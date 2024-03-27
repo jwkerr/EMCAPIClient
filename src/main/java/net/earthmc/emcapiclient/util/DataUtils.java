@@ -15,8 +15,8 @@ public class DataUtils {
         List<T> identifiers = new ArrayList<>();
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
-            String name = jsonObject.get("name").getAsString();
-            String uuid = jsonObject.get("uuid").getAsString();
+            String name = DataUtils.getElementAsStringOrNull(jsonObject.get("name"));
+            String uuid = DataUtils.getElementAsStringOrNull(jsonObject.get("uuid"));
 
             try {
                 T identifier = identifierClass.getConstructor(String.class, String.class).newInstance(name, uuid);

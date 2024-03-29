@@ -1,5 +1,6 @@
 # EMCAPIClient
 
+# Using EMCAPIClient
 Create an instance of EMCAPIClient like this
 ```java
 EMCAPIClient api = new EMCAPIClient();
@@ -14,4 +15,39 @@ EMCAPIClient api = new EMCAPIClient();
 List<PlayerIdentifier> players = api.getAllPlayerIdentifiers();
 
 List<PlayerData> playerData = api.getPlayerData(players);
+```
+
+# Adding EMCAPIClient to your project
+Add EMCAPIClient to your Java project at https://jitpack.io/#Fruitloopins/EMCAPIClient
+
+## Maven
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
+```xml
+<dependency>
+    <groupId>com.github.Fruitloopins</groupId>
+    <artifactId>EMCAPIClient</artifactId>
+    <version>Tag</version>
+</dependency>
+```
+
+## Gradle
+```groovy
+repositories {
+			mavenCentral()
+			maven { url "https://jitpack.io" }
+		}
+```
+
+```groovy
+dependencies {
+        implementation "com.github.Fruitloopins:EMCAPIClient:Tag"
+}
 ```

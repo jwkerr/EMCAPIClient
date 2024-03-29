@@ -12,4 +12,11 @@ public abstract class Data {
     public JsonObject getJsonObject() {
         return jsonObject;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Data data)) return false;
+
+        return this.jsonObject.equals(data.getJsonObject());
+    }
 }

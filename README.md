@@ -39,11 +39,13 @@ Replace "Tag" in the below examples with the latest Git commit hash (https://git
 ```
 
 ```xml
-<dependency>
-    <groupId>com.github.Fruitloopins</groupId>
-    <artifactId>EMCAPIClient</artifactId>
-    <version>Tag</version>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>com.github.Fruitloopins</groupId>
+        <artifactId>EMCAPIClient</artifactId>
+        <version>Tag</version>
+    </dependency>
+</dependencies>
 ```
 
 ## Gradle

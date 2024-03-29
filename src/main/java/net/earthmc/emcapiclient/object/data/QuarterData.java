@@ -34,7 +34,9 @@ public class QuarterData extends Data {
         this.type = jsonObject.get("type").getAsString();
 
         JsonObject owner = jsonObject.getAsJsonObject("owner");
-        this.owner = new PlayerIdentifier(DataUtil.getElementAsStringOrNull(owner.get("name")), DataUtil.getElementAsStringOrNull(owner.get("uuid")));
+        String ownerName = DataUtil.getElementAsStringOrNull(owner.get("name"));
+        String ownerUUID = DataUtil.getElementAsStringOrNull(owner.get("uuid"));
+        this.owner = ownerName != null || ownerUUID != null ? new PlayerIdentifier(ownerName, ownerUUID) : null;
 
         JsonObject town = jsonObject.getAsJsonObject("town");
         this.town = new TownIdentifier(DataUtil.getElementAsStringOrNull(town.get("name")), DataUtil.getElementAsStringOrNull(town.get("uuid")));
@@ -75,6 +77,7 @@ public class QuarterData extends Data {
         return type;
     }
 
+    @Nullable
     public PlayerIdentifier getOwner() {
         return owner;
     }

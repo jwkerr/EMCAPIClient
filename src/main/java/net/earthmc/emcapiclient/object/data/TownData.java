@@ -46,7 +46,9 @@ public class TownData extends Data {
         this.mayor = new PlayerIdentifier(DataUtil.getElementAsStringOrNull(mayor.get("name")), DataUtil.getElementAsStringOrNull(mayor.get("uuid")));
 
         JsonObject nation = jsonObject.getAsJsonObject("nation");
-        this.nation = new NationIdentifier(DataUtil.getElementAsStringOrNull(nation.get("name")), DataUtil.getElementAsStringOrNull(nation.get("uuid")));
+        String nationName = DataUtil.getElementAsStringOrNull(nation.get("name"));
+        String nationUUID = DataUtil.getElementAsStringOrNull(nation.get("uuid"));
+        this.nation = nationName != null || nationUUID != null ? new NationIdentifier(nationName, nationUUID) : null;
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
@@ -125,6 +127,7 @@ public class TownData extends Data {
         return mayor;
     }
 
+    @Nullable
     public NationIdentifier getNation() {
         return nation;
     }

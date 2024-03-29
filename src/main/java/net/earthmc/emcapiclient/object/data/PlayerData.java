@@ -37,10 +37,14 @@ public class PlayerData extends Data {
         this.about = DataUtil.getElementAsStringOrNull(jsonObject.get("about"));
 
         JsonObject town = jsonObject.getAsJsonObject("town");
-        this.town = new TownIdentifier(DataUtil.getElementAsStringOrNull(town.get("name")), DataUtil.getElementAsStringOrNull(town.get("uuid")));
+        String townName = DataUtil.getElementAsStringOrNull(town.get("name"));
+        String townUUID = DataUtil.getElementAsStringOrNull(town.get("uuid"));
+        this.town = townName != null || townUUID != null ? new TownIdentifier(townName, townUUID) : null;
 
         JsonObject nation = jsonObject.getAsJsonObject("nation");
-        this.nation = new NationIdentifier(DataUtil.getElementAsStringOrNull(nation.get("name")), DataUtil.getElementAsStringOrNull(nation.get("uuid")));
+        String nationName = DataUtil.getElementAsStringOrNull(nation.get("name"));
+        String nationUUID = DataUtil.getElementAsStringOrNull(nation.get("uuid"));
+        this.nation = nationName != null || nationUUID != null ? new NationIdentifier(nationName, nationUUID) : null;
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
@@ -96,10 +100,12 @@ public class PlayerData extends Data {
         return uuid;
     }
 
+    @Nullable
     public TownIdentifier getTown() {
         return town;
     }
 
+    @Nullable
     public NationIdentifier getNation() {
         return nation;
     }

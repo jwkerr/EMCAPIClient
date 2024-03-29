@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TownData {
-    private final JsonObject jsonObject;
+public class TownData extends Data {
     private final String name, uuid, board, founder, wiki;
     private final PlayerIdentifier mayor;
     private final NationIdentifier nation;
@@ -35,7 +34,7 @@ public class TownData {
     private final HashMap<String, List<String>> ranks;
 
     public TownData(JsonObject jsonObject) {
-        this.jsonObject = jsonObject;
+        super(jsonObject);
 
         this.name = jsonObject.get("name").getAsString();
         this.uuid = jsonObject.get("uuid").getAsString();
@@ -98,10 +97,6 @@ public class TownData {
         this.quarters = DataUtils.getIdentifierList(jsonObject.getAsJsonArray("quarters"), QuarterIdentifier.class);
 
         this.ranks = DataUtils.getRanksMap(jsonObject.getAsJsonObject("ranks"));
-    }
-
-    public JsonObject getJsonObject() {
-        return jsonObject;
     }
 
     public String getName() {

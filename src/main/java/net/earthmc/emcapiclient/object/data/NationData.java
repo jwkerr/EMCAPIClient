@@ -11,8 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 
-public class NationData {
-    private final JsonObject jsonObject;
+public class NationData extends Data {
     private final String name, uuid, board, dynmapColour, dynmapOutline, wiki;
     private final PlayerIdentifier king;
     private final TownIdentifier capital;
@@ -26,7 +25,7 @@ public class NationData {
     private final HashMap<String, List<String>> ranks;
 
     public NationData(JsonObject jsonObject) {
-        this.jsonObject = jsonObject;
+        super(jsonObject);
 
         this.name = jsonObject.get("name").getAsString();
         this.uuid = jsonObject.get("uuid").getAsString();
@@ -68,10 +67,6 @@ public class NationData {
         this.sanctioned = DataUtils.getIdentifierList(jsonObject.getAsJsonArray("sanctioned"), TownIdentifier.class);
 
         this.ranks = DataUtils.getRanksMap(jsonObject.getAsJsonObject("ranks"));
-    }
-
-    public JsonObject getJsonObject() {
-        return jsonObject;
     }
 
     public String getName() {

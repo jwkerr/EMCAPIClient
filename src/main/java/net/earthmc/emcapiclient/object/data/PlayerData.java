@@ -13,8 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PlayerData {
-    private final JsonObject jsonObject;
+public class PlayerData extends Data {
     private final String name, uuid, title, surname, formattedName, about;
     private final TownIdentifier town;
     private final NationIdentifier nation;
@@ -28,7 +27,7 @@ public class PlayerData {
 
 
     public PlayerData(JsonObject jsonObject) {
-        this.jsonObject = jsonObject;
+        super(jsonObject);
 
         this.name = jsonObject.get("name").getAsString();
         this.uuid = jsonObject.get("uuid").getAsString();
@@ -68,10 +67,6 @@ public class PlayerData {
 
         JsonArray friends = jsonObject.getAsJsonArray("friends");
         this.friends = DataUtils.getIdentifierList(friends, PlayerIdentifier.class);
-    }
-
-    public JsonObject getJsonObject() {
-        return jsonObject;
     }
 
     public String getName() {

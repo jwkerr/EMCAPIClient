@@ -2,15 +2,14 @@ package net.earthmc.emcapiclient.object.data;
 
 import com.google.gson.JsonObject;
 
-public class ServerData {
-    private final JsonObject jsonObject;
+public class ServerData extends Data {
     private final String version, moonPhase;
     private final long newDayTime, time, fullTime;
     private final boolean hasStorm, isThundering;
     private final int maxPlayers, numOnlinePlayers, numOnlineNomads, numResidents, numNomads, numTowns, numTownBlocks, numNations, numQuarters, numCuboids, votePartyTarget, numVotesRemaining;
 
     public ServerData(JsonObject jsonObject) {
-        this.jsonObject = jsonObject;
+        super(jsonObject);
 
         this.version = jsonObject.get("version").getAsString();
         this.moonPhase = jsonObject.get("moonPhase").getAsString();
@@ -39,10 +38,6 @@ public class ServerData {
         JsonObject voteParty = jsonObject.getAsJsonObject("voteParty");
         this.votePartyTarget = voteParty.get("target").getAsInt();
         this.numVotesRemaining = voteParty.get("numRemaining").getAsInt();
-    }
-
-    public JsonObject getJsonObject() {
-        return jsonObject;
     }
 
     public String getVersion() {

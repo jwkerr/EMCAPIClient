@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class QuarterData {
-    private final JsonObject jsonObject;
+public class QuarterData extends Data {
     private final UUID uuid;
     private final String type;
     private final PlayerIdentifier owner;
@@ -29,7 +28,7 @@ public class QuarterData {
     private final List<Cuboid> cuboids;
 
     public QuarterData(JsonObject jsonObject) {
-        this.jsonObject = jsonObject;
+        super(jsonObject);
 
         this.uuid = UUID.fromString(jsonObject.get("uuid").getAsString());
         this.type = jsonObject.get("type").getAsString();
@@ -66,10 +65,6 @@ public class QuarterData {
             cuboidsList.add(new Cuboid(cuboid.getAsJsonArray("pos1"), cuboid.getAsJsonArray("pos2")));
         }
         this.cuboids = cuboidsList;
-    }
-
-    public JsonObject getJsonObject() {
-        return jsonObject;
     }
 
     public UUID getUUID() {

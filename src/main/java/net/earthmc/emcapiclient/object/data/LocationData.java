@@ -5,13 +5,15 @@ import net.earthmc.emcapiclient.object.identifier.NationIdentifier;
 import net.earthmc.emcapiclient.object.identifier.TownIdentifier;
 import net.earthmc.emcapiclient.util.DataUtils;
 
-public class LocationData {
+public class LocationData extends Data {
     private final int x, z;
     private final boolean isWilderness;
     private final TownIdentifier town;
     private final NationIdentifier nation;
 
     public LocationData(JsonObject jsonObject) {
+        super(jsonObject);
+
         JsonObject location = jsonObject.getAsJsonObject("location");
         this.x = location.get("x").getAsInt();
         this.z = location.get("z").getAsInt();

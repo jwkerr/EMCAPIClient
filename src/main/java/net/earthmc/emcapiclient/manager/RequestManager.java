@@ -27,7 +27,7 @@ public class RequestManager {
      * @param url URL as a string
      * @return The URL's response body as a string
      */
-    public String requestURL(String url) throws BadRequestException, NotFoundException, GatewayTimeoutException {
+    public String requestURL(String url) {
         url += url.contains("?") ? "&" : "?";
         url += UUID.randomUUID();
 
@@ -58,7 +58,7 @@ public class RequestManager {
      * @return The URL parsed to a {@link JsonArray}, null if the URL has no response body
      * @throws com.google.gson.JsonSyntaxException If the URL does not return a valid JSON array
      */
-    public JsonArray getURLAsJsonArray(String url) throws BadRequestException, NotFoundException, GatewayTimeoutException {
+    public JsonArray getURLAsJsonArray(String url) {
         String response = requestURL(url);
         if (response == null) return null;
 
@@ -72,7 +72,7 @@ public class RequestManager {
      * @return The URL parsed to a {@link JsonObject}, null if the URL has no response body
      * @throws com.google.gson.JsonSyntaxException If the URL does not return a valid JSON object
      */
-    public JsonObject getURLAsJsonObject(String url) throws BadRequestException, NotFoundException, GatewayTimeoutException {
+    public JsonObject getURLAsJsonObject(String url) {
         String response = requestURL(url);
         if (response == null) return null;
 

@@ -109,6 +109,10 @@ public class TownData extends Data {
         return uuid;
     }
 
+    /**
+     *
+     * @return A string representing the town's board as seen on /t, null if the town has no board
+     */
     @Nullable
     public String getBoard() {
         return board;
@@ -118,6 +122,10 @@ public class TownData extends Data {
         return founder;
     }
 
+    /**
+     *
+     * @return A string representing the town's linked wiki URL, null if the town has not set a wiki URL
+     */
     @Nullable
     public String getWiki() {
         return wiki;
@@ -206,6 +214,12 @@ public class TownData extends Data {
         return balance;
     }
 
+    /**
+     *
+     * @return A double representing the town's sale price, null if the town is not for sale
+     * <p>
+     * See {@link #isForSale()}
+     */
     @Nullable
     public Double getForSalePrice() {
         return forSalePrice;

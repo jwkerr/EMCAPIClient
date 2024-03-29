@@ -91,6 +91,10 @@ public class PlayerData extends Data {
         return formattedName;
     }
 
+    /**
+     *
+     * @return A string representing the player's about as seen on /res, null if the player has no about
+     */
     @Nullable
     public String getAbout() {
         return about;
@@ -100,11 +104,19 @@ public class PlayerData extends Data {
         return uuid;
     }
 
+    /**
+     *
+     * @return A {@link TownIdentifier} representing the player's town or null if they have no town
+     */
     @Nullable
     public TownIdentifier getTown() {
         return town;
     }
 
+    /**
+     *
+     * @return A {@link NationIdentifier} representing the player's nation or null if they have no nation
+     */
     @Nullable
     public NationIdentifier getNation() {
         return nation;

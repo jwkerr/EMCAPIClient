@@ -77,6 +77,10 @@ public class NationData extends Data {
         return uuid;
     }
 
+    /**
+     *
+     * @return A string representing the nation's board as seen on /n, null if the nation has no board
+     */
     @Nullable
     public String getBoard() {
         return board;
@@ -90,6 +94,10 @@ public class NationData extends Data {
         return dynmapOutline;
     }
 
+    /**
+     *
+     * @return A string representing the nation's linked wiki URL, null if the nation has not set a wiki URL
+     */
     @Nullable
     public String getWiki() {
         return wiki;
@@ -143,6 +151,10 @@ public class NationData extends Data {
         return balance;
     }
 
+    /**
+     *
+     * @return An object representing the values of where the nation's spawn is set, null if there is no spawn set
+     */
     @Nullable
     public Spawn getSpawn() {
         return spawn;

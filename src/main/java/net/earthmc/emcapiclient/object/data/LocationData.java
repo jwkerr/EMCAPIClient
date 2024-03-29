@@ -40,15 +40,27 @@ public class LocationData extends Data {
         return z;
     }
 
+    /**
+     *
+     * @return True if the specified location has no town
+     */
     public boolean isWilderness() {
         return isWilderness;
     }
 
+    /**
+     *
+     * @return The {@link TownIdentifier} of the town at the specified location or null if there is no town
+     */
     @Nullable
     public TownIdentifier getTown() {
         return town;
     }
 
+    /**
+     *
+     * @return The {@link NationIdentifier} of the nation at the specified location or null if there is no nation
+     */
     @Nullable
     public NationIdentifier getNation() {
         return nation;

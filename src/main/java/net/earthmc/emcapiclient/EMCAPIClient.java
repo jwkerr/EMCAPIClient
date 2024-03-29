@@ -243,18 +243,13 @@ public class EMCAPIClient {
      * @return A list of objects representing basic information at each specified location such as the town and nation
      */
     public List<LocationData> getLocationData(List<Pair<Integer, Integer>> coordinates) {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < coordinates.size(); i++) {
-            sb.append(coordinates.get(i).getFirst());
-            sb.append(";");
-            sb.append(coordinates.get(i).getSecond());
-
-            if (i != coordinates.size() - 1)
-                sb.append(",");
+        List<String> coordinateStrings = new ArrayList<>();
+        for (Pair<Integer, Integer> coordinate : coordinates) {
+            coordinateStrings.add(coordinate.getFirst() + ";" + coordinate.getSecond());
         }
 
-        JsonArray jsonArray = requestManager.getURLAsJsonArray(EARTHMC_API_URL + "location?query=" + sb);
+        String requestString = String.join(",", coordinateStrings);
+        JsonArray jsonArray = requestManager.getURLAsJsonArray(EARTHMC_API_URL + "location?query=" + requestString);
 
         List<LocationData> locations = new ArrayList<>();
         for (JsonElement element : jsonArray) {

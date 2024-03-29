@@ -7,7 +7,7 @@ import net.earthmc.emcapiclient.object.permissions.Permissions;
 import net.earthmc.emcapiclient.object.identifier.NationIdentifier;
 import net.earthmc.emcapiclient.object.identifier.PlayerIdentifier;
 import net.earthmc.emcapiclient.object.identifier.TownIdentifier;
-import net.earthmc.emcapiclient.util.DataUtils;
+import net.earthmc.emcapiclient.util.DataUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -31,21 +31,21 @@ public class PlayerData extends Data {
 
         this.name = jsonObject.get("name").getAsString();
         this.uuid = jsonObject.get("uuid").getAsString();
-        this.title = DataUtils.getElementAsStringOrNull(jsonObject.get("title"));
-        this.surname = DataUtils.getElementAsStringOrNull(jsonObject.get("surname"));
+        this.title = DataUtil.getElementAsStringOrNull(jsonObject.get("title"));
+        this.surname = DataUtil.getElementAsStringOrNull(jsonObject.get("surname"));
         this.formattedName = jsonObject.get("formattedName").getAsString();
-        this.about = DataUtils.getElementAsStringOrNull(jsonObject.get("about"));
+        this.about = DataUtil.getElementAsStringOrNull(jsonObject.get("about"));
 
         JsonObject town = jsonObject.getAsJsonObject("town");
-        this.town = new TownIdentifier(DataUtils.getElementAsStringOrNull(town.get("name")), DataUtils.getElementAsStringOrNull(town.get("uuid")));
+        this.town = new TownIdentifier(DataUtil.getElementAsStringOrNull(town.get("name")), DataUtil.getElementAsStringOrNull(town.get("uuid")));
 
         JsonObject nation = jsonObject.getAsJsonObject("nation");
-        this.nation = new NationIdentifier(DataUtils.getElementAsStringOrNull(nation.get("name")), DataUtils.getElementAsStringOrNull(nation.get("uuid")));
+        this.nation = new NationIdentifier(DataUtil.getElementAsStringOrNull(nation.get("name")), DataUtil.getElementAsStringOrNull(nation.get("uuid")));
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
-        this.joinedTownAt = DataUtils.getElementsAsLongOrNull(timestamps.get("joinedTownAt"));
-        this.lastOnline = DataUtils.getElementsAsLongOrNull(timestamps.get("lastOnline"));
+        this.joinedTownAt = DataUtil.getElementsAsLongOrNull(timestamps.get("joinedTownAt"));
+        this.lastOnline = DataUtil.getElementsAsLongOrNull(timestamps.get("lastOnline"));
 
         JsonObject status = jsonObject.getAsJsonObject("status");
         this.isOnline = status.get("isOnline").getAsBoolean();
@@ -66,7 +66,7 @@ public class PlayerData extends Data {
         this.nationRanks = ranks.get("nationRanks").getAsJsonArray().asList().stream().map(JsonElement::getAsString).collect(Collectors.toList());
 
         JsonArray friends = jsonObject.getAsJsonArray("friends");
-        this.friends = DataUtils.getIdentifierList(friends, PlayerIdentifier.class);
+        this.friends = DataUtil.getIdentifierList(friends, PlayerIdentifier.class);
     }
 
     public String getName() {

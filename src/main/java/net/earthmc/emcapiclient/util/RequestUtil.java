@@ -14,13 +14,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class RequestUtils {
+public class RequestUtil {
     private static final int BATCH_SIZE = 100;
 
     public static <T extends Identifier> List<T> getAllIdentifiers(String endpoint, Class<T> identiferClass) {
         JsonArray jsonArray = EMCAPIClient.requestManager.getURLAsJsonArray(EMCAPIClient.EARTHMC_API_URL + endpoint);
 
-        return DataUtils.getIdentifierList(jsonArray, identiferClass);
+        return DataUtil.getIdentifierList(jsonArray, identiferClass);
     }
 
     public static <T extends Data> List<T> getDataByStrings(List<String> uuidsOrNames, String endpoint) throws GatewayTimeoutException {

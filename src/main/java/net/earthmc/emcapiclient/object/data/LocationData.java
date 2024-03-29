@@ -3,7 +3,7 @@ package net.earthmc.emcapiclient.object.data;
 import com.google.gson.JsonObject;
 import net.earthmc.emcapiclient.object.identifier.NationIdentifier;
 import net.earthmc.emcapiclient.object.identifier.TownIdentifier;
-import net.earthmc.emcapiclient.util.DataUtils;
+import net.earthmc.emcapiclient.util.DataUtil;
 
 public class LocationData extends Data {
     private final int x, z;
@@ -21,10 +21,10 @@ public class LocationData extends Data {
         this.isWilderness = jsonObject.get("isWilderness").getAsBoolean();
 
         JsonObject town = jsonObject.getAsJsonObject("town");
-        this.town = new TownIdentifier(DataUtils.getElementAsStringOrNull(town.get("name")), DataUtils.getElementAsStringOrNull(town.get("uuid")));
+        this.town = new TownIdentifier(DataUtil.getElementAsStringOrNull(town.get("name")), DataUtil.getElementAsStringOrNull(town.get("uuid")));
 
         JsonObject nation = jsonObject.getAsJsonObject("nation");
-        this.nation = new NationIdentifier(DataUtils.getElementAsStringOrNull(nation.get("name")), DataUtils.getElementAsStringOrNull(nation.get("uuid")));
+        this.nation = new NationIdentifier(DataUtil.getElementAsStringOrNull(nation.get("name")), DataUtil.getElementAsStringOrNull(nation.get("uuid")));
     }
 
     public int getX() {

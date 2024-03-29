@@ -8,8 +8,8 @@ import net.earthmc.emcapiclient.manager.RequestManager;
 import net.earthmc.emcapiclient.object.data.*;
 import net.earthmc.emcapiclient.object.data.LocationData;
 import net.earthmc.emcapiclient.object.identifier.*;
-import net.earthmc.emcapiclient.util.DataUtils;
-import net.earthmc.emcapiclient.util.RequestUtils;
+import net.earthmc.emcapiclient.util.DataUtil;
+import net.earthmc.emcapiclient.util.RequestUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class EMCAPIClient {
      * @return A list of objects representing every player's username and UUID
      */
     public List<PlayerIdentifier> getAllPlayerIdentifiers() {
-        return RequestUtils.getAllIdentifiers("players", PlayerIdentifier.class);
+        return RequestUtil.getAllIdentifiers("players", PlayerIdentifier.class);
     }
 
     /**
@@ -31,7 +31,7 @@ public class EMCAPIClient {
      * @return A list of objects representing every town's name and UUID
      */
     public List<TownIdentifier> getAllTownIdentifiers() {
-        return RequestUtils.getAllIdentifiers("towns", TownIdentifier.class);
+        return RequestUtil.getAllIdentifiers("towns", TownIdentifier.class);
     }
 
     /**
@@ -39,7 +39,7 @@ public class EMCAPIClient {
      * @return A list of objects representing every nation's name and UUID
      */
     public List<NationIdentifier> getAllNationIdentifiers() {
-        return RequestUtils.getAllIdentifiers("nations", NationIdentifier.class);
+        return RequestUtil.getAllIdentifiers("nations", NationIdentifier.class);
     }
 
     /**
@@ -47,7 +47,7 @@ public class EMCAPIClient {
      * @return A list of objects representing every quarter's name (always null) and UUID
      */
     public List<QuarterIdentifier> getAllQuarterIdentifiers() {
-        return RequestUtils.getAllIdentifiers("quarters", QuarterIdentifier.class);
+        return RequestUtil.getAllIdentifiers("quarters", QuarterIdentifier.class);
     }
 
     /**
@@ -121,7 +121,7 @@ public class EMCAPIClient {
      * @return A list of objects representing every requested player's data
      */
     public List<PlayerData> getPlayerDataByStrings(List<String> uuidsOrNames) {
-        return RequestUtils.getDataByStrings(uuidsOrNames, "players");
+        return RequestUtil.getDataByStrings(uuidsOrNames, "players");
     }
 
     /**
@@ -130,7 +130,7 @@ public class EMCAPIClient {
      * @return A list of objects representing every requested town's data
      */
     public List<TownData> getTownDataByStrings(List<String> uuidsOrNames) {
-        return RequestUtils.getDataByStrings(uuidsOrNames, "towns");
+        return RequestUtil.getDataByStrings(uuidsOrNames, "towns");
     }
 
     /**
@@ -139,7 +139,7 @@ public class EMCAPIClient {
      * @return A list of objects representing every requested nation's data
      */
     public List<NationData> getNationDataByStrings(List<String> uuidsOrNames) {
-        return RequestUtils.getDataByStrings(uuidsOrNames, "nations");
+        return RequestUtil.getDataByStrings(uuidsOrNames, "nations");
     }
 
     /**
@@ -148,7 +148,7 @@ public class EMCAPIClient {
      * @return A list of objects representing every requested quarter's data
      */
     public List<QuarterData> getQuarterDataByStrings(List<String> uuidsOrNames) {
-        return RequestUtils.getDataByStrings(uuidsOrNames, "quarters");
+        return RequestUtil.getDataByStrings(uuidsOrNames, "quarters");
     }
 
     /**
@@ -201,7 +201,7 @@ public class EMCAPIClient {
      * @return A list of {@link DiscordIdentifier}
      */
     public List<DiscordIdentifier> getDiscordIdentifiersByStrings(List<String> uuidsOrIDs) {
-        return RequestUtils.getDiscordIdentifiers(uuidsOrIDs);
+        return RequestUtil.getDiscordIdentifiers(uuidsOrIDs);
     }
 
     /**
@@ -211,7 +211,7 @@ public class EMCAPIClient {
      * @return A list of {@link TownIdentifier} representing all the nearby towns excluding the specified town
      */
     public List<TownIdentifier> getTownsNearbyTown(String uuidOrName, int radius) {
-        return DataUtils.getIdentifierList(requestManager.getURLAsJsonArray(EARTHMC_API_URL + "nearby/town?town=" + uuidOrName + "&radius=" + radius), TownIdentifier.class);
+        return DataUtil.getIdentifierList(requestManager.getURLAsJsonArray(EARTHMC_API_URL + "nearby/town?town=" + uuidOrName + "&radius=" + radius), TownIdentifier.class);
     }
 
     /**
@@ -222,7 +222,7 @@ public class EMCAPIClient {
      * @return A list of {@link TownIdentifier} representing all the nearby towns
      */
     public List<TownIdentifier> getTownsNearbyCoordinate(int x, int z, int radius) {
-        return DataUtils.getIdentifierList(requestManager.getURLAsJsonArray(EARTHMC_API_URL + "nearby/coordinate?x=" + x + "&z=" + z + "&radius=" + radius), TownIdentifier.class);
+        return DataUtil.getIdentifierList(requestManager.getURLAsJsonArray(EARTHMC_API_URL + "nearby/coordinate?x=" + x + "&z=" + z + "&radius=" + radius), TownIdentifier.class);
     }
 
     /**

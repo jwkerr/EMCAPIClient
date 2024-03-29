@@ -9,7 +9,7 @@ import net.earthmc.emcapiclient.object.Spawn;
 import net.earthmc.emcapiclient.object.identifier.NationIdentifier;
 import net.earthmc.emcapiclient.object.identifier.PlayerIdentifier;
 import net.earthmc.emcapiclient.object.identifier.QuarterIdentifier;
-import net.earthmc.emcapiclient.util.DataUtils;
+import net.earthmc.emcapiclient.util.DataUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -38,20 +38,20 @@ public class TownData extends Data {
 
         this.name = jsonObject.get("name").getAsString();
         this.uuid = jsonObject.get("uuid").getAsString();
-        this.board = DataUtils.getElementAsStringOrNull(jsonObject.get("board"));
+        this.board = DataUtil.getElementAsStringOrNull(jsonObject.get("board"));
         this.founder = jsonObject.get("founder").getAsString();
-        this.wiki = DataUtils.getElementAsStringOrNull(jsonObject.get("wiki"));
+        this.wiki = DataUtil.getElementAsStringOrNull(jsonObject.get("wiki"));
 
         JsonObject mayor = jsonObject.getAsJsonObject("mayor");
-        this.mayor = new PlayerIdentifier(DataUtils.getElementAsStringOrNull(mayor.get("name")), DataUtils.getElementAsStringOrNull(mayor.get("uuid")));
+        this.mayor = new PlayerIdentifier(DataUtil.getElementAsStringOrNull(mayor.get("name")), DataUtil.getElementAsStringOrNull(mayor.get("uuid")));
 
         JsonObject nation = jsonObject.getAsJsonObject("nation");
-        this.nation = new NationIdentifier(DataUtils.getElementAsStringOrNull(nation.get("name")), DataUtils.getElementAsStringOrNull(nation.get("uuid")));
+        this.nation = new NationIdentifier(DataUtil.getElementAsStringOrNull(nation.get("name")), DataUtil.getElementAsStringOrNull(nation.get("uuid")));
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
-        this.joinedNationAt = DataUtils.getElementsAsLongOrNull(timestamps.get("joinedNationAt"));
-        this.ruinedAt = DataUtils.getElementsAsLongOrNull(timestamps.get("ruinedAt"));
+        this.joinedNationAt = DataUtil.getElementsAsLongOrNull(timestamps.get("joinedNationAt"));
+        this.ruinedAt = DataUtil.getElementsAsLongOrNull(timestamps.get("ruinedAt"));
 
         JsonObject status = jsonObject.getAsJsonObject("status");
         this.isPublic = status.get("isPublic").getAsBoolean();
@@ -71,7 +71,7 @@ public class TownData extends Data {
         this.numTrusted = stats.get("numTrusted").getAsInt();
         this.numOutlaws = stats.get("numOutlaws").getAsInt();
         this.balance = stats.get("balance").getAsInt();
-        this.forSalePrice = DataUtils.getElementAsDoubleOrNull(stats.get("forSalePrice"));
+        this.forSalePrice = DataUtil.getElementAsDoubleOrNull(stats.get("forSalePrice"));
 
         this.permissions = new Permissions(jsonObject.getAsJsonObject("perms"));
 
@@ -90,13 +90,13 @@ public class TownData extends Data {
         }
         this.townBlocks = townBlocksList;
 
-        this.residents = DataUtils.getIdentifierList(jsonObject.getAsJsonArray("residents"), PlayerIdentifier.class);
-        this.trusted = DataUtils.getIdentifierList(jsonObject.getAsJsonArray("trusted"), PlayerIdentifier.class);
-        this.outlaws = DataUtils.getIdentifierList(jsonObject.getAsJsonArray("outlaws"), PlayerIdentifier.class);
+        this.residents = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("residents"), PlayerIdentifier.class);
+        this.trusted = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("trusted"), PlayerIdentifier.class);
+        this.outlaws = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("outlaws"), PlayerIdentifier.class);
 
-        this.quarters = DataUtils.getIdentifierList(jsonObject.getAsJsonArray("quarters"), QuarterIdentifier.class);
+        this.quarters = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("quarters"), QuarterIdentifier.class);
 
-        this.ranks = DataUtils.getRanksMap(jsonObject.getAsJsonObject("ranks"));
+        this.ranks = DataUtil.getRanksMap(jsonObject.getAsJsonObject("ranks"));
     }
 
     public String getName() {

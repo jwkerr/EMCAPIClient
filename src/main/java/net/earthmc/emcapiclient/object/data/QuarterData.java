@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import net.earthmc.emcapiclient.object.Cuboid;
 import net.earthmc.emcapiclient.object.identifier.PlayerIdentifier;
 import net.earthmc.emcapiclient.object.identifier.TownIdentifier;
-import net.earthmc.emcapiclient.util.DataUtils;
+import net.earthmc.emcapiclient.util.DataUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -34,20 +34,20 @@ public class QuarterData extends Data {
         this.type = jsonObject.get("type").getAsString();
 
         JsonObject owner = jsonObject.getAsJsonObject("owner");
-        this.owner = new PlayerIdentifier(DataUtils.getElementAsStringOrNull(owner.get("name")), DataUtils.getElementAsStringOrNull(owner.get("uuid")));
+        this.owner = new PlayerIdentifier(DataUtil.getElementAsStringOrNull(owner.get("name")), DataUtil.getElementAsStringOrNull(owner.get("uuid")));
 
         JsonObject town = jsonObject.getAsJsonObject("town");
-        this.town = new TownIdentifier(DataUtils.getElementAsStringOrNull(town.get("name")), DataUtils.getElementAsStringOrNull(town.get("uuid")));
+        this.town = new TownIdentifier(DataUtil.getElementAsStringOrNull(town.get("name")), DataUtil.getElementAsStringOrNull(town.get("uuid")));
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
-        this.claimedAt = DataUtils.getElementsAsLongOrNull(timestamps.get("claimedAt"));
+        this.claimedAt = DataUtil.getElementsAsLongOrNull(timestamps.get("claimedAt"));
 
         JsonObject status = jsonObject.getAsJsonObject("status");
         this.isEmbassy = status.get("isEmbassy").getAsBoolean();
 
         JsonObject stats = jsonObject.getAsJsonObject("stats");
-        this.price = DataUtils.getElementAsIntegerOrNull(stats.get("price"));
+        this.price = DataUtil.getElementAsIntegerOrNull(stats.get("price"));
         this.volume = stats.get("volume").getAsInt();
         this.numCuboids = stats.get("numCuboids").getAsInt();
 
@@ -55,7 +55,7 @@ public class QuarterData extends Data {
         this.colour = new int[]{colour.get(0).getAsInt(), colour.get(1).getAsInt(), colour.get(2).getAsInt()};
 
         JsonArray trusted = jsonObject.getAsJsonArray("trusted");
-        this.trusted = DataUtils.getIdentifierList(trusted, PlayerIdentifier.class);
+        this.trusted = DataUtil.getIdentifierList(trusted, PlayerIdentifier.class);
 
         List<Cuboid> cuboidsList = new ArrayList<>();
         JsonArray cuboids = jsonObject.getAsJsonArray("cuboids");

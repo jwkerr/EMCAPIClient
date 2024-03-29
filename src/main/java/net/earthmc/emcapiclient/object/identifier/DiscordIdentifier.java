@@ -1,7 +1,7 @@
 package net.earthmc.emcapiclient.object.identifier;
 
 import com.google.gson.JsonObject;
-import net.earthmc.emcapiclient.util.DataUtils;
+import net.earthmc.emcapiclient.util.DataUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class DiscordIdentifier {
@@ -9,8 +9,8 @@ public class DiscordIdentifier {
     private final String id;
 
     public DiscordIdentifier(JsonObject jsonObject) {
-        this.uuid = DataUtils.getElementAsStringOrNull(jsonObject.get("uuid"));
-        this.id = DataUtils.getElementAsStringOrNull(jsonObject.get("id"));
+        this.uuid = DataUtil.getElementAsStringOrNull(jsonObject.get("uuid"));
+        this.id = DataUtil.getElementAsStringOrNull(jsonObject.get("id"));
     }
 
     @Nullable

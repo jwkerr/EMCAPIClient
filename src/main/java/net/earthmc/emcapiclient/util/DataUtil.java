@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DataUtils {
+public class DataUtil {
 
     public static <T extends Identifier> List<T> getIdentifierList(JsonArray jsonArray, Class<T> identifierClass) {
         List<T> identifiers = new ArrayList<>();
         for (JsonElement element : jsonArray) {
             JsonObject jsonObject = element.getAsJsonObject();
-            String name = DataUtils.getElementAsStringOrNull(jsonObject.get("name"));
-            String uuid = DataUtils.getElementAsStringOrNull(jsonObject.get("uuid"));
+            String name = DataUtil.getElementAsStringOrNull(jsonObject.get("name"));
+            String uuid = DataUtil.getElementAsStringOrNull(jsonObject.get("uuid"));
 
             try {
                 T identifier = identifierClass.getConstructor(String.class, String.class).newInstance(name, uuid);

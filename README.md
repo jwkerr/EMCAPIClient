@@ -1,7 +1,6 @@
 # EMCAPIClient
 
 Create an instance of EMCAPIClient like this
-
 ```java
 EMCAPIClient api = new EMCAPIClient();
 ```

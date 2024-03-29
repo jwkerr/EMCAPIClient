@@ -20,6 +20,7 @@ List<PlayerData> playerData = api.getPlayerData(players);
 # Adding EMCAPIClient to your project
 Add EMCAPIClient to your Java project at https://jitpack.io/#Fruitloopins/EMCAPIClient
 
+Replace "Tag" in the below examples with the latest Git commit hash (https://github.com/Fruitloopins/EMCAPIClient/commits/master/)
 ## Maven
 ```xml
 <repositories>
@@ -41,9 +42,9 @@ Add EMCAPIClient to your Java project at https://jitpack.io/#Fruitloopins/EMCAPI
 ## Gradle
 ```groovy
 repositories {
-			mavenCentral()
-			maven { url "https://jitpack.io" }
-		}
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
 ```
 
 ```groovy

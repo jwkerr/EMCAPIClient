@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class RequestUtil {
-    private static final int BATCH_SIZE = 100;
+    private static final int BATCH_SIZE = 52;
 
     public static <T extends Identifier> List<T> getAllIdentifiers(String endpoint, Class<T> identiferClass) {
         JsonArray jsonArray = EMCAPIClient.requestManager.getURLAsJsonArray(EMCAPIClient.EARTHMC_API_URL + endpoint);

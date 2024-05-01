@@ -3,6 +3,7 @@ package net.earthmc.emcapiclient.object;
 import com.google.gson.JsonObject;
 
 public class Spawn {
+
     private final String world;
     private final double x, y, z, pitch, yaw;
 

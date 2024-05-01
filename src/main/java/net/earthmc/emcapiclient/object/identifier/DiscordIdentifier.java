@@ -5,6 +5,7 @@ import net.earthmc.emcapiclient.util.DataUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class DiscordIdentifier {
+
     private final String uuid;
     private final String id;
 

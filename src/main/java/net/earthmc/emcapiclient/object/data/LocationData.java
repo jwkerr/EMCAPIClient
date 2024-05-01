@@ -7,6 +7,7 @@ import net.earthmc.emcapiclient.util.DataUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class LocationData extends Data {
+
     private final int x, z;
     private final boolean isWilderness;
     private final TownIdentifier town;

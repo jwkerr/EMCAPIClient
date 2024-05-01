@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class NationData extends Data {
+
     private final String name, uuid, board, dynmapColour, dynmapOutline, wiki;
     private final PlayerIdentifier king;
     private final TownIdentifier capital;

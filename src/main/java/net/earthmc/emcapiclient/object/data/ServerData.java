@@ -3,6 +3,7 @@ package net.earthmc.emcapiclient.object.data;
 import com.google.gson.JsonObject;
 
 public class ServerData extends Data {
+
     private final String version, moonPhase;
     private final long newDayTime, time, fullTime;
     private final boolean hasStorm, isThundering;

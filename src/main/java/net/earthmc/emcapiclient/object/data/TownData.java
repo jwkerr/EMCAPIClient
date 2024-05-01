@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TownData extends Data {
+
     private final String name, uuid, board, founder, wiki;
     private final PlayerIdentifier mayor;
     private final NationIdentifier nation;

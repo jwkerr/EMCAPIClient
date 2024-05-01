@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class QuarterData extends Data {
+
     private final UUID uuid;
     private final String type;
     private final PlayerIdentifier owner;

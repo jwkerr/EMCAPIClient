@@ -3,6 +3,7 @@ package net.earthmc.emcapiclient.object;
 import com.google.gson.JsonArray;
 
 public class Cuboid {
+
     private final int[] pos1, pos2;
 
     public Cuboid(JsonArray pos1, JsonArray pos2) {

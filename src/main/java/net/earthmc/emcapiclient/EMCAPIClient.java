@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EMCAPIClient {
+
     public static final String EARTHMC_API_URL = "https://api.earthmc.net/v3/aurora/";
     public static final RequestManager requestManager = new RequestManager();;
 

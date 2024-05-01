@@ -1,9 +1,9 @@
 package net.earthmc.emcapiclient.object.permissions;
 
 import com.google.gson.JsonObject;
-import net.earthmc.emcapiclient.object.permissions.*;
 
 public class Permissions {
+
     private final JsonObject jsonObject;
     private final Build buildPermissions;
     private final Destroy destroyPermissions;

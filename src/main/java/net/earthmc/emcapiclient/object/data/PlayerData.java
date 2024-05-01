@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PlayerData extends Data {
+
     private final String name, uuid, title, surname, formattedName, about;
     private final TownIdentifier town;
     private final NationIdentifier nation;

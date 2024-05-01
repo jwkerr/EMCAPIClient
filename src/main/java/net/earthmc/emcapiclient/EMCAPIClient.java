@@ -153,6 +153,42 @@ public class EMCAPIClient {
 
     /**
      *
+     * @param uuidsOrNames An arbitrarily long list of player UUIDs or usernames as strings
+     * @return A list of objects representing every requested player's data
+     */
+    public List<PlayerData> getPlayerDataByStrings(String[] uuidsOrNames) {
+        return getPlayerDataByStrings(List.of(uuidsOrNames));
+    }
+
+    /**
+     *
+     * @param uuidsOrNames An arbitrarily long list of town UUIDs or names as strings
+     * @return A list of objects representing every requested town's data
+     */
+    public List<TownData> getTownDataByStrings(String[] uuidsOrNames) {
+        return getTownDataByStrings(List.of(uuidsOrNames));
+    }
+
+    /**
+     *
+     * @param uuidsOrNames An arbitrarily long list of nation UUIDs or names as strings
+     * @return A list of objects representing every requested nation's data
+     */
+    public List<NationData> getNationDataByStrings(String[] uuidsOrNames) {
+        return getNationDataByStrings(List.of(uuidsOrNames));
+    }
+
+    /**
+     *
+     * @param uuidsOrNames An arbitrarily long list of quarter UUIDs as strings
+     * @return A list of objects representing every requested quarter's data
+     */
+    public List<QuarterData> getQuarterDataByStrings(String[] uuidsOrNames) {
+        return getQuarterDataByStrings(List.of(uuidsOrNames));
+    }
+
+    /**
+     *
      * @param identifiers An arbitrarily long list of PlayerIdentifiers
      * @return A list of objects representing every requested player's data
      */

@@ -2,6 +2,7 @@ package net.earthmc.emcapiclient.object;
 
 import com.google.gson.JsonObject;
 
+@SuppressWarnings("unused")
 public class Spawn {
 
     private final String world;

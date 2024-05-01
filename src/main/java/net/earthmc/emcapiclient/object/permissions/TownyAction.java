@@ -2,6 +2,7 @@ package net.earthmc.emcapiclient.object.permissions;
 
 import com.google.gson.JsonArray;
 
+@SuppressWarnings("unused")
 public class TownyAction {
     private final boolean resident, nation, ally, outsider;
 

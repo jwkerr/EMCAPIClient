@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.earthmc.emcapiclient.util.DataUtil;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unused")
 public class DiscordIdentifier {
 
     private final String uuid;

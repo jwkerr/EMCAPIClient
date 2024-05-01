@@ -2,6 +2,7 @@ package net.earthmc.emcapiclient.object.permissions;
 
 import com.google.gson.JsonObject;
 
+@SuppressWarnings("unused")
 public class Permissions {
 
     private final JsonObject jsonObject;

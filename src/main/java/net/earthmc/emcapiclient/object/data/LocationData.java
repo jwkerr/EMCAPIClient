@@ -6,6 +6,7 @@ import net.earthmc.emcapiclient.object.identifier.TownIdentifier;
 import net.earthmc.emcapiclient.util.DataUtil;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unused")
 public class LocationData extends Data {
 
     private final int x, z;

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class TownData extends Data {
 
     private final String name, uuid, board, founder, wiki;

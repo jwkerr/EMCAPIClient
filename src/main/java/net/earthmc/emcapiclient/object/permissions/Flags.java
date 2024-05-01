@@ -2,6 +2,7 @@ package net.earthmc.emcapiclient.object.permissions;
 
 import com.google.gson.JsonObject;
 
+@SuppressWarnings("unused")
 public class Flags {
 
     private final boolean pvp, explosion, fire, mobs;

@@ -2,6 +2,7 @@ package net.earthmc.emcapiclient.object.data;
 
 import com.google.gson.JsonObject;
 
+@SuppressWarnings("unused")
 public class ServerData extends Data {
 
     private final String version, moonPhase;

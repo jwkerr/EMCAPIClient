@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 public class PlayerData extends Data {
 
     private final String name, uuid, title, surname, formattedName, about;

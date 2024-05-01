@@ -14,10 +14,11 @@ import net.earthmc.emcapiclient.util.RequestUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class EMCAPIClient {
 
     public static final String EARTHMC_API_URL = "https://api.earthmc.net/v3/aurora/";
-    public static final RequestManager requestManager = new RequestManager();;
+    public static final RequestManager requestManager = new RequestManager();
 
     /**
      *

@@ -18,7 +18,20 @@ import java.util.List;
 public class EMCAPIClient {
 
     public static final String EARTHMC_API_URL = "https://api.earthmc.net/v3/aurora/";
-    public static final RequestManager requestManager = new RequestManager();
+    public static final RequestManager REQUEST_MANAGER = new RequestManager();
+
+    /**
+     * Do not set this value higher than the default of 52 if you are using identifiers or UUIDs as it will max out the URL length
+     * If you wish to increase the size to request more at once you should be using usernames, such workarounds will not be necessary in the future with updates to the API
+     *
+     * @param batchSize The amount of objects that will be requested in one request
+     */
+    public void setBatchSize(int batchSize) {
+        if (batchSize <= 0) batchSize = 1;
+        if (batchSize > 100) batchSize = 100; // The max objects that can be looked up at once in the API
+
+        RequestUtil.batchSize = batchSize;
+    }
 
     /**
      *
@@ -57,7 +70,7 @@ public class EMCAPIClient {
      * @return An object representing the server data endpoint
      */
     public ServerData getServerData() {
-        JsonObject jsonObject = requestManager.getURLAsJsonObject(EARTHMC_API_URL);
+        JsonObject jsonObject = REQUEST_MANAGER.getURLAsJsonObject(EARTHMC_API_URL);
 
         return new ServerData(jsonObject);
     }
@@ -68,7 +81,7 @@ public class EMCAPIClient {
      * @return An object representing the player's data
      */
     public PlayerData getPlayerDataByString(String uuidOrName) {
-        JsonArray jsonArray = requestManager.getURLAsJsonArray(EARTHMC_API_URL + "players?query=" + uuidOrName);
+        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "players?query=" + uuidOrName);
 
         return new PlayerData(jsonArray.get(0).getAsJsonObject());
     }
@@ -79,7 +92,7 @@ public class EMCAPIClient {
      * @return An object representing the town's data
      */
     public TownData getTownDataByString(String uuidOrName) {
-        JsonArray jsonArray = requestManager.getURLAsJsonArray(EARTHMC_API_URL + "towns?query=" + uuidOrName);
+        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "towns?query=" + uuidOrName);
 
         return new TownData(jsonArray.get(0).getAsJsonObject());
     }
@@ -90,7 +103,7 @@ public class EMCAPIClient {
      * @return An object representing the nation's data
      */
     public NationData getNationDataByString(String uuidOrName) {
-        JsonArray jsonArray = requestManager.getURLAsJsonArray(EARTHMC_API_URL + "nations?query=" + uuidOrName);
+        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "nations?query=" + uuidOrName);
 
         return new NationData(jsonArray.get(0).getAsJsonObject());
     }
@@ -101,7 +114,7 @@ public class EMCAPIClient {
      * @return An object representing the quarter's data
      */
     public QuarterData getQuarterDataByString(String uuid) {
-        JsonArray jsonArray = requestManager.getURLAsJsonArray(EARTHMC_API_URL + "quarters?query=" + uuid);
+        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "quarters?query=" + uuid);
 
         return new QuarterData(jsonArray.get(0).getAsJsonObject());
     }
@@ -112,7 +125,7 @@ public class EMCAPIClient {
      * @return A {@link DiscordIdentifier} representing the user's DiscordSRV link data
      */
     public DiscordIdentifier getDiscordIdentifierByString(String uuidOrID) {
-        JsonArray jsonArray = requestManager.getURLAsJsonArray(EARTHMC_API_URL + "discord?query=" + uuidOrID);
+        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "discord?query=" + uuidOrID);
 
         return new DiscordIdentifier(jsonArray.get(0).getAsJsonObject());
     }
@@ -249,7 +262,7 @@ public class EMCAPIClient {
      * @return A list of {@link TownIdentifier} representing all the nearby towns excluding the specified town
      */
     public List<TownIdentifier> getTownsNearbyTown(String uuidOrName, int radius) {
-        return DataUtil.getIdentifierList(requestManager.getURLAsJsonArray(EARTHMC_API_URL + "nearby/town?town=" + uuidOrName + "&radius=" + radius), TownIdentifier.class);
+        return DataUtil.getIdentifierList(REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "nearby/town?town=" + uuidOrName + "&radius=" + radius), TownIdentifier.class);
     }
 
     /**
@@ -260,7 +273,7 @@ public class EMCAPIClient {
      * @return A list of {@link TownIdentifier} representing all the nearby towns
      */
     public List<TownIdentifier> getTownsNearbyCoordinate(int x, int z, int radius) {
-        return DataUtil.getIdentifierList(requestManager.getURLAsJsonArray(EARTHMC_API_URL + "nearby/coordinate?x=" + x + "&z=" + z + "&radius=" + radius), TownIdentifier.class);
+        return DataUtil.getIdentifierList(REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "nearby/coordinate?x=" + x + "&z=" + z + "&radius=" + radius), TownIdentifier.class);
     }
 
     /**
@@ -270,7 +283,7 @@ public class EMCAPIClient {
      * @return An object representing basic information such as the town and nation at that location
      */
     public LocationData getLocationData(int x, int z) {
-        JsonArray jsonArray = requestManager.getURLAsJsonArray(EARTHMC_API_URL + "location?query=" + x + ";" + z);
+        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "location?query=" + x + ";" + z);
 
         return new LocationData(jsonArray.get(0).getAsJsonObject());
     }
@@ -287,7 +300,7 @@ public class EMCAPIClient {
         }
 
         String requestString = String.join(",", coordinateStrings);
-        JsonArray jsonArray = requestManager.getURLAsJsonArray(EARTHMC_API_URL + "location?query=" + requestString);
+        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "location?query=" + requestString);
 
         List<LocationData> locations = new ArrayList<>();
         for (JsonElement element : jsonArray) {

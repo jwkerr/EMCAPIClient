@@ -16,10 +16,10 @@ import java.util.concurrent.Future;
 
 public class RequestUtil {
 
-    private static final int BATCH_SIZE = 52;
+    public static int batchSize = 52;
 
     public static <T extends Identifier> List<T> getAllIdentifiers(String endpoint, Class<T> identiferClass) {
-        JsonArray jsonArray = EMCAPIClient.requestManager.getURLAsJsonArray(EMCAPIClient.EARTHMC_API_URL + endpoint);
+        JsonArray jsonArray = EMCAPIClient.REQUEST_MANAGER.getURLAsJsonArray(EMCAPIClient.EARTHMC_API_URL + endpoint);
 
         return DataUtil.getIdentifierList(jsonArray, identiferClass);
     }
@@ -30,13 +30,13 @@ public class RequestUtil {
 
         List<Future<List<T>>> futures = new ArrayList<>();
 
-        for (int i = 0; i < uuidsOrNames.size(); i += BATCH_SIZE) {
-            List<String> batch = uuidsOrNames.subList(i, Math.min(i + BATCH_SIZE, uuidsOrNames.size()));
+        for (int i = 0; i < uuidsOrNames.size(); i += batchSize) {
+            List<String> batch = uuidsOrNames.subList(i, Math.min(i + batchSize, uuidsOrNames.size()));
             Future<List<T>> future = executor.submit(() -> {
                 List<T> batchData = new ArrayList<>();
 
                 String requestString = String.join(",", batch);
-                JsonArray batchArray = EMCAPIClient.requestManager.getURLAsJsonArray(EMCAPIClient.EARTHMC_API_URL + endpoint + "?query=" + requestString);
+                JsonArray batchArray = EMCAPIClient.REQUEST_MANAGER.getURLAsJsonArray(EMCAPIClient.EARTHMC_API_URL + endpoint + "?query=" + requestString);
 
                 for (JsonElement element : batchArray) {
                     switch (endpoint) {
@@ -68,11 +68,11 @@ public class RequestUtil {
 
     public static List<DiscordIdentifier> getDiscordIdentifiers(List<String> uuidsOrIDs) {
         List<DiscordIdentifier> data = new ArrayList<>();
-        for (int i = 0; i < uuidsOrIDs.size(); i += BATCH_SIZE) {
-            List<String> batch = uuidsOrIDs.subList(i, BATCH_SIZE);
+        for (int i = 0; i < uuidsOrIDs.size(); i += batchSize) {
+            List<String> batch = uuidsOrIDs.subList(i, batchSize);
 
             String requestString = String.join(",", batch);
-            JsonArray jsonArray = EMCAPIClient.requestManager.getURLAsJsonArray(EMCAPIClient.EARTHMC_API_URL + "discord?query=" + requestString);
+            JsonArray jsonArray = EMCAPIClient.REQUEST_MANAGER.getURLAsJsonArray(EMCAPIClient.EARTHMC_API_URL + "discord?query=" + requestString);
 
             for (JsonElement element : jsonArray) {
                 data.add(new DiscordIdentifier(element.getAsJsonObject()));

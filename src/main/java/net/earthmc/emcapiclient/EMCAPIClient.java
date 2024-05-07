@@ -13,6 +13,7 @@ import net.earthmc.emcapiclient.util.RequestUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class EMCAPIClient {
@@ -132,6 +133,51 @@ public class EMCAPIClient {
 
     /**
      *
+     * @param uuid The UUID of a player currently registered in Towny
+     * @return An object representing the player's data
+     */
+    public PlayerData getPlayerDataByUUID(UUID uuid) {
+        return getPlayerDataByString(uuid.toString());
+    }
+
+    /**
+     *
+     * @param uuid The UUID of a town currently registered in Towny
+     * @return An object representing the town's data
+     */
+    public TownData getTownDataByUUID(UUID uuid) {
+        return getTownDataByString(uuid.toString());
+    }
+
+    /**
+     *
+     * @param uuid The UUID of a nation currently registered in Towny
+     * @return An object representing the nation's data
+     */
+    public NationData getNationDataByUUID(UUID uuid) {
+        return getNationDataByString(uuid.toString());
+    }
+
+    /**
+     *
+     * @param uuid The UUID of a quarter that currently exists
+     * @return An object representing the quarter's data
+     */
+    public QuarterData getQuarterDataByUUID(UUID uuid) {
+        return getQuarterDataByString(uuid.toString());
+    }
+
+    /**
+     *
+     * @param uuid The Minecraft UUID of the user
+     * @return A {@link DiscordIdentifier} representing the user's DiscordSRV link data
+     */
+    public DiscordIdentifier getDiscordIdentifierByUUID(UUID uuid) {
+        return getDiscordIdentifierByString(uuid.toString());
+    }
+
+    /**
+     *
      * @param uuidsOrNames An arbitrarily long list of player UUIDs or usernames as strings
      * @return A list of objects representing every requested player's data
      */
@@ -200,6 +246,50 @@ public class EMCAPIClient {
      */
     public List<QuarterData> getQuarterDataByStrings(String[] uuidsOrNames) {
         return getQuarterDataByStrings(List.of(uuidsOrNames));
+    }
+
+    /**
+     *
+     * @param uuids An arbitrarily long list of player UUIDs
+     * @return A list of objects representing every requested player's data
+     */
+    public List<PlayerData> getPlayerDataByUUIDs(List<UUID> uuids) {
+        return getPlayerDataByStrings(uuids.stream()
+                .map(UUID::toString)
+                .toList());
+    }
+
+    /**
+     *
+     * @param uuids An arbitrarily long list of town UUIDs
+     * @return A list of objects representing every requested town's data
+     */
+    public List<TownData> getTownDataByUUIDs(List<UUID> uuids) {
+        return getTownDataByStrings(uuids.stream()
+                .map(UUID::toString)
+                .toList());
+    }
+
+    /**
+     *
+     * @param uuids An arbitrarily long list of nation UUIDs
+     * @return A list of objects representing every requested nation's data
+     */
+    public List<NationData> getNationDataByUUIDs(List<UUID> uuids) {
+        return getNationDataByStrings(uuids.stream()
+                .map(UUID::toString)
+                .toList());
+    }
+
+    /**
+     *
+     * @param uuids An arbitrarily long list of quarter UUIDs
+     * @return A list of objects representing every requested quarter's data
+     */
+    public List<QuarterData> getQuarterDataByUUIDs(List<UUID> uuids) {
+        return getQuarterDataByStrings(uuids.stream()
+                .map(UUID::toString)
+                .toList());
     }
 
     /**

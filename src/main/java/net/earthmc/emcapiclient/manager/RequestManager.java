@@ -16,11 +16,7 @@ import java.util.UUID;
 
 public class RequestManager {
 
-    private final OkHttpClient client;
-
-    public RequestManager() {
-        client = new OkHttpClient();
-    }
+    private final OkHttpClient client = new OkHttpClient();
 
     /**
      * This method will automatically append random text to the end of the url to bypass CloudFlare caching
@@ -32,7 +28,9 @@ public class RequestManager {
         url += url.contains("?") ? "&" : "?";
         url += UUID.randomUUID();
 
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
 
         try (Response response = client.newCall(request).execute()) {
             String message = response.message();

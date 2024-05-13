@@ -25,9 +25,9 @@ public static void main(String[] args) {
 ```
 
 # Adding EMCAPIClient to your project
-Add EMCAPIClient to your Java project at https://jitpack.io/#Fruitloopins/EMCAPIClient
+Add EMCAPIClient to your Java project at https://jitpack.io/#jwkerr/EMCAPIClient
 
-Replace "Tag" in the below examples with the latest Git commit hash (https://github.com/Fruitloopins/EMCAPIClient/commits/master/)
+Replace "Tag" in the below examples with the latest Git commit hash (https://github.com/jwkerr/EMCAPIClient/commits/master/)
 ## Maven
 ```xml
 <repositories>
@@ -41,7 +41,7 @@ Replace "Tag" in the below examples with the latest Git commit hash (https://git
 ```xml
 <dependencies>
     <dependency>
-        <groupId>com.github.Fruitloopins</groupId>
+        <groupId>com.github.jwkerr</groupId>
         <artifactId>EMCAPIClient</artifactId>
         <version>Tag</version>
     </dependency>
@@ -58,6 +58,6 @@ repositories {
 
 ```groovy
 dependencies {
-        implementation "com.github.Fruitloopins:EMCAPIClient:Tag"
+        implementation "com.github.jwkerr:EMCAPIClient:Tag"
 }
 ```

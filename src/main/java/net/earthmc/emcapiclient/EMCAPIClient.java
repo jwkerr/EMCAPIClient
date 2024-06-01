@@ -68,6 +68,38 @@ public class EMCAPIClient {
 
     /**
      *
+     * @return A list of objects representing every player's data
+     */
+    public List<PlayerData> getAllPlayerData() {
+        return getPlayerDataByIdentifiers(getAllPlayerIdentifiers());
+    }
+
+    /**
+     *
+     * @return A list of objects representing every town's data
+     */
+    public List<TownData> getAllTownData() {
+        return getTownDataByIdentifiers(getAllTownIdentifiers());
+    }
+
+    /**
+     *
+     * @return A list of objects representing every nation's data
+     */
+    public List<NationData> getAllNationData() {
+        return getNationDataByIdentifiers(getAllNationIdentifiers());
+    }
+
+    /**
+     *
+     * @return A list of objects representing every quarter's data
+     */
+    public List<QuarterData> getAllQuarterData() {
+        return getQuarterDataByIdentifiers(getAllQuarterIdentifiers());
+    }
+
+    /**
+     *
      * @return An object representing the server data endpoint
      */
     public ServerData getServerData() {

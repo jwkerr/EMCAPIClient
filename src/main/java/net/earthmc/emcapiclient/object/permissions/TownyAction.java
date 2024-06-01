@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 
 @SuppressWarnings("unused")
 public class TownyAction {
+    
     private final boolean resident, nation, ally, outsider;
 
     public TownyAction(JsonArray jsonArray) {

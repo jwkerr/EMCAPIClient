@@ -6,28 +6,20 @@ import com.google.gson.JsonObject;
 import net.earthmc.emcapiclient.exception.BadRequestException;
 import net.earthmc.emcapiclient.exception.GatewayTimeoutException;
 import net.earthmc.emcapiclient.exception.NotFoundException;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import okhttp3.*;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public class RequestManager {
 
     private final OkHttpClient client = new OkHttpClient();
 
     /**
-     * This method will automatically append random text to the end of the url to bypass CloudFlare caching
      *
      * @param url URL as a string
      * @return The URL's response body as a string
      */
-    public String requestURL(String url) {
-        url += url.contains("?") ? "&" : "?";
-        url += UUID.randomUUID();
-
+    public String getURL(String url) {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -58,7 +50,7 @@ public class RequestManager {
      * @throws com.google.gson.JsonSyntaxException If the URL does not return a valid JSON array
      */
     public JsonArray getURLAsJsonArray(String url) {
-        String response = requestURL(url);
+        String response = getURL(url);
         if (response == null) return null;
 
         Gson gson = new Gson();
@@ -72,7 +64,54 @@ public class RequestManager {
      * @throws com.google.gson.JsonSyntaxException If the URL does not return a valid JSON object
      */
     public JsonObject getURLAsJsonObject(String url) {
-        String response = requestURL(url);
+        String response = getURL(url);
+        if (response == null) return null;
+
+        Gson gson = new Gson();
+        return gson.fromJson(response, JsonObject.class);
+    }
+
+    /**
+     *
+     * @param url URL as a string
+     * @param body Body as a string
+     * @return The URL's response body as a string
+     */
+    public String postURL(String url, String body) {
+        Request request = new Request.Builder()
+                .url(url)
+                .post(RequestBody.create(body.getBytes()))
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            String message = response.message();
+            switch (response.code()) {
+                case 400 -> throw new BadRequestException(message);
+                case 404 -> throw new NotFoundException(message);
+                case 504 -> throw new GatewayTimeoutException(message);
+            }
+
+            ResponseBody responseBody = response.body();
+            if (responseBody == null) return null;
+
+            return responseBody.string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public JsonArray postURLAsJsonArray(String url, JsonObject body) {
+        String response = postURL(url, body.toString());
+        if (response == null) return null;
+
+        Gson gson = new Gson();
+        return gson.fromJson(response, JsonArray.class);
+    }
+
+    public JsonObject postURLAsJsonObject(String url, JsonObject body) {
+        String response = postURL(url, body.toString());
         if (response == null) return null;
 
         Gson gson = new Gson();

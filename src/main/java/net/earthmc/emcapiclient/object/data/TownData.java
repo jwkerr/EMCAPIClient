@@ -24,7 +24,7 @@ public class TownData extends Data {
     private final NationIdentifier nation;
     private final long registered;
     private final Long joinedNationAt, ruinedAt;
-    private final boolean isPublic, isOpen, isNeutral, isCapital, isOverClaimed, isRuined, isForSale, hasNation, hasOverclaimShield;
+    private final boolean isPublic, isOpen, isNeutral, isCapital, isOverClaimed, isRuined, isForSale, hasNation, hasOverclaimShield, canOutsidersSpawn;
     private final int numTownBlocks, maxTownBlocks, numResidents, numTrusted, numOutlaws, balance;
     private final Double forSalePrice;
     private final Permissions permissions;
@@ -67,6 +67,7 @@ public class TownData extends Data {
         this.isForSale = status.get("isForSale").getAsBoolean();
         this.hasNation = status.get("hasNation").getAsBoolean();
         this.hasOverclaimShield = status.get("hasOverclaimShield").getAsBoolean();
+        this.canOutsidersSpawn = status.get("canOutsidersSpawn").getAsBoolean();
 
         JsonObject stats = jsonObject.getAsJsonObject("stats");
         this.numTownBlocks = stats.get("numTownBlocks").getAsInt();
@@ -190,6 +191,10 @@ public class TownData extends Data {
 
     public boolean hasOverclaimShield() {
         return hasOverclaimShield;
+    }
+
+    public boolean canOutsidersSpawn() {
+        return canOutsidersSpawn;
     }
 
     public int getNumTownBlocks() {

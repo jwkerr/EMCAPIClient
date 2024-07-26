@@ -1,17 +1,14 @@
 package net.earthmc.emcapiclient;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import kotlin.Pair;
 import net.earthmc.emcapiclient.manager.RequestManager;
+import net.earthmc.emcapiclient.object.DiscordType;
 import net.earthmc.emcapiclient.object.data.*;
-import net.earthmc.emcapiclient.object.data.LocationData;
 import net.earthmc.emcapiclient.object.identifier.*;
-import net.earthmc.emcapiclient.util.DataUtil;
+import net.earthmc.emcapiclient.util.JSONUtil;
 import net.earthmc.emcapiclient.util.RequestUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -114,7 +111,8 @@ public class EMCAPIClient {
      * @return An object representing the player's data
      */
     public PlayerData getPlayerDataByString(String uuidOrName) {
-        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "players?query=" + uuidOrName);
+        JsonObject body = JSONUtil.createRequestBody(uuidOrName);
+        JsonArray jsonArray = REQUEST_MANAGER.postURLAsJsonArray(EARTHMC_API_URL + "players", body);
 
         return new PlayerData(jsonArray.get(0).getAsJsonObject());
     }
@@ -125,7 +123,8 @@ public class EMCAPIClient {
      * @return An object representing the town's data
      */
     public TownData getTownDataByString(String uuidOrName) {
-        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "towns?query=" + uuidOrName);
+        JsonObject body = JSONUtil.createRequestBody(uuidOrName);
+        JsonArray jsonArray = REQUEST_MANAGER.postURLAsJsonArray(EARTHMC_API_URL + "towns", body);
 
         return new TownData(jsonArray.get(0).getAsJsonObject());
     }
@@ -136,7 +135,8 @@ public class EMCAPIClient {
      * @return An object representing the nation's data
      */
     public NationData getNationDataByString(String uuidOrName) {
-        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "nations?query=" + uuidOrName);
+        JsonObject body = JSONUtil.createRequestBody(uuidOrName);
+        JsonArray jsonArray = REQUEST_MANAGER.postURLAsJsonArray(EARTHMC_API_URL + "nations", body);
 
         return new NationData(jsonArray.get(0).getAsJsonObject());
     }
@@ -147,7 +147,8 @@ public class EMCAPIClient {
      * @return An object representing the quarter's data
      */
     public QuarterData getQuarterDataByString(String uuid) {
-        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "quarters?query=" + uuid);
+        JsonObject body = JSONUtil.createRequestBody(uuid);
+        JsonArray jsonArray = REQUEST_MANAGER.postURLAsJsonArray(EARTHMC_API_URL + "quarters", body);
 
         return new QuarterData(jsonArray.get(0).getAsJsonObject());
     }
@@ -158,7 +159,8 @@ public class EMCAPIClient {
      * @return A {@link DiscordIdentifier} representing the user's DiscordSRV link data
      */
     public DiscordIdentifier getDiscordIdentifierByString(String uuidOrID) {
-        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "discord?query=" + uuidOrID);
+        JsonObject body = JSONUtil.createRequestBody(uuidOrID);
+        JsonArray jsonArray = REQUEST_MANAGER.postURLAsJsonArray(EARTHMC_API_URL + "discord", body);
 
         return new DiscordIdentifier(jsonArray.get(0).getAsJsonObject());
     }
@@ -371,64 +373,10 @@ public class EMCAPIClient {
     /**
      *
      * @param uuidsOrIDs A list of Minecraft UUIDs or Discord IDs as strings
+     * @param type Minecraft if you are searching by UUID, Discord if you are searching by ID
      * @return A list of {@link DiscordIdentifier}
      */
-    public List<DiscordIdentifier> getDiscordIdentifiersByStrings(List<String> uuidsOrIDs) {
-        return RequestUtil.getDiscordIdentifiers(uuidsOrIDs);
-    }
-
-    /**
-     *
-     * @param uuidOrName The town UUID or name that you want to search near
-     * @param radius The block radius to search around, measured in blocks from homeblock to homeblock
-     * @return A list of {@link TownIdentifier} representing all the nearby towns excluding the specified town
-     */
-    public List<TownIdentifier> getTownsNearbyTown(String uuidOrName, int radius) {
-        return DataUtil.getIdentifierList(REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "nearby/town?town=" + uuidOrName + "&radius=" + radius), TownIdentifier.class);
-    }
-
-    /**
-     *
-     * @param x The X coordinate to search near
-     * @param z The Z coordinate to search near
-     * @param radius radius The block radius to search around, measured in blocks from townblock to homeblock
-     * @return A list of {@link TownIdentifier} representing all the nearby towns
-     */
-    public List<TownIdentifier> getTownsNearbyCoordinate(int x, int z, int radius) {
-        return DataUtil.getIdentifierList(REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "nearby/coordinate?x=" + x + "&z=" + z + "&radius=" + radius), TownIdentifier.class);
-    }
-
-    /**
-     *
-     * @param x The X coordinate to search
-     * @param z The Z coordinate to search
-     * @return An object representing basic information such as the town and nation at that location
-     */
-    public LocationData getLocationData(int x, int z) {
-        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "location?query=" + x + ";" + z);
-
-        return new LocationData(jsonArray.get(0).getAsJsonObject());
-    }
-
-    /**
-     *
-     * @param coordinates A list of pairs representing in-game coordinates, the first entry is the X coordinate and the second entry is the Z coordinate
-     * @return A list of objects representing basic information at each specified location such as the town and nation
-     */
-    public List<LocationData> getLocationData(List<Pair<Integer, Integer>> coordinates) {
-        List<String> coordinateStrings = new ArrayList<>();
-        for (Pair<Integer, Integer> coordinate : coordinates) {
-            coordinateStrings.add(coordinate.getFirst() + ";" + coordinate.getSecond());
-        }
-
-        String requestString = String.join(",", coordinateStrings);
-        JsonArray jsonArray = REQUEST_MANAGER.getURLAsJsonArray(EARTHMC_API_URL + "location?query=" + requestString);
-
-        List<LocationData> locations = new ArrayList<>();
-        for (JsonElement element : jsonArray) {
-            locations.add(new LocationData(element.getAsJsonObject()));
-        }
-
-        return locations;
+    public List<DiscordIdentifier> getDiscordIdentifiersByStrings(List<String> uuidsOrIDs, DiscordType type) {
+        return RequestUtil.getDiscordIdentifiers(uuidsOrIDs, type);
     }
 }

@@ -379,4 +379,6 @@ public class EMCAPIClient {
     public List<DiscordIdentifier> getDiscordIdentifiersByStrings(List<String> uuidsOrIDs, DiscordType type) {
         return RequestUtil.getDiscordIdentifiers(uuidsOrIDs, type);
     }
+
+    // TODO: implement nearby and location endpoint
 }

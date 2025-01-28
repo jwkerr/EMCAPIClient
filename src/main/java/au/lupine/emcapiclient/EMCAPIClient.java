@@ -24,6 +24,9 @@ public class EMCAPIClient {
     public final RequestManager requestManager = new RequestManager();
     public World world = World.AURORA;
 
+    /**
+     * Set the default world to be used in API requests
+     */
     public void setDefaultWorld(World world) {
         this.world = world;
     }

@@ -115,7 +115,7 @@ public class Player extends APIObject {
     }
 
     /**
-     * @return A {@link Town} representing the player's town or null if they have no town
+     * @return A {@link TownIdentifier} representing the player's town or null if they have no town
      */
     @Nullable
     public TownIdentifier getTown() {
@@ -123,7 +123,7 @@ public class Player extends APIObject {
     }
 
     /**
-     * @return A {@link Nation} representing the player's nation or null if they have no nation
+     * @return A {@link NationIdentifier} representing the player's nation or null if they have no nation
      */
     @Nullable
     public NationIdentifier getNation() {

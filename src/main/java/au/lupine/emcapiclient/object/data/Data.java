@@ -36,7 +36,6 @@ public abstract class Data {
 
     /**
      * Use this to access any values that may not be parsed by EMCAPIClient
-     *
      * @return The {@link JsonObject} that was parsed to create this object
      */
     public JsonObject getJsonObject() {

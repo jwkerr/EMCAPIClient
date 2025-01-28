@@ -1,10 +1,10 @@
 package au.lupine.emcapiclient.manager;
 
+import au.lupine.emcapiclient.object.exception.FailedRequestException;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import au.lupine.emcapiclient.object.exception.FailedRequestException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

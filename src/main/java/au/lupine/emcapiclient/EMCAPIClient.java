@@ -1,14 +1,12 @@
 package au.lupine.emcapiclient;
 
+import au.lupine.emcapiclient.manager.RequestManager;
+import au.lupine.emcapiclient.object.World;
 import au.lupine.emcapiclient.object.data.*;
 import au.lupine.emcapiclient.object.identifier.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import au.lupine.emcapiclient.manager.RequestManager;
-import au.lupine.emcapiclient.object.World;
-import net.earthmc.emcapiclient.object.data.*;
-import net.earthmc.emcapiclient.object.identifier.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

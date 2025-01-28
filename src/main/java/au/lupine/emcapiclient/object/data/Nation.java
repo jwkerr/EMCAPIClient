@@ -1,12 +1,12 @@
 package au.lupine.emcapiclient.object.data;
 
-import com.google.gson.JsonObject;
 import au.lupine.emcapiclient.object.Location;
 import au.lupine.emcapiclient.object.identifier.Identifier;
 import au.lupine.emcapiclient.object.identifier.NationIdentifier;
 import au.lupine.emcapiclient.object.identifier.PlayerIdentifier;
 import au.lupine.emcapiclient.object.identifier.TownIdentifier;
 import au.lupine.emcapiclient.util.JSONUtil;
+import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;

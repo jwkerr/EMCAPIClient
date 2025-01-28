@@ -1,9 +1,5 @@
 package au.lupine.emcapiclient.object.data;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import kotlin.Pair;
 import au.lupine.emcapiclient.object.Location;
 import au.lupine.emcapiclient.object.identifier.Identifier;
 import au.lupine.emcapiclient.object.identifier.NationIdentifier;
@@ -11,6 +7,10 @@ import au.lupine.emcapiclient.object.identifier.PlayerIdentifier;
 import au.lupine.emcapiclient.object.identifier.QuarterIdentifier;
 import au.lupine.emcapiclient.object.permissions.Permissions;
 import au.lupine.emcapiclient.util.JSONUtil;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import kotlin.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

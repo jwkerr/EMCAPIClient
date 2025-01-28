@@ -1,7 +1,7 @@
 package au.lupine.emcapiclient.object;
 
-import com.google.gson.JsonObject;
 import au.lupine.emcapiclient.util.JSONUtil;
+import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")

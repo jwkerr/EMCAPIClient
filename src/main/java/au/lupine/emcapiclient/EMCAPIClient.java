@@ -26,8 +26,8 @@ public class EMCAPIClient {
 
     public static final URI EARTHMC_API_URI = URI.create("https://api.earthmc.net/v3/");
 
-    public final RequestManager requestManager = new RequestManager();
-    public World world = World.AURORA;
+    private final RequestManager requestManager = new RequestManager();
+    private World world = World.AURORA;
 
     /**
      * Set the default world to be used in API requests when none is specified
@@ -42,6 +42,10 @@ public class EMCAPIClient {
 
     private URI createWorldURI(World world) {
         return EARTHMC_API_URI.resolve(world.getName() + "/");
+    }
+
+    public RequestManager getRequestManager() {
+        return requestManager;
     }
 
     public @NotNull List<PlayerIdentifier> getAllPlayers() {

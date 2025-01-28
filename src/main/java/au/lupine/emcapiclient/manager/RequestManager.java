@@ -22,6 +22,14 @@ public class RequestManager {
     private final HttpClient client = HttpClient.newHttpClient();
     private final Gson gson = new Gson();
 
+    public HttpClient getClient() {
+        return client;
+    }
+
+    public Gson getGson() {
+        return gson;
+    }
+
     public JsonObject getURIAsJsonObject(@NotNull URI uri) {
         return (JsonObject) getURIAsJsonElement(uri, JsonObject.class);
     }
@@ -34,6 +42,32 @@ public class RequestManager {
         try {
             HttpResponse<String> response = client.send(
                     HttpRequest.newBuilder().GET().uri(uri).build(),
+                    HttpResponse.BodyHandlers.ofString()
+            );
+
+            int statusCode = response.statusCode();
+            if (statusCode != 200) throw new FailedRequestException(statusCode);
+
+            return gson.fromJson(response.body(), elementClass);
+        } catch (IOException | InterruptedException e) {
+            return null;
+        }
+    }
+
+    public JsonObject postURIAsJsonObject(@NotNull URI uri, @NotNull JsonObject body) {
+        return (JsonObject) postURIAsJsonElement(uri, body, JsonObject.class);
+    }
+
+    public JsonArray postURIAsJsonArray(@NotNull URI uri, @NotNull JsonObject body) {
+        return (JsonArray) postURIAsJsonElement(uri, body, JsonArray.class);
+    }
+
+    private <T extends JsonElement> JsonElement postURIAsJsonElement(@NotNull URI uri, @NotNull JsonObject body, @NotNull Class<T> elementClass) {
+        try {
+            HttpResponse<String> response = client.send(
+                    HttpRequest.newBuilder().POST(
+                            HttpRequest.BodyPublishers.ofString(body.toString())
+                    ).uri(uri).build(),
                     HttpResponse.BodyHandlers.ofString()
             );
 
@@ -68,28 +102,6 @@ public class RequestManager {
         } catch (CompletionException e) {
             if (e.getCause() instanceof FailedRequestException) throw (FailedRequestException) e.getCause();
             throw e;
-        }
-    }
-
-    public JsonArray postURIAsJsonArray(@NotNull URI uri, @NotNull JsonObject body) {
-        return (JsonArray) postURIAsJsonElement(uri, body, JsonArray.class);
-    }
-
-    private <T extends JsonElement> JsonElement postURIAsJsonElement(@NotNull URI uri, @NotNull JsonObject body, @NotNull Class<T> elementClass) {
-        try {
-            HttpResponse<String> response = client.send(
-                    HttpRequest.newBuilder().POST(
-                            HttpRequest.BodyPublishers.ofString(body.toString())
-                    ).uri(uri).build(),
-                    HttpResponse.BodyHandlers.ofString()
-            );
-
-            int statusCode = response.statusCode();
-            if (statusCode != 200) throw new FailedRequestException(statusCode);
-
-            return gson.fromJson(response.body(), elementClass);
-        } catch (IOException | InterruptedException e) {
-            return null;
         }
     }
 

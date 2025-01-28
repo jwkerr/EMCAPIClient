@@ -1,5 +1,6 @@
 package au.lupine.emcapiclient.object.identifier;
 
+import au.lupine.emcapiclient.object.data.APIObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -10,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Represents a reference to an {@link APIObject}
+ */
 public abstract class Identifier {
 
     private final String name;

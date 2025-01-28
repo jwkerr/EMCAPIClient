@@ -16,6 +16,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The primary class in EMCAPIClient, simply create a new instance like any other object to use it
+ * <p>
+ * Methods with and without a {@link World} parameter will default to the world specified by {@link #setDefaultWorld(World)} when no world is provided
+ */
 @SuppressWarnings("unused")
 public class EMCAPIClient {
 
@@ -25,7 +30,7 @@ public class EMCAPIClient {
     public World world = World.AURORA;
 
     /**
-     * Set the default world to be used in API requests
+     * Set the default world to be used in API requests when none is specified
      */
     public void setDefaultWorld(World world) {
         this.world = world;

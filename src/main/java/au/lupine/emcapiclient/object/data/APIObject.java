@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class Data {
+public abstract class APIObject {
 
     private final JsonObject jsonObject;
 
-    public Data(JsonObject jsonObject) {
+    public APIObject(JsonObject jsonObject) {
         this.jsonObject = jsonObject;
     }
 
@@ -48,9 +48,9 @@ public abstract class Data {
      */
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Data data)) return false;
+        if (!(obj instanceof APIObject apiObject)) return false;
 
-        return this.jsonObject.equals(data.getJsonObject());
+        return this.jsonObject.equals(apiObject.getJsonObject());
     }
 
     @Override

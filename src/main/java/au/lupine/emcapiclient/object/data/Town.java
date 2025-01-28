@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public class Town extends Data {
+public class Town extends APIObject {
 
     private final String name, board, founder, wiki;
     private final UUID uuid;

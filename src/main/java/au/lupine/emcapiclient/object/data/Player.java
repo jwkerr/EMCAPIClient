@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
-public class Player extends Data {
+public class Player extends APIObject {
 
     private final String name, title, surname, formattedName, about;
     private final UUID uuid;

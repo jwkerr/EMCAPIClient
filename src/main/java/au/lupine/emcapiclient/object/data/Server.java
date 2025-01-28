@@ -3,7 +3,7 @@ package au.lupine.emcapiclient.object.data;
 import com.google.gson.JsonObject;
 
 @SuppressWarnings("unused")
-public class Server extends Data {
+public class Server extends APIObject {
 
     private final String version, moonPhase;
     private final long newDayTime, serverTimeOfDay, time, fullTime;

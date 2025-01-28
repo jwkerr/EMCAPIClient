@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public class Quarter extends Data {
+public class Quarter extends APIObject {
 
     private final String name;
     private final UUID uuid;

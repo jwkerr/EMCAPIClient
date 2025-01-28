@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public class Nation extends Data {
+public class Nation extends APIObject {
 
     private final String name, board, dynmapColour, dynmapOutline, wiki;
     private final UUID uuid;

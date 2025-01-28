@@ -5,18 +5,18 @@ import com.google.gson.JsonArray;
 @SuppressWarnings("unused")
 public class Cuboid {
 
-    private final int[] pos1, pos2;
+    private final Location cornerOne, cornerTwo;
 
-    public Cuboid(JsonArray pos1, JsonArray pos2) {
-        this.pos1 = new int[]{pos1.get(0).getAsInt(), pos1.get(1).getAsInt(), pos1.get(2).getAsInt()};
-        this.pos2 = new int[]{pos2.get(0).getAsInt(), pos2.get(1).getAsInt(), pos2.get(2).getAsInt()};
+    public Cuboid(JsonArray cornerOne, JsonArray cornerTwo) {
+        this.cornerOne = new Location(null, cornerOne.get(0).getAsDouble(), cornerOne.get(1).getAsInt(), cornerOne.get(2).getAsInt(), null, null);
+        this.cornerTwo = new Location(null, cornerTwo.get(0).getAsDouble(), cornerTwo.get(1).getAsDouble(), cornerTwo.get(2).getAsDouble(), null, null);
     }
 
-    public int[] getPos1() {
-        return pos1;
+    public Location getCornerOne() {
+        return cornerOne;
     }
 
-    public int[] getPos2() {
-        return pos2;
+    public Location getCornerTwo() {
+        return cornerTwo;
     }
 }

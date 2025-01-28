@@ -1,384 +1,568 @@
 package net.earthmc.emcapiclient;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.earthmc.emcapiclient.manager.RequestManager;
-import net.earthmc.emcapiclient.object.DiscordType;
+import net.earthmc.emcapiclient.object.World;
 import net.earthmc.emcapiclient.object.data.*;
 import net.earthmc.emcapiclient.object.identifier.*;
-import net.earthmc.emcapiclient.util.JSONUtil;
-import net.earthmc.emcapiclient.util.RequestUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class EMCAPIClient {
 
-    public static final String EARTHMC_API_URL = "https://api.earthmc.net/v3/aurora/";
-    public static final RequestManager REQUEST_MANAGER = new RequestManager();
+    public static final URI EARTHMC_API_URI = URI.create("https://api.earthmc.net/v3/");
 
-    /**
-     * Do not set this value higher than the default of 52 if you are using identifiers or UUIDs as it will max out the URL length
-     * If you wish to increase the size to request more at once you should be using usernames, such workarounds will not be necessary in the future with updates to the API
-     *
-     * @param batchSize The amount of objects that will be requested in one request
-     */
-    public void setBatchSize(int batchSize) {
-        if (batchSize <= 0) batchSize = 1;
-        if (batchSize > 100) batchSize = 100; // The max objects that can be looked up at once in the API
+    public final RequestManager requestManager = new RequestManager();
+    public World world = World.AURORA;
 
-        RequestUtil.batchSize = batchSize;
+    public void setDefaultWorld(World world) {
+        this.world = world;
     }
 
-    /**
-     *
-     * @return A list of objects representing every player's username and UUID
-     */
-    public List<PlayerIdentifier> getAllPlayerIdentifiers() {
-        return RequestUtil.getAllIdentifiers("players", PlayerIdentifier.class);
+    private URI getDefaultWorldURI() {
+        return EARTHMC_API_URI.resolve(world.getName() + "/");
     }
 
-    /**
-     *
-     * @return A list of objects representing every town's name and UUID
-     */
-    public List<TownIdentifier> getAllTownIdentifiers() {
-        return RequestUtil.getAllIdentifiers("towns", TownIdentifier.class);
+    private URI createWorldURI(World world) {
+        return EARTHMC_API_URI.resolve(world.getName() + "/");
     }
 
-    /**
-     *
-     * @return A list of objects representing every nation's name and UUID
-     */
-    public List<NationIdentifier> getAllNationIdentifiers() {
-        return RequestUtil.getAllIdentifiers("nations", NationIdentifier.class);
+    public @NotNull List<PlayerIdentifier> getAllPlayers() {
+        return getAllPlayers(world);
     }
 
-    /**
-     *
-     * @return A list of objects representing every quarter's name (always null) and UUID
-     */
-    public List<QuarterIdentifier> getAllQuarterIdentifiers() {
-        return RequestUtil.getAllIdentifiers("quarters", QuarterIdentifier.class);
+    public @NotNull List<PlayerIdentifier> getAllPlayers(@NotNull World world) {
+        return Identifier.createIdentifierList(
+                requestManager.getURIAsJsonArray(
+                        createWorldURI(world).resolve("players")
+                ),
+                PlayerIdentifier.class
+        );
     }
 
-    /**
-     *
-     * @return A list of objects representing every player's data
-     */
-    public List<PlayerData> getAllPlayerData() {
-        return getPlayerDataByIdentifiers(getAllPlayerIdentifiers());
+    public @NotNull List<TownIdentifier> getAllTowns() {
+        return getAllTowns(world);
     }
 
-    /**
-     *
-     * @return A list of objects representing every town's data
-     */
-    public List<TownData> getAllTownData() {
-        return getTownDataByIdentifiers(getAllTownIdentifiers());
+    public @NotNull List<TownIdentifier> getAllTowns(@NotNull World world) {
+        return Identifier.createIdentifierList(
+                requestManager.getURIAsJsonArray(
+                        createWorldURI(world).resolve("towns")
+                ),
+                TownIdentifier.class
+        );
     }
 
-    /**
-     *
-     * @return A list of objects representing every nation's data
-     */
-    public List<NationData> getAllNationData() {
-        return getNationDataByIdentifiers(getAllNationIdentifiers());
+    public @NotNull List<NationIdentifier> getAllNations() {
+        return getAllNations(world);
     }
 
-    /**
-     *
-     * @return A list of objects representing every quarter's data
-     */
-    public List<QuarterData> getAllQuarterData() {
-        return getQuarterDataByIdentifiers(getAllQuarterIdentifiers());
+    public @NotNull List<NationIdentifier> getAllNations(@NotNull World world) {
+        return Identifier.createIdentifierList(
+                requestManager.getURIAsJsonArray(
+                        createWorldURI(world).resolve("nations")
+                ),
+                NationIdentifier.class
+        );
     }
 
-    /**
-     *
-     * @return An object representing the server data endpoint
-     */
-    public ServerData getServerData() {
-        JsonObject jsonObject = REQUEST_MANAGER.getURLAsJsonObject(EARTHMC_API_URL);
-
-        return new ServerData(jsonObject);
+    public @NotNull List<QuarterIdentifier> getAllQuarters() {
+        return getAllQuarters(world);
     }
 
-    /**
-     *
-     * @param uuidOrName The UUID or username of a player currently registered in Towny as a string
-     * @return An object representing the player's data
-     */
-    public PlayerData getPlayerDataByString(String uuidOrName) {
-        JsonObject body = JSONUtil.createRequestBody(uuidOrName);
-        JsonArray jsonArray = REQUEST_MANAGER.postURLAsJsonArray(EARTHMC_API_URL + "players", body);
-
-        return new PlayerData(jsonArray.get(0).getAsJsonObject());
+    public @NotNull List<QuarterIdentifier> getAllQuarters(@NotNull World world) {
+        return Identifier.createIdentifierList(
+                requestManager.getURIAsJsonArray(
+                        createWorldURI(world).resolve("quarters")
+                ),
+                QuarterIdentifier.class
+        );
     }
 
-    /**
-     *
-     * @param uuidOrName The UUID or name of a town currently registered in Towny as a string
-     * @return An object representing the town's data
-     */
-    public TownData getTownDataByString(String uuidOrName) {
-        JsonObject body = JSONUtil.createRequestBody(uuidOrName);
-        JsonArray jsonArray = REQUEST_MANAGER.postURLAsJsonArray(EARTHMC_API_URL + "towns", body);
-
-        return new TownData(jsonArray.get(0).getAsJsonObject());
+    public @NotNull List<Player> getPlayersByStrings(@NotNull List<String> query) {
+        return getPlayersByStrings(world, query);
     }
 
-    /**
-     *
-     * @param uuidOrName The UUID or name of a nation currently registered in Towny as a string
-     * @return An object representing the nation's data
-     */
-    public NationData getNationDataByString(String uuidOrName) {
-        JsonObject body = JSONUtil.createRequestBody(uuidOrName);
-        JsonArray jsonArray = REQUEST_MANAGER.postURLAsJsonArray(EARTHMC_API_URL + "nations", body);
+    public @NotNull List<Player> getPlayersByStrings(@NotNull World world, @NotNull List<String> query) {
+        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("players"), query);
 
-        return new NationData(jsonArray.get(0).getAsJsonObject());
+        List<Player> players = new ArrayList<>();
+        for (JsonElement element : response) {
+            Player player = new Player(element.getAsJsonObject());
+            players.add(player);
+        }
+
+        return players;
     }
 
-    /**
-     *
-     * @param uuid The UUID of a quarter that currently exists
-     * @return An object representing the quarter's data
-     */
-    public QuarterData getQuarterDataByString(String uuid) {
-        JsonObject body = JSONUtil.createRequestBody(uuid);
-        JsonArray jsonArray = REQUEST_MANAGER.postURLAsJsonArray(EARTHMC_API_URL + "quarters", body);
-
-        return new QuarterData(jsonArray.get(0).getAsJsonObject());
+    public @NotNull List<Town> getTownsByStrings(@NotNull List<String> query) {
+        return getTownsByStrings(world, query);
     }
 
-    /**
-     *
-     * @param uuidOrID The Minecraft UUID or Discord ID of the user
-     * @return A {@link DiscordIdentifier} representing the user's DiscordSRV link data
-     */
-    public DiscordIdentifier getDiscordIdentifierByString(String uuidOrID) {
-        JsonObject body = JSONUtil.createRequestBody(uuidOrID);
-        JsonArray jsonArray = REQUEST_MANAGER.postURLAsJsonArray(EARTHMC_API_URL + "discord", body);
+    public @NotNull List<Town> getTownsByStrings(@NotNull World world, @NotNull List<String> query) {
+        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("towns"), query);
 
-        return new DiscordIdentifier(jsonArray.get(0).getAsJsonObject());
+        List<Town> towns = new ArrayList<>();
+        for (JsonElement element : response) {
+            Town town = new Town(element.getAsJsonObject());
+            towns.add(town);
+        }
+
+        return towns;
     }
 
-    /**
-     *
-     * @param uuid The UUID of a player currently registered in Towny
-     * @return An object representing the player's data
-     */
-    public PlayerData getPlayerDataByUUID(UUID uuid) {
-        return getPlayerDataByString(uuid.toString());
+    public @NotNull List<Nation> getNationsByStrings(@NotNull List<String> query) {
+        return getNationsByStrings(world, query);
     }
 
-    /**
-     *
-     * @param uuid The UUID of a town currently registered in Towny
-     * @return An object representing the town's data
-     */
-    public TownData getTownDataByUUID(UUID uuid) {
-        return getTownDataByString(uuid.toString());
+    public @NotNull List<Nation> getNationsByStrings(@NotNull World world, @NotNull List<String> query) {
+        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("nations"), query);
+
+        List<Nation> nations = new ArrayList<>();
+        for (JsonElement element : response) {
+            Nation nation = new Nation(element.getAsJsonObject());
+            nations.add(nation);
+        }
+
+        return nations;
     }
 
-    /**
-     *
-     * @param uuid The UUID of a nation currently registered in Towny
-     * @return An object representing the nation's data
-     */
-    public NationData getNationDataByUUID(UUID uuid) {
-        return getNationDataByString(uuid.toString());
+    public @NotNull List<Quarter> getQuartersByStrings(@NotNull List<String> query) {
+        return getQuartersByStrings(world, query);
     }
 
-    /**
-     *
-     * @param uuid The UUID of a quarter that currently exists
-     * @return An object representing the quarter's data
-     */
-    public QuarterData getQuarterDataByUUID(UUID uuid) {
-        return getQuarterDataByString(uuid.toString());
+    public @NotNull List<Quarter> getQuartersByStrings(@NotNull World world, @NotNull List<String> query) {
+        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("quarters"), query);
+
+        List<Quarter> quarters = new ArrayList<>();
+        for (JsonElement element : response) {
+            Quarter quarter = new Quarter(element.getAsJsonObject());
+            quarters.add(quarter);
+        }
+
+        return quarters;
     }
 
-    /**
-     *
-     * @param uuid The Minecraft UUID of the user
-     * @return A {@link DiscordIdentifier} representing the user's DiscordSRV link data
-     */
-    public DiscordIdentifier getDiscordIdentifierByUUID(UUID uuid) {
-        return getDiscordIdentifierByString(uuid.toString());
+    public @NotNull List<Player> getPlayersByUUIDs(@NotNull List<UUID> query) {
+        return getPlayersByUUIDs(world, query);
     }
 
-    /**
-     *
-     * @param uuidsOrNames An arbitrarily long list of player UUIDs or usernames as strings
-     * @return A list of objects representing every requested player's data
-     */
-    public List<PlayerData> getPlayerDataByStrings(List<String> uuidsOrNames) {
-        return RequestUtil.getDataByStrings(uuidsOrNames, "players");
+    public @NotNull List<Player> getPlayersByUUIDs(@NotNull World world, @NotNull List<UUID> query) {
+        return getPlayersByStrings(world, query.stream().map(UUID::toString).toList());
     }
 
-    /**
-     *
-     * @param uuidsOrNames An arbitrarily long list of town UUIDs or names as strings
-     * @return A list of objects representing every requested town's data
-     */
-    public List<TownData> getTownDataByStrings(List<String> uuidsOrNames) {
-        return RequestUtil.getDataByStrings(uuidsOrNames, "towns");
+    public @NotNull List<Town> getTownsByUUIDs(@NotNull List<UUID> query) {
+        return getTownsByUUIDs(world, query);
     }
 
-    /**
-     *
-     * @param uuidsOrNames An arbitrarily long list of nation UUIDs or names as strings
-     * @return A list of objects representing every requested nation's data
-     */
-    public List<NationData> getNationDataByStrings(List<String> uuidsOrNames) {
-        return RequestUtil.getDataByStrings(uuidsOrNames, "nations");
+    public @NotNull List<Town> getTownsByUUIDs(@NotNull World world, @NotNull List<UUID> query) {
+        return getTownsByStrings(world, query.stream().map(UUID::toString).toList());
     }
 
-    /**
-     *
-     * @param uuidsOrNames An arbitrarily long list of quarter UUIDs as strings
-     * @return A list of objects representing every requested quarter's data
-     */
-    public List<QuarterData> getQuarterDataByStrings(List<String> uuidsOrNames) {
-        return RequestUtil.getDataByStrings(uuidsOrNames, "quarters");
+    public @NotNull List<Nation> getNationsByUUIDs(@NotNull List<UUID> query) {
+        return getNationsByUUIDs(world, query);
     }
 
-    /**
-     *
-     * @param uuidsOrNames An arbitrarily long list of player UUIDs or usernames as strings
-     * @return A list of objects representing every requested player's data
-     */
-    public List<PlayerData> getPlayerDataByStrings(String[] uuidsOrNames) {
-        return getPlayerDataByStrings(List.of(uuidsOrNames));
+    public @NotNull List<Nation> getNationsByUUIDs(@NotNull World world, @NotNull List<UUID> query) {
+        return getNationsByStrings(world, query.stream().map(UUID::toString).toList());
     }
 
-    /**
-     *
-     * @param uuidsOrNames An arbitrarily long list of town UUIDs or names as strings
-     * @return A list of objects representing every requested town's data
-     */
-    public List<TownData> getTownDataByStrings(String[] uuidsOrNames) {
-        return getTownDataByStrings(List.of(uuidsOrNames));
+    public @NotNull List<Quarter> getQuartersByUUIDs(@NotNull List<UUID> query) {
+        return getQuartersByUUIDs(world, query);
     }
 
-    /**
-     *
-     * @param uuidsOrNames An arbitrarily long list of nation UUIDs or names as strings
-     * @return A list of objects representing every requested nation's data
-     */
-    public List<NationData> getNationDataByStrings(String[] uuidsOrNames) {
-        return getNationDataByStrings(List.of(uuidsOrNames));
+    public @NotNull List<Quarter> getQuartersByUUIDs(@NotNull World world, @NotNull List<UUID> query) {
+        return getQuartersByStrings(world, query.stream().map(UUID::toString).toList());
     }
 
-    /**
-     *
-     * @param uuidsOrNames An arbitrarily long list of quarter UUIDs as strings
-     * @return A list of objects representing every requested quarter's data
-     */
-    public List<QuarterData> getQuarterDataByStrings(String[] uuidsOrNames) {
-        return getQuarterDataByStrings(List.of(uuidsOrNames));
+    public @NotNull List<Player> getPlayersByStrings(@NotNull String... query) {
+        return getPlayersByStrings(world, query);
     }
 
-    /**
-     *
-     * @param uuids An arbitrarily long list of player UUIDs
-     * @return A list of objects representing every requested player's data
-     */
-    public List<PlayerData> getPlayerDataByUUIDs(List<UUID> uuids) {
-        return getPlayerDataByStrings(uuids.stream()
-                .map(UUID::toString)
-                .toList());
+    public @NotNull List<Player> getPlayersByStrings(@NotNull World world, @NotNull String... query) {
+        return getPlayersByStrings(world, Arrays.stream(query).toList());
     }
 
-    /**
-     *
-     * @param uuids An arbitrarily long list of town UUIDs
-     * @return A list of objects representing every requested town's data
-     */
-    public List<TownData> getTownDataByUUIDs(List<UUID> uuids) {
-        return getTownDataByStrings(uuids.stream()
-                .map(UUID::toString)
-                .toList());
+    public @NotNull List<Town> getTownsByStrings(@NotNull String... query) {
+        return getTownsByStrings(world, query);
     }
 
-    /**
-     *
-     * @param uuids An arbitrarily long list of nation UUIDs
-     * @return A list of objects representing every requested nation's data
-     */
-    public List<NationData> getNationDataByUUIDs(List<UUID> uuids) {
-        return getNationDataByStrings(uuids.stream()
-                .map(UUID::toString)
-                .toList());
+    public @NotNull List<Town> getTownsByStrings(@NotNull World world, @NotNull String... query) {
+        return getTownsByStrings(world, Arrays.stream(query).toList());
     }
 
-    /**
-     *
-     * @param uuids An arbitrarily long list of quarter UUIDs
-     * @return A list of objects representing every requested quarter's data
-     */
-    public List<QuarterData> getQuarterDataByUUIDs(List<UUID> uuids) {
-        return getQuarterDataByStrings(uuids.stream()
-                .map(UUID::toString)
-                .toList());
+    public @NotNull List<Nation> getNationsByStrings(@NotNull String... query) {
+        return getNationsByStrings(world, query);
     }
 
-    /**
-     *
-     * @param identifiers An arbitrarily long list of PlayerIdentifiers
-     * @return A list of objects representing every requested player's data
-     */
-    public List<PlayerData> getPlayerDataByIdentifiers(List<PlayerIdentifier> identifiers) {
-        return getPlayerDataByStrings(identifiers.stream()
-                .map(Identifier::getUUID)
-                .toList());
+    public @NotNull List<Nation> getNationsByStrings(@NotNull World world, @NotNull String... query) {
+        return getNationsByStrings(world, Arrays.stream(query).toList());
     }
 
-    /**
-     *
-     * @param identifiers An arbitrarily long list of TownIdentifiers
-     * @return A list of objects representing every requested town's data
-     */
-    public List<TownData> getTownDataByIdentifiers(List<TownIdentifier> identifiers) {
-        return getTownDataByStrings(identifiers.stream()
-                .map(Identifier::getUUID)
-                .toList());
+    public @NotNull List<Quarter> getQuartersByStrings(@NotNull String... query) {
+        return getQuartersByStrings(world, query);
     }
 
-    /**
-     *
-     * @param identifiers An arbitrarily long list of NationIdentifiers
-     * @return A list of objects representing every requested nation's data
-     */
-    public List<NationData> getNationDataByIdentifiers(List<NationIdentifier> identifiers) {
-        return getNationDataByStrings(identifiers.stream()
-                .map(Identifier::getUUID)
-                .toList());
+    public @NotNull List<Quarter> getQuartersByStrings(@NotNull World world, @NotNull String... query) {
+        return getQuartersByStrings(world, Arrays.stream(query).toList());
     }
 
-    /**
-     *
-     * @param identifiers An arbitrarily long list of QuarterIdentifiers
-     * @return A list of objects representing every requested quarter's data
-     */
-    public List<QuarterData> getQuarterDataByIdentifiers(List<QuarterIdentifier> identifiers) {
-        return getQuarterDataByStrings(identifiers.stream()
-                .map(Identifier::getUUID)
-                .toList());
+    public @NotNull List<Player> getPlayersByIdentifiers(@NotNull List<PlayerIdentifier> query) {
+        return getPlayersByIdentifiers(world, query);
     }
 
-    /**
-     *
-     * @param uuidsOrIDs A list of Minecraft UUIDs or Discord IDs as strings
-     * @param type Minecraft if you are searching by UUID, Discord if you are searching by ID
-     * @return A list of {@link DiscordIdentifier}
-     */
-    public List<DiscordIdentifier> getDiscordIdentifiersByStrings(List<String> uuidsOrIDs, DiscordType type) {
-        return RequestUtil.getDiscordIdentifiers(uuidsOrIDs, type);
+    public @NotNull List<Player> getPlayersByIdentifiers(@NotNull World world, @NotNull List<PlayerIdentifier> query) {
+        return getPlayersByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
     }
 
-    // TODO: implement nearby and location endpoint
+    public @NotNull List<Town> getTownsByIdentifiers(@NotNull List<TownIdentifier> query) {
+        return getTownsByIdentifiers(world, query);
+    }
+
+    public @NotNull List<Town> getTownsByIdentifiers(@NotNull World world, @NotNull List<TownIdentifier> query) {
+        return getTownsByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
+    }
+
+    public @NotNull List<Nation> getNationsByIdentifiers(@NotNull List<NationIdentifier> query) {
+        return getNationsByIdentifiers(world, query);
+    }
+
+    public @NotNull List<Nation> getNationsByIdentifiers(@NotNull World world, @NotNull List<NationIdentifier> query) {
+        return getNationsByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
+    }
+
+    public @NotNull List<Quarter> getQuartersByIdentifiers(@NotNull List<QuarterIdentifier> query) {
+        return getQuartersByIdentifiers(world, query);
+    }
+
+    public @NotNull List<Quarter> getQuartersByIdentifiers(@NotNull World world, @NotNull List<QuarterIdentifier> query) {
+        return getQuartersByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
+    }
+
+    public @NotNull Server getServer() {
+        return getServer(world);
+    }
+
+    public @NotNull Server getServer(@NotNull World world) {
+        JsonObject response = requestManager.getURIAsJsonObject(createWorldURI(world));
+        return new Server(response);
+    }
+
+    public @Nullable Player getPlayerByString(@NotNull String query) {
+        return getPlayerByString(world, query);
+    }
+
+    public @Nullable Player getPlayerByString(@NotNull World world, @NotNull String query) {
+        List<Player> players = getPlayersByStrings(world, query);
+        return players.isEmpty() ? null : players.get(0);
+    }
+
+    public @Nullable Town getTownByString(@NotNull String query) {
+        return getTownByString(world, query);
+    }
+
+    public @Nullable Town getTownByString(@NotNull World world, @NotNull String query) {
+        List<Town> towns = getTownsByStrings(world, query);
+        return towns.isEmpty() ? null : towns.get(0);
+    }
+
+    public @Nullable Nation getNationByString(@NotNull String query) {
+        return getNationByString(world, query);
+    }
+
+    public @Nullable Nation getNationByString(@NotNull World world, @NotNull String query) {
+        List<Nation> nations = getNationsByStrings(world, query);
+        return nations.isEmpty() ? null : nations.get(0);
+    }
+
+    public @Nullable Quarter getQuarterByString(@NotNull String query) {
+        return getQuarterByString(world, query);
+    }
+
+    public @Nullable Quarter getQuarterByString(@NotNull World world, @NotNull String query) {
+        List<Quarter> quarters = getQuartersByStrings(world, query);
+        return quarters.isEmpty() ? null : quarters.get(0);
+    }
+
+    public @Nullable Player getPlayerByUUID(@NotNull UUID query) {
+        return getPlayerByUUID(world, query);
+    }
+
+    public @Nullable Player getPlayerByUUID(@NotNull World world, @NotNull UUID query) {
+        return getPlayerByString(world, query.toString());
+    }
+
+    public @Nullable Town getTownByUUID(@NotNull UUID query) {
+        return getTownByUUID(world, query);
+    }
+
+    public @Nullable Town getTownByUUID(@NotNull World world, @NotNull UUID query) {
+        return getTownByString(world, query.toString());
+    }
+
+    public @Nullable Nation getNationByUUID(@NotNull UUID query) {
+        return getNationByUUID(world, query);
+    }
+
+    public @Nullable Nation getNationByUUID(@NotNull World world, @NotNull UUID query) {
+        return getNationByString(world, query.toString());
+    }
+
+    public @Nullable Quarter getQuarterByUUID(@NotNull UUID query) {
+        return getQuarterByUUID(world, query);
+    }
+
+    public @Nullable Quarter getQuarterByUUID(@NotNull World world, @NotNull UUID query) {
+        return getQuarterByString(world, query.toString());
+    }
+
+    public @Nullable Player getPlayerByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getPlayerByIdentifier(world, identifier);
+    }
+
+    public @Nullable Player getPlayerByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+        return getPlayerByUUID(world, identifier.getUUID());
+    }
+
+    public @Nullable Town getTownByIdentifier(@NotNull TownIdentifier identifier) {
+        return getTownByIdentifier(world, identifier);
+    }
+
+    public @Nullable Town getTownByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        return getTownByUUID(world, identifier.getUUID());
+    }
+
+    public @Nullable Nation getNationByIdentifier(@NotNull NationIdentifier identifier) {
+        return getNationByIdentifier(world, identifier);
+    }
+
+    public @Nullable Nation getNationByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+        return getNationByUUID(world, identifier.getUUID());
+    }
+
+    public @Nullable Quarter getQuarterByIdentifier(@NotNull QuarterIdentifier identifier) {
+        return getQuarterByIdentifier(world, identifier);
+    }
+
+    public @Nullable Quarter getQuarterByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
+        return getQuarterByUUID(world, identifier.getUUID());
+    }
+
+    public @Nullable TownIdentifier getTownByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getTownByIdentifier(world, identifier);
+    }
+
+    public @Nullable TownIdentifier getTownByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+        Player player = getPlayerByIdentifier(world, identifier);
+        if (player == null) return null;
+
+        return player.getTown();
+    }
+
+    public @Nullable NationIdentifier getNationByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getNationByIdentifier(world, identifier);
+    }
+
+    public @Nullable NationIdentifier getNationByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+        Player player = getPlayerByIdentifier(world, identifier);
+        if (player == null) return null;
+
+        return player.getNation();
+    }
+
+    public @Nullable List<PlayerIdentifier> getFriendsByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getFriendsByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getFriendsByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+        Player player = getPlayerByIdentifier(world, identifier);
+        if (player == null) return null;
+
+        return player.getFriends();
+    }
+
+    public @Nullable PlayerIdentifier getMayorByIdentifier(@NotNull TownIdentifier identifier) {
+         return getMayorByIdentifier(world, identifier);
+    }
+
+    public @Nullable PlayerIdentifier getMayorByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        Town town = getTownByIdentifier(world, identifier);
+        if (town == null) return null;
+
+        return town.getMayor();
+    }
+
+    public @Nullable NationIdentifier getNationByIdentifier(@NotNull TownIdentifier identifier) {
+        return getNationByIdentifier(world, identifier);
+    }
+
+    public @Nullable NationIdentifier getNationByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        Town town = getTownByIdentifier(world, identifier);
+        if (town == null) return null;
+
+        return town.getNation();
+    }
+
+    public @Nullable List<PlayerIdentifier> getResidentsByIdentifier(@NotNull TownIdentifier identifier) {
+        return getResidentsByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getResidentsByIdentifier(@NotNull World world, TownIdentifier identifier) {
+        Town town = getTownByIdentifier(world, identifier);
+        if (town == null) return null;
+
+        return town.getResidents();
+    }
+
+    public @Nullable List<PlayerIdentifier> getTrustedByIdentifier(@NotNull TownIdentifier identifier) {
+        return getTrustedByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getTrustedByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        Town town = getTownByIdentifier(world, identifier);
+        if (town == null) return null;
+
+        return town.getTrusted();
+    }
+
+    public @Nullable List<PlayerIdentifier> getOutlawsByIdentifier(@NotNull TownIdentifier identifier) {
+        return getOutlawsByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getOutlawsByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        Town town = getTownByIdentifier(world, identifier);
+        if (town == null) return null;
+
+        return town.getOutlaws();
+    }
+
+    public @Nullable List<QuarterIdentifier> getQuartersByIdentifier(@NotNull TownIdentifier identifier) {
+        return getQuartersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<QuarterIdentifier> getQuartersByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        Town town = getTownByIdentifier(world, identifier);
+        if (town == null) return null;
+
+        return town.getQuarters();
+    }
+
+    public @Nullable PlayerIdentifier getKingByIdentifier(@NotNull NationIdentifier identifier) {
+        return getKingByIdentifier(world, identifier);
+    }
+
+    public @Nullable PlayerIdentifier getKingByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+        Nation nation = getNationByIdentifier(world, identifier);
+        if (nation == null) return null;
+
+        return nation.getKing();
+    }
+
+    public @Nullable TownIdentifier getCapitalByIdentifier(@NotNull NationIdentifier identifier) {
+        return getCapitalByIdentifier(world, identifier);
+    }
+
+    public @Nullable TownIdentifier getCapitalByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+        Nation nation = getNationByIdentifier(world, identifier);
+        if (nation == null) return null;
+
+        return nation.getCapital();
+    }
+
+    public @Nullable List<PlayerIdentifier> getResidentsByIdentifier(@NotNull NationIdentifier identifier) {
+        return getResidentsByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getResidentsByIdentifier(@NotNull World world, NationIdentifier identifier) {
+        Nation nation = getNationByIdentifier(world, identifier);
+        if (nation == null) return null;
+
+        return nation.getResidents();
+    }
+
+    public @Nullable List<TownIdentifier> getTownsByIdentifier(@NotNull NationIdentifier identifier) {
+        return getTownsByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<TownIdentifier> getTownsByIdentifier(@NotNull World world, NationIdentifier identifier) {
+        Nation nation = getNationByIdentifier(world, identifier);
+        if (nation == null) return null;
+
+        return nation.getTowns();
+    }
+
+    public @Nullable List<TownIdentifier> getSanctionedByIdentifier(@NotNull NationIdentifier identifier) {
+        return getSanctionedByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<TownIdentifier> getSanctionedByIdentifier(@NotNull World world, NationIdentifier identifier) {
+        Nation nation = getNationByIdentifier(world, identifier);
+        if (nation == null) return null;
+
+        return nation.getSanctioned();
+    }
+
+    public @Nullable List<NationIdentifier> getAlliesByIdentifier(@NotNull NationIdentifier identifier) {
+        return getAlliesByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<NationIdentifier> getAlliesByIdentifier(@NotNull World world, NationIdentifier identifier) {
+        Nation nation = getNationByIdentifier(world, identifier);
+        if (nation == null) return null;
+
+        return nation.getAllies();
+    }
+
+    public @Nullable List<NationIdentifier> getEnemiesByIdentifier(@NotNull NationIdentifier identifier) {
+        return getEnemiesByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<NationIdentifier> getEnemiesByIdentifier(@NotNull World world, NationIdentifier identifier) {
+        Nation nation = getNationByIdentifier(world, identifier);
+        if (nation == null) return null;
+
+        return nation.getEnemies();
+    }
+
+    public @Nullable PlayerIdentifier getOwnerByIdentifier(@NotNull QuarterIdentifier identifier) {
+        return getOwnerByIdentifier(world, identifier);
+    }
+
+    public @Nullable PlayerIdentifier getOwnerByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
+        Quarter quarter = getQuarterByIdentifier(identifier);
+        if (quarter == null) return null;
+
+        return quarter.getOwner();
+    }
+
+    public @Nullable TownIdentifier getTownByIdentifier(@NotNull QuarterIdentifier identifier) {
+        return getTownByIdentifier(world, identifier);
+    }
+
+    public @Nullable TownIdentifier getTownByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
+        Quarter quarter = getQuarterByIdentifier(identifier);
+        if (quarter == null) return null;
+
+        return quarter.getTown();
+    }
+
+    public @Nullable List<PlayerIdentifier> getTrustedByIdentifier(@NotNull QuarterIdentifier identifier) {
+        return getTrustedByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getTrustedByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
+        Quarter quarter = getQuarterByIdentifier(identifier);
+        if (quarter == null) return null;
+
+        return quarter.getTrusted();
+    }
 }

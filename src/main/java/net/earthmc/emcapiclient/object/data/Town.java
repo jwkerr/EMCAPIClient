@@ -4,58 +4,67 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import kotlin.Pair;
-import net.earthmc.emcapiclient.object.permissions.Permissions;
-import net.earthmc.emcapiclient.object.Spawn;
+import net.earthmc.emcapiclient.object.Location;
+import net.earthmc.emcapiclient.object.identifier.Identifier;
 import net.earthmc.emcapiclient.object.identifier.NationIdentifier;
 import net.earthmc.emcapiclient.object.identifier.PlayerIdentifier;
 import net.earthmc.emcapiclient.object.identifier.QuarterIdentifier;
-import net.earthmc.emcapiclient.util.DataUtil;
+import net.earthmc.emcapiclient.object.permissions.Permissions;
+import net.earthmc.emcapiclient.util.JSONUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("unused")
-public class TownData extends Data {
+public class Town extends Data {
 
-    private final String name, uuid, board, founder, wiki;
+    private final String name, board, founder, wiki;
+    private final UUID uuid;
     private final PlayerIdentifier mayor;
     private final NationIdentifier nation;
     private final long registered;
     private final Long joinedNationAt, ruinedAt;
     private final boolean isPublic, isOpen, isNeutral, isCapital, isOverClaimed, isRuined, isForSale, hasNation, hasOverclaimShield, canOutsidersSpawn;
-    private final int numTownBlocks, maxTownBlocks, numResidents, numTrusted, numOutlaws, balance;
+    private final int numTownBlocks, maxTownBlocks, bonusBlocks, numResidents, numTrusted, numOutlaws, balance;
     private final Double forSalePrice;
     private final Permissions permissions;
-    private final Spawn spawn;
+    private final Location spawn;
     private final Pair<Integer, Integer> homeBlock;
     private final List<Pair<Integer, Integer>> townBlocks;
     private final List<PlayerIdentifier> residents, trusted, outlaws;
     private final List<QuarterIdentifier> quarters;
     private final HashMap<String, List<String>> ranks;
 
-    public TownData(JsonObject jsonObject) {
+    public Town(JsonObject jsonObject) {
         super(jsonObject);
 
         this.name = jsonObject.get("name").getAsString();
-        this.uuid = jsonObject.get("uuid").getAsString();
-        this.board = DataUtil.getElementAsStringOrNull(jsonObject.get("board"));
+        this.uuid =  UUID.fromString(jsonObject.get("uuid").getAsString());
+        this.board = JSONUtil.getElementAsStringOrNull(jsonObject.get("board"));
         this.founder = jsonObject.get("founder").getAsString();
-        this.wiki = DataUtil.getElementAsStringOrNull(jsonObject.get("wiki"));
+        this.wiki = JSONUtil.getElementAsStringOrNull(jsonObject.get("wiki"));
 
         JsonObject mayor = jsonObject.getAsJsonObject("mayor");
-        this.mayor = new PlayerIdentifier(DataUtil.getElementAsStringOrNull(mayor.get("name")), DataUtil.getElementAsStringOrNull(mayor.get("uuid")));
+        this.mayor = new PlayerIdentifier(
+                JSONUtil.getElementAsStringOrNull(mayor.get("name")),
+                JSONUtil.getElementAsStringOrNull(mayor.get("uuid"))
+        );
 
         JsonObject nation = jsonObject.getAsJsonObject("nation");
-        String nationName = DataUtil.getElementAsStringOrNull(nation.get("name"));
-        String nationUUID = DataUtil.getElementAsStringOrNull(nation.get("uuid"));
-        this.nation = nationName != null || nationUUID != null ? new NationIdentifier(nationName, nationUUID) : null;
+        String nationName = JSONUtil.getElementAsStringOrNull(nation.get("name"));
+        String nationUUID = JSONUtil.getElementAsStringOrNull(nation.get("uuid"));
+        this.nation = nationName == null || nationUUID == null ? null : new NationIdentifier(
+                nationName,
+                nationUUID
+        );
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
-        this.joinedNationAt = DataUtil.getElementsAsLongOrNull(timestamps.get("joinedNationAt"));
-        this.ruinedAt = DataUtil.getElementsAsLongOrNull(timestamps.get("ruinedAt"));
+        this.joinedNationAt = JSONUtil.getElementsAsLongOrNull(timestamps.get("joinedNationAt"));
+        this.ruinedAt = JSONUtil.getElementsAsLongOrNull(timestamps.get("ruinedAt"));
 
         JsonObject status = jsonObject.getAsJsonObject("status");
         this.isPublic = status.get("isPublic").getAsBoolean();
@@ -72,17 +81,18 @@ public class TownData extends Data {
         JsonObject stats = jsonObject.getAsJsonObject("stats");
         this.numTownBlocks = stats.get("numTownBlocks").getAsInt();
         this.maxTownBlocks = stats.get("maxTownBlocks").getAsInt();
+        this.bonusBlocks = stats.get("bonusBlocks").getAsInt();
         this.numResidents = stats.get("numResidents").getAsInt();
         this.numTrusted = stats.get("numTrusted").getAsInt();
         this.numOutlaws = stats.get("numOutlaws").getAsInt();
         this.balance = stats.get("balance").getAsInt();
-        this.forSalePrice = DataUtil.getElementAsDoubleOrNull(stats.get("forSalePrice"));
+        this.forSalePrice = JSONUtil.getElementAsDoubleOrNull(stats.get("forSalePrice"));
 
         this.permissions = new Permissions(jsonObject.getAsJsonObject("perms"));
 
         JsonObject coordinates = jsonObject.getAsJsonObject("coordinates");
         JsonObject spawn = coordinates.getAsJsonObject("spawn");
-        this.spawn = spawn.get("world").isJsonNull() ? null : new Spawn(spawn);
+        this.spawn = spawn.get("world").isJsonNull() ? null : new Location(spawn);
 
         JsonArray homeBlock = coordinates.getAsJsonArray("homeBlock");
         this.homeBlock = homeBlock.get(0).isJsonNull() ? null : new Pair<>(homeBlock.get(0).getAsInt(), homeBlock.get(1).getAsInt());
@@ -95,25 +105,24 @@ public class TownData extends Data {
         }
         this.townBlocks = townBlocksList;
 
-        this.residents = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("residents"), PlayerIdentifier.class);
-        this.trusted = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("trusted"), PlayerIdentifier.class);
-        this.outlaws = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("outlaws"), PlayerIdentifier.class);
+        this.residents = Identifier.createIdentifierList(jsonObject.getAsJsonArray("residents"), PlayerIdentifier.class);
+        this.trusted = Identifier.createIdentifierList(jsonObject.getAsJsonArray("trusted"), PlayerIdentifier.class);
+        this.outlaws = Identifier.createIdentifierList(jsonObject.getAsJsonArray("outlaws"), PlayerIdentifier.class);
 
-        this.quarters = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("quarters"), QuarterIdentifier.class);
+        this.quarters = Identifier.createIdentifierList(jsonObject.getAsJsonArray("quarters"), QuarterIdentifier.class);
 
-        this.ranks = DataUtil.getRanksMap(jsonObject.getAsJsonObject("ranks"));
+        this.ranks = getRanksMap();
     }
 
     public String getName() {
         return name;
     }
 
-    public String getUUID() {
+    public UUID getUUID() {
         return uuid;
     }
 
     /**
-     *
      * @return A string representing the town's board as seen on /t, null if the town has no board
      */
     @Nullable
@@ -126,7 +135,6 @@ public class TownData extends Data {
     }
 
     /**
-     *
      * @return A string representing the town's linked wiki URL, null if the town has not set a wiki URL
      */
     @Nullable
@@ -205,6 +213,10 @@ public class TownData extends Data {
         return maxTownBlocks;
     }
 
+    public int getBonusBlocks() {
+        return bonusBlocks;
+    }
+
     public int getNumResidents() {
         return numResidents;
     }
@@ -222,7 +234,6 @@ public class TownData extends Data {
     }
 
     /**
-     *
      * @return A double representing the town's sale price, null if the town is not for sale
      * <p>
      * See {@link #isForSale()}
@@ -237,7 +248,7 @@ public class TownData extends Data {
     }
 
     @Nullable
-    public Spawn getSpawn() {
+    public Location getSpawn() {
         return spawn;
     }
 

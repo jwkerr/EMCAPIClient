@@ -3,20 +3,23 @@ package net.earthmc.emcapiclient.object.data;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.earthmc.emcapiclient.object.permissions.Permissions;
+import net.earthmc.emcapiclient.object.identifier.Identifier;
 import net.earthmc.emcapiclient.object.identifier.NationIdentifier;
 import net.earthmc.emcapiclient.object.identifier.PlayerIdentifier;
 import net.earthmc.emcapiclient.object.identifier.TownIdentifier;
-import net.earthmc.emcapiclient.util.DataUtil;
+import net.earthmc.emcapiclient.object.permissions.Permissions;
+import net.earthmc.emcapiclient.util.JSONUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
-public class PlayerData extends Data {
+public class Player extends Data {
 
-    private final String name, uuid, title, surname, formattedName, about;
+    private final String name, title, surname, formattedName, about;
+    private final UUID uuid;
     private final TownIdentifier town;
     private final NationIdentifier nation;
     private final long registered;
@@ -28,30 +31,36 @@ public class PlayerData extends Data {
     private final List<PlayerIdentifier> friends;
 
 
-    public PlayerData(JsonObject jsonObject) {
+    public Player(JsonObject jsonObject) {
         super(jsonObject);
 
         this.name = jsonObject.get("name").getAsString();
-        this.uuid = jsonObject.get("uuid").getAsString();
-        this.title = DataUtil.getElementAsStringOrNull(jsonObject.get("title"));
-        this.surname = DataUtil.getElementAsStringOrNull(jsonObject.get("surname"));
+        this.uuid = UUID.fromString(jsonObject.get("uuid").getAsString());
+        this.title = JSONUtil.getElementAsStringOrNull(jsonObject.get("title"));
+        this.surname = JSONUtil.getElementAsStringOrNull(jsonObject.get("surname"));
         this.formattedName = jsonObject.get("formattedName").getAsString();
-        this.about = DataUtil.getElementAsStringOrNull(jsonObject.get("about"));
+        this.about = JSONUtil.getElementAsStringOrNull(jsonObject.get("about"));
 
         JsonObject town = jsonObject.getAsJsonObject("town");
-        String townName = DataUtil.getElementAsStringOrNull(town.get("name"));
-        String townUUID = DataUtil.getElementAsStringOrNull(town.get("uuid"));
-        this.town = townName != null || townUUID != null ? new TownIdentifier(townName, townUUID) : null;
+        String townName = JSONUtil.getElementAsStringOrNull(town.get("name"));
+        String townUUID = JSONUtil.getElementAsStringOrNull(town.get("uuid"));
+        this.town = townName == null || townUUID == null ? null : new TownIdentifier(
+                townName,
+                townUUID
+        );
 
         JsonObject nation = jsonObject.getAsJsonObject("nation");
-        String nationName = DataUtil.getElementAsStringOrNull(nation.get("name"));
-        String nationUUID = DataUtil.getElementAsStringOrNull(nation.get("uuid"));
-        this.nation = nationName != null || nationUUID != null ? new NationIdentifier(nationName, nationUUID) : null;
+        String nationName = JSONUtil.getElementAsStringOrNull(nation.get("name"));
+        String nationUUID = JSONUtil.getElementAsStringOrNull(nation.get("uuid"));
+        this.nation = nationName == null || nationUUID == null ? null : new NationIdentifier(
+                nationName,
+                nationUUID
+        );
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
-        this.joinedTownAt = DataUtil.getElementsAsLongOrNull(timestamps.get("joinedTownAt"));
-        this.lastOnline = DataUtil.getElementsAsLongOrNull(timestamps.get("lastOnline"));
+        this.joinedTownAt = JSONUtil.getElementsAsLongOrNull(timestamps.get("joinedTownAt"));
+        this.lastOnline = JSONUtil.getElementsAsLongOrNull(timestamps.get("lastOnline"));
 
         JsonObject status = jsonObject.getAsJsonObject("status");
         this.isOnline = status.get("isOnline").getAsBoolean();
@@ -72,11 +81,15 @@ public class PlayerData extends Data {
         this.nationRanks = ranks.get("nationRanks").getAsJsonArray().asList().stream().map(JsonElement::getAsString).collect(Collectors.toList());
 
         JsonArray friends = jsonObject.getAsJsonArray("friends");
-        this.friends = DataUtil.getIdentifierList(friends, PlayerIdentifier.class);
+        this.friends = Identifier.createIdentifierList(friends, PlayerIdentifier.class);
     }
 
     public String getName() {
         return name;
+    }
+
+    public UUID getUUID() {
+        return uuid;
     }
 
     @Nullable
@@ -94,7 +107,6 @@ public class PlayerData extends Data {
     }
 
     /**
-     *
      * @return A string representing the player's about as seen on /res, null if the player has no about
      */
     @Nullable
@@ -102,13 +114,8 @@ public class PlayerData extends Data {
         return about;
     }
 
-    public String getUUID() {
-        return uuid;
-    }
-
     /**
-     *
-     * @return A {@link TownIdentifier} representing the player's town or null if they have no town
+     * @return A {@link Town} representing the player's town or null if they have no town
      */
     @Nullable
     public TownIdentifier getTown() {
@@ -116,8 +123,7 @@ public class PlayerData extends Data {
     }
 
     /**
-     *
-     * @return A {@link NationIdentifier} representing the player's nation or null if they have no nation
+     * @return A {@link Nation} representing the player's nation or null if they have no nation
      */
     @Nullable
     public NationIdentifier getNation() {

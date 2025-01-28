@@ -2,119 +2,105 @@ package net.earthmc.emcapiclient.manager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.earthmc.emcapiclient.exception.BadRequestException;
-import net.earthmc.emcapiclient.exception.GatewayTimeoutException;
-import net.earthmc.emcapiclient.exception.NotFoundException;
-import okhttp3.*;
+import net.earthmc.emcapiclient.object.exception.FailedRequestException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.stream.IntStream;
 
 public class RequestManager {
 
-    private final OkHttpClient client = new OkHttpClient();
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final Gson gson = new Gson();
 
-    /**
-     *
-     * @param url URL as a string
-     * @return The URL's response body as a string
-     */
-    public String getURL(String url) {
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
+    public JsonObject getURIAsJsonObject(@NotNull URI uri) {
+        return (JsonObject) getURIAsJsonElement(uri, JsonObject.class);
+    }
 
-        try (Response response = client.newCall(request).execute()) {
-            String message = response.message();
-            switch (response.code()) {
-                case 400 -> throw new BadRequestException(message);
-                case 404 -> throw new NotFoundException(message);
-                case 504 -> throw new GatewayTimeoutException(message);
-            }
+    public JsonArray getURIAsJsonArray(@NotNull URI uri) {
+        return (JsonArray) getURIAsJsonElement(uri, JsonArray.class);
+    }
 
-            ResponseBody body = response.body();
-            if (body == null) return null;
+    private <T extends JsonElement> JsonElement getURIAsJsonElement(@NotNull URI uri, @NotNull Class<T> elementClass) {
+        try {
+            HttpResponse<String> response = client.send(
+                    HttpRequest.newBuilder().GET().uri(uri).build(),
+                    HttpResponse.BodyHandlers.ofString()
+            );
 
-            return body.string();
-        } catch (IOException e) {
-            e.printStackTrace();
+            int statusCode = response.statusCode();
+            if (statusCode != 200) throw new FailedRequestException(statusCode);
+
+            return gson.fromJson(response.body(), elementClass);
+        } catch (IOException | InterruptedException e) {
+            return null;
         }
-
-        return null;
     }
 
-    /**
-     *
-     * @param url URL as a string
-     * @return The URL parsed to a {@link JsonArray}, null if the URL has no response body
-     * @throws com.google.gson.JsonSyntaxException If the URL does not return a valid JSON array
-     */
-    public JsonArray getURLAsJsonArray(String url) {
-        String response = getURL(url);
-        if (response == null) return null;
+    public JsonArray batchPostAsJsonArray(@NotNull URI uri, @NotNull List<String> query) {
+        List<List<String>> batches = IntStream.range(0, (query.size() + 99) / 100)
+                .mapToObj(i -> query.subList(i * 100, Math.min((i + 1) * 100, query.size())))
+                .toList();
 
-        Gson gson = new Gson();
-        return gson.fromJson(response, JsonArray.class);
-    }
+        List<CompletableFuture<JsonArray>> futures = batches.stream()
+                .map(batch -> CompletableFuture.supplyAsync(() ->
+                        postURIAsJsonArray(uri, createRequestBody(batch))))
+                .toList();
 
-    /**
-     *
-     * @param url URL as a string
-     * @return The URL parsed to a {@link JsonObject}, null if the URL has no response body
-     * @throws com.google.gson.JsonSyntaxException If the URL does not return a valid JSON object
-     */
-    public JsonObject getURLAsJsonObject(String url) {
-        String response = getURL(url);
-        if (response == null) return null;
+        CompletableFuture<JsonArray> combined = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenApply(v -> {
+            JsonArray result = new JsonArray();
+            futures.forEach(future -> result.addAll(future.join()));
 
-        Gson gson = new Gson();
-        return gson.fromJson(response, JsonObject.class);
-    }
+            return result;
+        });
 
-    /**
-     *
-     * @param url URL as a string
-     * @param body Body as a string
-     * @return The URL's response body as a string
-     */
-    public String postURL(String url, String body) {
-        Request request = new Request.Builder()
-                .url(url)
-                .post(RequestBody.create(body.getBytes()))
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            String message = response.message();
-            switch (response.code()) {
-                case 400 -> throw new BadRequestException(message);
-                case 404 -> throw new NotFoundException(message);
-                case 504 -> throw new GatewayTimeoutException(message);
-            }
-
-            ResponseBody responseBody = response.body();
-            if (responseBody == null) return null;
-
-            return responseBody.string();
-        } catch (IOException e) {
-            e.printStackTrace();
+        try {
+            return combined.join();
+        } catch (CompletionException e) {
+            if (e.getCause() instanceof FailedRequestException) throw (FailedRequestException) e.getCause();
+            throw e;
         }
-
-        return null;
     }
 
-    public JsonArray postURLAsJsonArray(String url, JsonObject body) {
-        String response = postURL(url, body.toString());
-        if (response == null) return null;
-
-        Gson gson = new Gson();
-        return gson.fromJson(response, JsonArray.class);
+    public JsonArray postURIAsJsonArray(@NotNull URI uri, @NotNull JsonObject body) {
+        return (JsonArray) postURIAsJsonElement(uri, body, JsonArray.class);
     }
 
-    public JsonObject postURLAsJsonObject(String url, JsonObject body) {
-        String response = postURL(url, body.toString());
-        if (response == null) return null;
+    private <T extends JsonElement> JsonElement postURIAsJsonElement(@NotNull URI uri, @NotNull JsonObject body, @NotNull Class<T> elementClass) {
+        try {
+            HttpResponse<String> response = client.send(
+                    HttpRequest.newBuilder().POST(
+                            HttpRequest.BodyPublishers.ofString(body.toString())
+                    ).uri(uri).build(),
+                    HttpResponse.BodyHandlers.ofString()
+            );
 
-        Gson gson = new Gson();
-        return gson.fromJson(response, JsonObject.class);
+            int statusCode = response.statusCode();
+            if (statusCode != 200) throw new FailedRequestException(statusCode);
+
+            return gson.fromJson(response.body(), elementClass);
+        } catch (IOException | InterruptedException e) {
+            return null;
+        }
+    }
+
+    private JsonObject createRequestBody(List<String> query) {
+        JsonObject body = new JsonObject();
+        JsonArray queryArray = new JsonArray();
+        for (String entry : query) {
+            queryArray.add(entry);
+        }
+        body.add("query", queryArray);
+
+        return body;
     }
 }

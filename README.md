@@ -6,20 +6,19 @@ Create an instance of EMCAPIClient like this
 EMCAPIClient api = new EMCAPIClient();
 ```
 
-Every method you should be using is within this class, there are Javadocs that you can read to learn how to use the library, the method names are self-explanatory
+Every method you should be using is within this class, the method names are self-explanatory, let me know if you need any help using the library
 
-BASIC EXAMPLE: get the data of all currently registered players and print their username
+BASIC EXAMPLE: get a nation by its name and print the username of every resident in it
 ```java
 public static void main(String[] args) {
     EMCAPIClient api = new EMCAPIClient();
 
-    List<PlayerIdentifier> playerIdentifiers = api.getAllPlayerIdentifiers();
-    List<PlayerData> playerData = api.getPlayerDataByIdentifiers(playerIdentifiers);
+    Nation nation = api.getNationByString("Alaska");
+    if (nation == null) return;
 
-    int n = 1;
-    for (PlayerData player : playerData) {
-        System.out.println(n + ": " + player.getName());
-        n++;
+    List<Player> players = api.getPlayersByIdentifiers(nation.getResidents());
+    for (Player player : players) {
+        System.out.println(player.getName());
     }
 }
 ```

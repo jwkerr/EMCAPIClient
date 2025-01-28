@@ -1,51 +1,35 @@
 package net.earthmc.emcapiclient.util;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import net.earthmc.emcapiclient.object.DiscordType;
-
-import java.util.List;
+import com.google.gson.JsonElement;
+import org.jetbrains.annotations.Nullable;
 
 public class JSONUtil {
 
-    public static JsonObject createRequestBody(String string) {
-        JsonObject bodyObject = new JsonObject();
-        JsonArray queryArray = new JsonArray();
+    @Nullable
+    public static String getElementAsStringOrNull(JsonElement element) {
+        if (element.isJsonNull()) return null;
 
-        queryArray.add(string);
-        bodyObject.add("query", queryArray);
-
-        return bodyObject;
+        return element.getAsString();
     }
 
-    public static JsonObject createRequestBody(List<String> strings) {
-        JsonObject bodyObject = new JsonObject();
-        JsonArray queryArray = new JsonArray();
+    @Nullable
+    public static Integer getElementAsIntegerOrNull(JsonElement element) {
+        if (element.isJsonNull()) return null;
 
-        for (String string : strings) {
-            queryArray.add(string);
-        }
-
-        bodyObject.add("query", queryArray);
-
-        return bodyObject;
+        return element.getAsInt();
     }
 
-    public static JsonObject createDiscordRequestBody(List<String> strings, DiscordType type) {
-        JsonObject bodyObject = new JsonObject();
-        JsonArray queryArray = new JsonArray();
-        String typeString = type.toString();
+    @Nullable
+    public static Long getElementsAsLongOrNull(JsonElement element) {
+        if (element.isJsonNull()) return null;
 
-        for (String string : strings) {
-            JsonObject innerObject = new JsonObject();
-            innerObject.addProperty("type", typeString);
-            innerObject.addProperty("target", string);
+        return element.getAsLong();
+    }
 
-            queryArray.add(innerObject);
-        }
+    @Nullable
+    public static Double getElementAsDoubleOrNull(JsonElement element) {
+        if (element.isJsonNull()) return null;
 
-        bodyObject.add("query", queryArray);
-
-        return bodyObject;
+        return element.getAsDouble();
     }
 }

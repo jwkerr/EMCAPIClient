@@ -1,46 +1,55 @@
 package net.earthmc.emcapiclient.object.data;
 
 import com.google.gson.JsonObject;
-import net.earthmc.emcapiclient.object.Spawn;
+import net.earthmc.emcapiclient.object.Location;
+import net.earthmc.emcapiclient.object.identifier.Identifier;
 import net.earthmc.emcapiclient.object.identifier.NationIdentifier;
 import net.earthmc.emcapiclient.object.identifier.PlayerIdentifier;
 import net.earthmc.emcapiclient.object.identifier.TownIdentifier;
-import net.earthmc.emcapiclient.util.DataUtil;
+import net.earthmc.emcapiclient.util.JSONUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("unused")
-public class NationData extends Data {
+public class Nation extends Data {
 
-    private final String name, uuid, board, dynmapColour, dynmapOutline, wiki;
+    private final String name, board, dynmapColour, dynmapOutline, wiki;
+    private final UUID uuid;
     private final PlayerIdentifier king;
     private final TownIdentifier capital;
     private final long registered;
     private final boolean isPublic, isOpen, isNeutral;
     private final int numTownBlocks, numResidents, numTowns, numAllies, numEnemies, balance;
-    private final Spawn spawn;
+    private final Location spawn;
     private final List<PlayerIdentifier> residents;
     private final List<TownIdentifier> towns, sanctioned;
     private final List<NationIdentifier> allies, enemies;
     private final HashMap<String, List<String>> ranks;
 
-    public NationData(JsonObject jsonObject) {
+    public Nation(JsonObject jsonObject) {
         super(jsonObject);
 
         this.name = jsonObject.get("name").getAsString();
-        this.uuid = jsonObject.get("uuid").getAsString();
-        this.board = DataUtil.getElementAsStringOrNull(jsonObject.get("board"));
+        this.uuid = UUID.fromString(jsonObject.get("uuid").getAsString());
+        this.board = JSONUtil.getElementAsStringOrNull(jsonObject.get("board"));
         this.dynmapColour = jsonObject.get("dynmapColour").getAsString();
         this.dynmapOutline = jsonObject.get("dynmapOutline").getAsString();
-        this.wiki = DataUtil.getElementAsStringOrNull(jsonObject.get("wiki"));
+        this.wiki = JSONUtil.getElementAsStringOrNull(jsonObject.get("wiki"));
 
         JsonObject king = jsonObject.getAsJsonObject("king");
-        this.king = new PlayerIdentifier(DataUtil.getElementAsStringOrNull(king.get("name")), DataUtil.getElementAsStringOrNull(king.get("uuid")));
+        this.king = new PlayerIdentifier(
+                JSONUtil.getElementAsStringOrNull(jsonObject.get("name")),
+                JSONUtil.getElementAsStringOrNull(jsonObject.get("uuid"))
+        );
 
         JsonObject capital = jsonObject.getAsJsonObject("capital");
-        this.capital = new TownIdentifier(DataUtil.getElementAsStringOrNull(capital.get("name")), DataUtil.getElementAsStringOrNull(capital.get("uuid")));
+        this.capital = new TownIdentifier(
+                JSONUtil.getElementAsStringOrNull(capital.get("name")),
+                JSONUtil.getElementAsStringOrNull(capital.get("uuid"))
+        );
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
@@ -60,27 +69,26 @@ public class NationData extends Data {
 
         JsonObject coordinates = jsonObject.getAsJsonObject("coordinates");
         JsonObject spawn = coordinates.getAsJsonObject("spawn");
-        this.spawn = spawn.get("world").isJsonNull() ? null : new Spawn(spawn);
+        this.spawn = spawn.get("world").isJsonNull() ? null : new Location(spawn);
 
-        this.residents = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("residents"), PlayerIdentifier.class);
-        this.towns = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("towns"), TownIdentifier.class);
-        this.allies = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("allies"), NationIdentifier.class);
-        this.enemies = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("enemies"), NationIdentifier.class);
-        this.sanctioned = DataUtil.getIdentifierList(jsonObject.getAsJsonArray("sanctioned"), TownIdentifier.class);
+        this.residents = Identifier.createIdentifierList(jsonObject.getAsJsonArray("residents"), PlayerIdentifier.class);
+        this.towns = Identifier.createIdentifierList(jsonObject.getAsJsonArray("towns"), TownIdentifier.class);
+        this.allies = Identifier.createIdentifierList(jsonObject.getAsJsonArray("allies"), NationIdentifier.class);
+        this.enemies = Identifier.createIdentifierList(jsonObject.getAsJsonArray("enemies"), NationIdentifier.class);
+        this.sanctioned = Identifier.createIdentifierList(jsonObject.getAsJsonArray("sanctioned"), TownIdentifier.class);
 
-        this.ranks = DataUtil.getRanksMap(jsonObject.getAsJsonObject("ranks"));
+        this.ranks = getRanksMap();
     }
 
     public String getName() {
         return name;
     }
 
-    public String getUUID() {
+    public UUID getUUID() {
         return uuid;
     }
 
     /**
-     *
      * @return A string representing the nation's board as seen on /n, null if the nation has no board
      */
     @Nullable
@@ -97,7 +105,6 @@ public class NationData extends Data {
     }
 
     /**
-     *
      * @return A string representing the nation's linked wiki URL, null if the nation has not set a wiki URL
      */
     @Nullable
@@ -154,11 +161,10 @@ public class NationData extends Data {
     }
 
     /**
-     *
      * @return An object representing the values of where the nation's spawn is set, null if there is no spawn set
      */
     @Nullable
-    public Spawn getSpawn() {
+    public Location getSpawn() {
         return spawn;
     }
 

@@ -8,7 +8,7 @@ public class Cuboid {
     private final Location cornerOne, cornerTwo;
 
     public Cuboid(JsonArray cornerOne, JsonArray cornerTwo) {
-        this.cornerOne = new Location(null, cornerOne.get(0).getAsDouble(), cornerOne.get(1).getAsInt(), cornerOne.get(2).getAsInt(), null, null);
+        this.cornerOne = new Location(null, cornerOne.get(0).getAsDouble(), cornerOne.get(1).getAsDouble(), cornerOne.get(2).getAsDouble(), null, null);
         this.cornerTwo = new Location(null, cornerTwo.get(0).getAsDouble(), cornerTwo.get(1).getAsDouble(), cornerTwo.get(2).getAsDouble(), null, null);
     }
 

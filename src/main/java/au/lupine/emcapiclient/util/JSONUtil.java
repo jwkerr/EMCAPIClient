@@ -1,33 +1,38 @@
 package au.lupine.emcapiclient.util;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class JSONUtil {
 
-    @Nullable
-    public static String getElementAsStringOrNull(JsonElement element) {
+    public static @NotNull JsonObject createRequestBody(@NotNull JsonArray queryArray) {
+        JsonObject body = new JsonObject();
+        body.add("query", queryArray);
+        return body;
+    }
+
+    public static @Nullable String getElementAsStringOrNull(JsonElement element) {
         if (element.isJsonNull()) return null;
 
         return element.getAsString();
     }
 
-    @Nullable
-    public static Integer getElementAsIntegerOrNull(JsonElement element) {
+    public static @Nullable Integer getElementAsIntegerOrNull(JsonElement element) {
         if (element.isJsonNull()) return null;
 
         return element.getAsInt();
     }
 
-    @Nullable
-    public static Long getElementsAsLongOrNull(JsonElement element) {
+    public static @Nullable Long getElementsAsLongOrNull(JsonElement element) {
         if (element.isJsonNull()) return null;
 
         return element.getAsLong();
     }
 
-    @Nullable
-    public static Double getElementAsDoubleOrNull(JsonElement element) {
+    public static @Nullable Double getElementAsDoubleOrNull(JsonElement element) {
         if (element.isJsonNull()) return null;
 
         return element.getAsDouble();

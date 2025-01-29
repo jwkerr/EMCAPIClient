@@ -1,9 +1,13 @@
 package au.lupine.emcapiclient;
 
 import au.lupine.emcapiclient.manager.RequestManager;
+import au.lupine.emcapiclient.object.DiscordType;
+import au.lupine.emcapiclient.object.DiscordPair;
+import au.lupine.emcapiclient.object.Location;
 import au.lupine.emcapiclient.object.World;
 import au.lupine.emcapiclient.object.data.*;
 import au.lupine.emcapiclient.object.identifier.*;
+import au.lupine.emcapiclient.util.JSONUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -105,7 +109,12 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Player> getPlayersByStrings(@NotNull World world, @NotNull List<String> query) {
-        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("players"), query);
+        JsonArray queryArray = new JsonArray();
+        for (String entry : query) {
+            queryArray.add(entry);
+        }
+
+        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("players"), JSONUtil.createRequestBody(queryArray));
 
         List<Player> players = new ArrayList<>();
         for (JsonElement element : response) {
@@ -121,7 +130,12 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Town> getTownsByStrings(@NotNull World world, @NotNull List<String> query) {
-        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("towns"), query);
+        JsonArray queryArray = new JsonArray();
+        for (String entry : query) {
+            queryArray.add(entry);
+        }
+
+        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("towns"), JSONUtil.createRequestBody(queryArray));
 
         List<Town> towns = new ArrayList<>();
         for (JsonElement element : response) {
@@ -137,7 +151,12 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Nation> getNationsByStrings(@NotNull World world, @NotNull List<String> query) {
-        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("nations"), query);
+        JsonArray queryArray = new JsonArray();
+        for (String entry : query) {
+            queryArray.add(entry);
+        }
+
+        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("nations"), JSONUtil.createRequestBody(queryArray));
 
         List<Nation> nations = new ArrayList<>();
         for (JsonElement element : response) {
@@ -153,7 +172,12 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Quarter> getQuartersByStrings(@NotNull World world, @NotNull List<String> query) {
-        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("quarters"), query);
+        JsonArray queryArray = new JsonArray();
+        for (String entry : query) {
+            queryArray.add(entry);
+        }
+
+        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("quarters"), JSONUtil.createRequestBody(queryArray));
 
         List<Quarter> quarters = new ArrayList<>();
         for (JsonElement element : response) {
@@ -162,6 +186,35 @@ public class EMCAPIClient {
         }
 
         return quarters;
+    }
+
+    public @NotNull List<DiscordPair> getDiscordPairsByStrings(@NotNull DiscordType type, @NotNull List<String> query) {
+        return getDiscordPairsByStrings(world, type, query);
+    }
+
+    public @NotNull List<DiscordPair> getDiscordPairsByStrings(@NotNull World world, @NotNull DiscordType type, @NotNull List<String> query) {
+        JsonArray queryArray = new JsonArray();
+        for (String entry : query) {
+            JsonObject innerObject = new JsonObject();
+            innerObject.addProperty("type", type.getName());
+            innerObject.addProperty("target", entry);
+            queryArray.add(innerObject);
+        }
+
+        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("discord"), JSONUtil.createRequestBody(queryArray));
+
+        List<DiscordPair> identifiers = new ArrayList<>();
+        for (JsonElement element : response) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            DiscordPair identifier = new DiscordPair(
+                    JSONUtil.getElementAsStringOrNull(jsonObject.get("id")),
+                    JSONUtil.getElementAsStringOrNull(jsonObject.get("uuid"))
+            );
+
+            identifiers.add(identifier);
+        }
+
+        return identifiers;
     }
 
     public @NotNull List<Player> getPlayersByUUIDs(@NotNull List<UUID> query) {
@@ -196,6 +249,14 @@ public class EMCAPIClient {
         return getQuartersByStrings(world, query.stream().map(UUID::toString).toList());
     }
 
+    public @NotNull List<DiscordPair> getDiscordPairsByUUIDs(@NotNull List<UUID> query) {
+        return getDiscordPairsByUUIDs(world, query);
+    }
+
+    public @NotNull List<DiscordPair> getDiscordPairsByUUIDs(@NotNull World world, @NotNull List<UUID> query) {
+        return getDiscordPairsByStrings(world, DiscordType.MINECRAFT, query.stream().map(UUID::toString).toList());
+    }
+
     public @NotNull List<Player> getPlayersByStrings(@NotNull String... query) {
         return getPlayersByStrings(world, query);
     }
@@ -228,6 +289,14 @@ public class EMCAPIClient {
         return getQuartersByStrings(world, Arrays.stream(query).toList());
     }
 
+    public @NotNull List<DiscordPair> getDiscordPairsByStrings(@NotNull DiscordType type, @NotNull String... query) {
+        return getDiscordPairsByStrings(world, type, query);
+    }
+
+    public @NotNull List<DiscordPair> getDiscordPairsByStrings(@NotNull World world, @NotNull DiscordType type, @NotNull String... query) {
+        return getDiscordPairsByStrings(world, type, Arrays.stream(query).toList());
+    }
+
     public @NotNull List<Player> getPlayersByIdentifiers(@NotNull List<PlayerIdentifier> query) {
         return getPlayersByIdentifiers(world, query);
     }
@@ -258,6 +327,14 @@ public class EMCAPIClient {
 
     public @NotNull List<Quarter> getQuartersByIdentifiers(@NotNull World world, @NotNull List<QuarterIdentifier> query) {
         return getQuartersByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
+    }
+
+    public @NotNull List<DiscordPair> getDiscordPairsByIdentifiers(@NotNull List<PlayerIdentifier> query) {
+        return getDiscordPairsByIdentifiers(world, query);
+    }
+
+    public @NotNull List<DiscordPair> getDiscordPairsByIdentifiers(@NotNull World world, @NotNull List<PlayerIdentifier> query) {
+        return getDiscordPairsByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
     }
 
     public @NotNull Server getServer() {
@@ -305,6 +382,15 @@ public class EMCAPIClient {
         return quarters.isEmpty() ? null : quarters.get(0);
     }
 
+    public @NotNull DiscordPair getDiscordPairByString(@NotNull DiscordType type, @NotNull String query) {
+        return getDiscordPairByString(world, type, query);
+    }
+
+    public @NotNull DiscordPair getDiscordPairByString(@NotNull World world, @NotNull DiscordType type, @NotNull String query) {
+        List<DiscordPair> identifiers = getDiscordPairsByStrings(world, type, query);
+        return identifiers.get(0);
+    }
+
     public @Nullable Player getPlayerByUUID(@NotNull UUID query) {
         return getPlayerByUUID(world, query);
     }
@@ -337,6 +423,14 @@ public class EMCAPIClient {
         return getQuarterByString(world, query.toString());
     }
 
+    public @Nullable DiscordPair getDiscordPairByUUID(@NotNull UUID query) {
+        return getDiscordPairByUUID(world, query);
+    }
+
+    public @Nullable DiscordPair getDiscordPairByUUID(@NotNull World world, @NotNull UUID query) {
+        return getDiscordPairByString(world, DiscordType.MINECRAFT, query.toString());
+    }
+
     public @Nullable Player getPlayerByIdentifier(@NotNull PlayerIdentifier identifier) {
         return getPlayerByIdentifier(world, identifier);
     }
@@ -367,6 +461,14 @@ public class EMCAPIClient {
 
     public @Nullable Quarter getQuarterByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
         return getQuarterByUUID(world, identifier.getUUID());
+    }
+
+    public @Nullable DiscordPair getDiscordPairByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getDiscordPairByIdentifier(world, identifier);
+    }
+
+    public @Nullable DiscordPair getDiscordPairByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+        return getDiscordPairByUUID(world, identifier.getUUID());
     }
 
     public @Nullable TownIdentifier getTownByIdentifier(@NotNull PlayerIdentifier identifier) {
@@ -576,5 +678,47 @@ public class EMCAPIClient {
         if (quarter == null) return null;
 
         return quarter.getTrusted();
+    }
+
+    public @NotNull List<LocationData> getLocationDataByLocations(@NotNull List<Location> query) {
+        return getLocationDataByLocations(world, query);
+    }
+
+    public @NotNull List<LocationData> getLocationDataByLocations(@NotNull World world, @NotNull List<Location> query) {
+        JsonArray queryArray = new JsonArray();
+        for (Location entry : query) {
+            JsonArray innerArray = new JsonArray();
+            innerArray.add(entry.getX());
+            innerArray.add(entry.getZ());
+            queryArray.add(innerArray);
+        }
+
+        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("location"), JSONUtil.createRequestBody(queryArray));
+
+        List<LocationData> locations = new ArrayList<>();
+        for (JsonElement element : response) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            LocationData data = new LocationData(jsonObject);
+            locations.add(data);
+        }
+
+        return locations;
+    }
+
+    public @NotNull List<LocationData> getLocationDataByLocations(@NotNull Location... query) {
+        return getLocationDataByLocations(world, query);
+    }
+
+    public @NotNull List<LocationData> getLocationDataByLocations(@NotNull World world, @NotNull Location... query) {
+        return getLocationDataByLocations(world, Arrays.stream(query).toList());
+    }
+
+    public @NotNull LocationData getLocationDataByLocation(@NotNull Location query) {
+        return getLocationDataByLocation(world, query);
+    }
+
+    public @NotNull LocationData getLocationDataByLocation(@NotNull World world, @NotNull Location query) {
+        List<LocationData> data = getLocationDataByLocations(query);
+        return data.get(0);
     }
 }

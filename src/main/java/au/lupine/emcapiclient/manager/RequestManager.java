@@ -12,10 +12,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
-import java.util.stream.IntStream;
 
 public class RequestManager {
 
@@ -80,14 +80,27 @@ public class RequestManager {
         }
     }
 
-    public JsonArray batchPostAsJsonArray(@NotNull URI uri, @NotNull List<String> query) {
-        List<List<String>> batches = IntStream.range(0, (query.size() + 99) / 100)
-                .mapToObj(i -> query.subList(i * 100, Math.min((i + 1) * 100, query.size())))
-                .toList();
+    public JsonArray batchPostAsJsonArray(@NotNull URI uri, @NotNull JsonObject body) {
+        if (!body.has("query") || !body.get("query").isJsonArray()) return null;
+
+        JsonArray query = body.getAsJsonArray("query");
+        int size = query.size();
+
+        List<JsonObject> batches = new ArrayList<>();
+        for (int i = 0; i < size; i += 100) {
+            JsonObject batchBody = new JsonObject();
+            JsonArray batchQuery = new JsonArray();
+            for (int j = i; j < i + 100 & j < size; j++) {
+                batchQuery.add(query.get(j));
+            }
+
+            batchBody.add("query", batchQuery);
+            batches.add(batchBody);
+        }
 
         List<CompletableFuture<JsonArray>> futures = batches.stream()
                 .map(batch -> CompletableFuture.supplyAsync(() ->
-                        postURIAsJsonArray(uri, createRequestBody(batch))))
+                        postURIAsJsonArray(uri, batch)))
                 .toList();
 
         CompletableFuture<JsonArray> combined = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenApply(v -> {
@@ -103,16 +116,5 @@ public class RequestManager {
             if (e.getCause() instanceof FailedRequestException) throw (FailedRequestException) e.getCause();
             throw e;
         }
-    }
-
-    private JsonObject createRequestBody(List<String> query) {
-        JsonObject body = new JsonObject();
-        JsonArray queryArray = new JsonArray();
-        for (String entry : query) {
-            queryArray.add(entry);
-        }
-        body.add("query", queryArray);
-
-        return body;
     }
 }

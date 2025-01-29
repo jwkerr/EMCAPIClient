@@ -8,10 +8,19 @@ import org.jetbrains.annotations.Nullable;
 public class Location {
 
     private final String world;
-    private final double x, y, z;
-    private final Double pitch, yaw;
+    private final double x, z;
+    private final Double pitch, y, yaw;
 
-    public Location(@Nullable String world, double x, double y, double z, @Nullable Double pitch, @Nullable Double yaw) {
+    public Location(double x, double z) {
+        this.world = null;
+        this.x = x;
+        this.y = null;
+        this.z = z;
+        this.pitch = null;
+        this.yaw = null;
+    }
+
+    public Location(@Nullable String world, double x, @Nullable Double y, double z, @Nullable Double pitch, @Nullable Double yaw) {
         this.world = world;
         this.x = x;
         this.y = y;
@@ -29,8 +38,7 @@ public class Location {
         this.yaw = JSONUtil.getElementAsDoubleOrNull(jsonObject.get("yaw"));
     }
 
-    @Nullable
-    public String getWorld() {
+    public @Nullable String getWorld() {
         return world;
     }
 
@@ -38,7 +46,7 @@ public class Location {
         return x;
     }
 
-    public double getY() {
+    public @Nullable Double getY() {
         return y;
     }
 
@@ -46,13 +54,11 @@ public class Location {
         return z;
     }
 
-    @Nullable
-    public Double getPitch() {
+    public @Nullable Double getPitch() {
         return pitch;
     }
 
-    @Nullable
-    public Double getYaw() {
+    public @Nullable Double getYaw() {
         return yaw;
     }
 }

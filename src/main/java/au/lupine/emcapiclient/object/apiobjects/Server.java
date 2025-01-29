@@ -1,4 +1,4 @@
-package au.lupine.emcapiclient.object.data;
+package au.lupine.emcapiclient.object.apiobjects;
 
 import com.google.gson.JsonObject;
 

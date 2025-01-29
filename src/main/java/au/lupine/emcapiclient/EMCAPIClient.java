@@ -2,10 +2,9 @@ package au.lupine.emcapiclient;
 
 import au.lupine.emcapiclient.manager.RequestManager;
 import au.lupine.emcapiclient.object.DiscordType;
-import au.lupine.emcapiclient.object.DiscordPair;
 import au.lupine.emcapiclient.object.Location;
 import au.lupine.emcapiclient.object.World;
-import au.lupine.emcapiclient.object.data.*;
+import au.lupine.emcapiclient.object.apiobjects.*;
 import au.lupine.emcapiclient.object.identifier.*;
 import au.lupine.emcapiclient.util.JSONUtil;
 import com.google.gson.JsonArray;
@@ -203,18 +202,15 @@ public class EMCAPIClient {
 
         JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("discord"), JSONUtil.createRequestBody(queryArray));
 
-        List<DiscordPair> identifiers = new ArrayList<>();
+        List<DiscordPair> pairs = new ArrayList<>();
         for (JsonElement element : response) {
             JsonObject jsonObject = element.getAsJsonObject();
-            DiscordPair identifier = new DiscordPair(
-                    JSONUtil.getElementAsStringOrNull(jsonObject.get("id")),
-                    JSONUtil.getElementAsStringOrNull(jsonObject.get("uuid"))
-            );
+            DiscordPair pair = new DiscordPair(jsonObject);
 
-            identifiers.add(identifier);
+            pairs.add(pair);
         }
 
-        return identifiers;
+        return pairs;
     }
 
     public @NotNull List<Player> getPlayersByUUIDs(@NotNull List<UUID> query) {
@@ -680,11 +676,11 @@ public class EMCAPIClient {
         return quarter.getTrusted();
     }
 
-    public @NotNull List<LocationData> getLocationDataByLocations(@NotNull List<Location> query) {
+    public @NotNull List<LocationInfo> getLocationDataByLocations(@NotNull List<Location> query) {
         return getLocationDataByLocations(world, query);
     }
 
-    public @NotNull List<LocationData> getLocationDataByLocations(@NotNull World world, @NotNull List<Location> query) {
+    public @NotNull List<LocationInfo> getLocationDataByLocations(@NotNull World world, @NotNull List<Location> query) {
         JsonArray queryArray = new JsonArray();
         for (Location entry : query) {
             JsonArray innerArray = new JsonArray();
@@ -695,30 +691,30 @@ public class EMCAPIClient {
 
         JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("location"), JSONUtil.createRequestBody(queryArray));
 
-        List<LocationData> locations = new ArrayList<>();
+        List<LocationInfo> locations = new ArrayList<>();
         for (JsonElement element : response) {
             JsonObject jsonObject = element.getAsJsonObject();
-            LocationData data = new LocationData(jsonObject);
+            LocationInfo data = new LocationInfo(jsonObject);
             locations.add(data);
         }
 
         return locations;
     }
 
-    public @NotNull List<LocationData> getLocationDataByLocations(@NotNull Location... query) {
+    public @NotNull List<LocationInfo> getLocationDataByLocations(@NotNull Location... query) {
         return getLocationDataByLocations(world, query);
     }
 
-    public @NotNull List<LocationData> getLocationDataByLocations(@NotNull World world, @NotNull Location... query) {
+    public @NotNull List<LocationInfo> getLocationDataByLocations(@NotNull World world, @NotNull Location... query) {
         return getLocationDataByLocations(world, Arrays.stream(query).toList());
     }
 
-    public @NotNull LocationData getLocationDataByLocation(@NotNull Location query) {
+    public @NotNull LocationInfo getLocationDataByLocation(@NotNull Location query) {
         return getLocationDataByLocation(world, query);
     }
 
-    public @NotNull LocationData getLocationDataByLocation(@NotNull World world, @NotNull Location query) {
-        List<LocationData> data = getLocationDataByLocations(query);
+    public @NotNull LocationInfo getLocationDataByLocation(@NotNull World world, @NotNull Location query) {
+        List<LocationInfo> data = getLocationDataByLocations(query);
         return data.get(0);
     }
 }

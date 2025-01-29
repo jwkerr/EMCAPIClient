@@ -1,4 +1,4 @@
-package au.lupine.emcapiclient.object.data;
+package au.lupine.emcapiclient.object.apiobjects;
 
 import au.lupine.emcapiclient.object.Location;
 import au.lupine.emcapiclient.object.identifier.NationIdentifier;
@@ -8,14 +8,14 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Nullable;
 
 
-public class LocationData extends APIObject {
+public class LocationInfo extends APIObject {
 
     private final Location location;
     private final boolean isWilderness;
     private final TownIdentifier town;
     private final NationIdentifier nation;
 
-    public LocationData(JsonObject jsonObject) {
+    public LocationInfo(JsonObject jsonObject) {
         super(jsonObject);
 
         JsonObject locationObject = jsonObject.get("location").getAsJsonObject();

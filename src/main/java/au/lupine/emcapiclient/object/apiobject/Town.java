@@ -1,4 +1,4 @@
-package au.lupine.emcapiclient.object.apiobjects;
+package au.lupine.emcapiclient.object.apiobject;
 
 import au.lupine.emcapiclient.object.wrapper.Location;
 import au.lupine.emcapiclient.object.wrapper.Pair;

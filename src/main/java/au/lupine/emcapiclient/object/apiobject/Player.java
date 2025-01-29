@@ -1,4 +1,4 @@
-package au.lupine.emcapiclient.object.apiobjects;
+package au.lupine.emcapiclient.object.apiobject;
 
 import au.lupine.emcapiclient.object.identifier.Identifier;
 import au.lupine.emcapiclient.object.identifier.NationIdentifier;

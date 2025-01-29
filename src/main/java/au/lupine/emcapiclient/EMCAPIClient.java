@@ -4,7 +4,7 @@ import au.lupine.emcapiclient.manager.RequestManager;
 import au.lupine.emcapiclient.object.state.DiscordType;
 import au.lupine.emcapiclient.object.wrapper.Location;
 import au.lupine.emcapiclient.object.wrapper.World;
-import au.lupine.emcapiclient.object.apiobjects.*;
+import au.lupine.emcapiclient.object.apiobject.*;
 import au.lupine.emcapiclient.object.identifier.*;
 import au.lupine.emcapiclient.util.JSONUtil;
 import com.google.gson.JsonArray;

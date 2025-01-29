@@ -1,6 +1,6 @@
 package au.lupine.emcapiclient.object.apiobjects;
 
-import au.lupine.emcapiclient.object.Cuboid;
+import au.lupine.emcapiclient.object.wrapper.Cuboid;
 import au.lupine.emcapiclient.object.identifier.Identifier;
 import au.lupine.emcapiclient.object.identifier.PlayerIdentifier;
 import au.lupine.emcapiclient.object.identifier.TownIdentifier;

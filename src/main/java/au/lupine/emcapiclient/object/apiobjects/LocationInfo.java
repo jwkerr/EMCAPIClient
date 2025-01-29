@@ -1,6 +1,6 @@
 package au.lupine.emcapiclient.object.apiobjects;
 
-import au.lupine.emcapiclient.object.Location;
+import au.lupine.emcapiclient.object.wrapper.Location;
 import au.lupine.emcapiclient.object.identifier.NationIdentifier;
 import au.lupine.emcapiclient.object.identifier.TownIdentifier;
 import au.lupine.emcapiclient.util.JSONUtil;

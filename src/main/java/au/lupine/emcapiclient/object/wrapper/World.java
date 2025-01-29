@@ -1,4 +1,4 @@
-package au.lupine.emcapiclient.object;
+package au.lupine.emcapiclient.object.wrapper;
 
 /**
  * Represents a discrete world on EarthMC as in Terra Nova, Terra Aurora, etc.

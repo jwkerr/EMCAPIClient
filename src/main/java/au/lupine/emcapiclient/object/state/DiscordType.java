@@ -1,4 +1,4 @@
-package au.lupine.emcapiclient.object;
+package au.lupine.emcapiclient.object.state;
 
 public enum DiscordType {
     DISCORD("discord"),

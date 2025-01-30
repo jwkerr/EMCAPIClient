@@ -1,5 +1,7 @@
 # EMCAPIClient
 
+Fair warning: this library is intended for my own personal use across projects, if I decide something isn't how I like it, I will change it, so do not expect compatibility across versions
+
 # Using EMCAPIClient
 Create an instance of EMCAPIClient like this
 ```java

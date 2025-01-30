@@ -2,6 +2,8 @@
 
 Fair warning: this library is intended for my own personal use across projects, if I decide something isn't how I like it, I will change it, so do not expect compatibility across versions
 
+That said, each version will work with the API and updating is not necessary, if you have things as you like, just stay on that version
+
 # Using EMCAPIClient
 Create an instance of EMCAPIClient like this
 ```java

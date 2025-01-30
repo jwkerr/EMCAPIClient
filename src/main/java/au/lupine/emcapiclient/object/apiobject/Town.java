@@ -1,7 +1,7 @@
 package au.lupine.emcapiclient.object.apiobject;
 
-import au.lupine.emcapiclient.object.wrapper.Location;
-import au.lupine.emcapiclient.object.wrapper.Pair;
+import au.lupine.emcapiclient.object.Location;
+import au.lupine.emcapiclient.object.Pair;
 import au.lupine.emcapiclient.object.identifier.Identifier;
 import au.lupine.emcapiclient.object.identifier.NationIdentifier;
 import au.lupine.emcapiclient.object.identifier.PlayerIdentifier;
@@ -111,7 +111,7 @@ public class Town extends APIObject {
 
         this.quarters = Identifier.createIdentifierList(jsonObject.getAsJsonArray("quarters"), QuarterIdentifier.class);
 
-        this.ranks = getRanksMap();
+        this.ranks = createRanksMap();
     }
 
     public String getName() {

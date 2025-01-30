@@ -9,12 +9,12 @@ import java.util.UUID;
 /**
  * Represents one (if account is not linked) or both of a Discord ID and a Minecraft UUID
  */
-public class DiscordPair extends APIObject {
+public class Discord extends APIObject {
 
     private final String id;
     private final UUID uuid;
 
-    public DiscordPair(JsonObject jsonObject) {
+    public Discord(JsonObject jsonObject) {
         super(jsonObject);
 
         this.id = JSONUtil.getElementAsStringOrNull(jsonObject.get("id"));

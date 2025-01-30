@@ -1,6 +1,6 @@
 package au.lupine.emcapiclient;
 
-import au.lupine.emcapiclient.object.wrapper.Location;
+import au.lupine.emcapiclient.object.Location;
 import au.lupine.emcapiclient.object.apiobject.LocationInfo;
 import au.lupine.emcapiclient.object.identifier.TownIdentifier;
 
@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         EMCAPIClient api = new EMCAPIClient();
 
-        List<LocationInfo> locations = api.getLocationDataByLocations(
+        List<LocationInfo> locations = api.getLocationInfoByLocations(
                 new Location(500, 500),
                 new Location(5000, 500),
                 new Location(0, 0),

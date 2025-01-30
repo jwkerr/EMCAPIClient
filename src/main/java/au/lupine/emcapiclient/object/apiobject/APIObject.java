@@ -16,7 +16,7 @@ public abstract class APIObject {
         this.jsonObject = jsonObject;
     }
 
-    public HashMap<String, List<String>> getRanksMap() {
+    protected HashMap<String, List<String>> createRanksMap() {
         JsonObject ranksObject = jsonObject.getAsJsonObject("ranks");
         HashMap<String, List<String>> ranksMap = new HashMap<>();
 

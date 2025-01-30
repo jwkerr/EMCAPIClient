@@ -1,4 +1,4 @@
-package au.lupine.emcapiclient.object.wrapper;
+package au.lupine.emcapiclient.object;
 
 public class Pair<F, S> {
 

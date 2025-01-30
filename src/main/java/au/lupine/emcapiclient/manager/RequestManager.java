@@ -46,9 +46,10 @@ public class RequestManager {
             );
 
             int statusCode = response.statusCode();
-            if (statusCode != 200) throw new FailedRequestException(statusCode);
+            String body = response.body();
+            if (statusCode != 200) throw new FailedRequestException(statusCode, body);
 
-            return gson.fromJson(response.body(), elementClass);
+            return gson.fromJson(body, elementClass);
         } catch (IOException | InterruptedException e) {
             return null;
         }
@@ -62,17 +63,18 @@ public class RequestManager {
         return (JsonArray) postURIAsJsonElement(uri, body, JsonArray.class);
     }
 
-    private <T extends JsonElement> JsonElement postURIAsJsonElement(@NotNull URI uri, @NotNull JsonObject body, @NotNull Class<T> elementClass) {
+    private <T extends JsonElement> JsonElement postURIAsJsonElement(@NotNull URI uri, @NotNull JsonObject requestBody, @NotNull Class<T> elementClass) {
         try {
             HttpResponse<String> response = client.send(
                     HttpRequest.newBuilder().POST(
-                            HttpRequest.BodyPublishers.ofString(body.toString())
+                            HttpRequest.BodyPublishers.ofString(requestBody.toString())
                     ).uri(uri).build(),
                     HttpResponse.BodyHandlers.ofString()
             );
 
             int statusCode = response.statusCode();
-            if (statusCode != 200) throw new FailedRequestException(statusCode);
+            String body = response.body();
+            if (statusCode != 200) throw new FailedRequestException(statusCode, body);
 
             return gson.fromJson(response.body(), elementClass);
         } catch (IOException | InterruptedException e) {

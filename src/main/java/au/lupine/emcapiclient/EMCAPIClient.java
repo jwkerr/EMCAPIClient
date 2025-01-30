@@ -2,8 +2,8 @@ package au.lupine.emcapiclient;
 
 import au.lupine.emcapiclient.manager.RequestManager;
 import au.lupine.emcapiclient.object.state.DiscordType;
-import au.lupine.emcapiclient.object.wrapper.Location;
-import au.lupine.emcapiclient.object.wrapper.World;
+import au.lupine.emcapiclient.object.Location;
+import au.lupine.emcapiclient.object.state.World;
 import au.lupine.emcapiclient.object.apiobject.*;
 import au.lupine.emcapiclient.object.identifier.*;
 import au.lupine.emcapiclient.util.JSONUtil;
@@ -187,11 +187,11 @@ public class EMCAPIClient {
         return quarters;
     }
 
-    public @NotNull List<DiscordPair> getDiscordPairsByStrings(@NotNull DiscordType type, @NotNull List<String> query) {
-        return getDiscordPairsByStrings(world, type, query);
+    public @NotNull List<Discord> getDiscordsByStrings(@NotNull DiscordType type, @NotNull List<String> query) {
+        return getDiscordsByStrings(world, type, query);
     }
 
-    public @NotNull List<DiscordPair> getDiscordPairsByStrings(@NotNull World world, @NotNull DiscordType type, @NotNull List<String> query) {
+    public @NotNull List<Discord> getDiscordsByStrings(@NotNull World world, @NotNull DiscordType type, @NotNull List<String> query) {
         JsonArray queryArray = new JsonArray();
         for (String entry : query) {
             JsonObject innerObject = new JsonObject();
@@ -202,10 +202,10 @@ public class EMCAPIClient {
 
         JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(world).resolve("discord"), JSONUtil.createRequestBody(queryArray));
 
-        List<DiscordPair> pairs = new ArrayList<>();
+        List<Discord> pairs = new ArrayList<>();
         for (JsonElement element : response) {
             JsonObject jsonObject = element.getAsJsonObject();
-            DiscordPair pair = new DiscordPair(jsonObject);
+            Discord pair = new Discord(jsonObject);
 
             pairs.add(pair);
         }
@@ -245,12 +245,12 @@ public class EMCAPIClient {
         return getQuartersByStrings(world, query.stream().map(UUID::toString).toList());
     }
 
-    public @NotNull List<DiscordPair> getDiscordPairsByUUIDs(@NotNull List<UUID> query) {
-        return getDiscordPairsByUUIDs(world, query);
+    public @NotNull List<Discord> getDiscordsByUUIDs(@NotNull List<UUID> query) {
+        return getDiscordsByUUIDs(world, query);
     }
 
-    public @NotNull List<DiscordPair> getDiscordPairsByUUIDs(@NotNull World world, @NotNull List<UUID> query) {
-        return getDiscordPairsByStrings(world, DiscordType.MINECRAFT, query.stream().map(UUID::toString).toList());
+    public @NotNull List<Discord> getDiscordsByUUIDs(@NotNull World world, @NotNull List<UUID> query) {
+        return getDiscordsByStrings(world, DiscordType.MINECRAFT, query.stream().map(UUID::toString).toList());
     }
 
     public @NotNull List<Player> getPlayersByStrings(@NotNull String... query) {
@@ -285,12 +285,12 @@ public class EMCAPIClient {
         return getQuartersByStrings(world, Arrays.stream(query).toList());
     }
 
-    public @NotNull List<DiscordPair> getDiscordPairsByStrings(@NotNull DiscordType type, @NotNull String... query) {
-        return getDiscordPairsByStrings(world, type, query);
+    public @NotNull List<Discord> getDiscordsByStrings(@NotNull DiscordType type, @NotNull String... query) {
+        return getDiscordsByStrings(world, type, query);
     }
 
-    public @NotNull List<DiscordPair> getDiscordPairsByStrings(@NotNull World world, @NotNull DiscordType type, @NotNull String... query) {
-        return getDiscordPairsByStrings(world, type, Arrays.stream(query).toList());
+    public @NotNull List<Discord> getDiscordsByStrings(@NotNull World world, @NotNull DiscordType type, @NotNull String... query) {
+        return getDiscordsByStrings(world, type, Arrays.stream(query).toList());
     }
 
     public @NotNull List<Player> getPlayersByIdentifiers(@NotNull List<PlayerIdentifier> query) {
@@ -325,12 +325,12 @@ public class EMCAPIClient {
         return getQuartersByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
     }
 
-    public @NotNull List<DiscordPair> getDiscordPairsByIdentifiers(@NotNull List<PlayerIdentifier> query) {
-        return getDiscordPairsByIdentifiers(world, query);
+    public @NotNull List<Discord> getDiscordsByIdentifiers(@NotNull List<PlayerIdentifier> query) {
+        return getDiscordsByIdentifiers(world, query);
     }
 
-    public @NotNull List<DiscordPair> getDiscordPairsByIdentifiers(@NotNull World world, @NotNull List<PlayerIdentifier> query) {
-        return getDiscordPairsByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
+    public @NotNull List<Discord> getDiscordsByIdentifiers(@NotNull World world, @NotNull List<PlayerIdentifier> query) {
+        return getDiscordsByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
     }
 
     public @NotNull Server getServer() {
@@ -378,12 +378,12 @@ public class EMCAPIClient {
         return quarters.isEmpty() ? null : quarters.get(0);
     }
 
-    public @NotNull DiscordPair getDiscordPairByString(@NotNull DiscordType type, @NotNull String query) {
-        return getDiscordPairByString(world, type, query);
+    public @NotNull Discord getDiscordByString(@NotNull DiscordType type, @NotNull String query) {
+        return getDiscordByString(world, type, query);
     }
 
-    public @NotNull DiscordPair getDiscordPairByString(@NotNull World world, @NotNull DiscordType type, @NotNull String query) {
-        List<DiscordPair> identifiers = getDiscordPairsByStrings(world, type, query);
+    public @NotNull Discord getDiscordByString(@NotNull World world, @NotNull DiscordType type, @NotNull String query) {
+        List<Discord> identifiers = getDiscordsByStrings(world, type, query);
         return identifiers.get(0);
     }
 
@@ -419,12 +419,12 @@ public class EMCAPIClient {
         return getQuarterByString(world, query.toString());
     }
 
-    public @Nullable DiscordPair getDiscordPairByUUID(@NotNull UUID query) {
-        return getDiscordPairByUUID(world, query);
+    public @Nullable Discord getDiscordByUUID(@NotNull UUID query) {
+        return getDiscordByUUID(world, query);
     }
 
-    public @Nullable DiscordPair getDiscordPairByUUID(@NotNull World world, @NotNull UUID query) {
-        return getDiscordPairByString(world, DiscordType.MINECRAFT, query.toString());
+    public @Nullable Discord getDiscordByUUID(@NotNull World world, @NotNull UUID query) {
+        return getDiscordByString(world, DiscordType.MINECRAFT, query.toString());
     }
 
     public @Nullable Player getPlayerByIdentifier(@NotNull PlayerIdentifier identifier) {
@@ -459,12 +459,12 @@ public class EMCAPIClient {
         return getQuarterByUUID(world, identifier.getUUID());
     }
 
-    public @Nullable DiscordPair getDiscordPairByIdentifier(@NotNull PlayerIdentifier identifier) {
-        return getDiscordPairByIdentifier(world, identifier);
+    public @Nullable Discord getDiscordByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getDiscordByIdentifier(world, identifier);
     }
 
-    public @Nullable DiscordPair getDiscordPairByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
-        return getDiscordPairByUUID(world, identifier.getUUID());
+    public @Nullable Discord getDiscordByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+        return getDiscordByUUID(world, identifier.getUUID());
     }
 
     public @Nullable TownIdentifier getTownByIdentifier(@NotNull PlayerIdentifier identifier) {
@@ -676,11 +676,11 @@ public class EMCAPIClient {
         return quarter.getTrusted();
     }
 
-    public @NotNull List<LocationInfo> getLocationDataByLocations(@NotNull List<Location> query) {
-        return getLocationDataByLocations(world, query);
+    public @NotNull List<LocationInfo> getLocationInfoByLocations(@NotNull List<Location> query) {
+        return getLocationInfoByLocations(world, query);
     }
 
-    public @NotNull List<LocationInfo> getLocationDataByLocations(@NotNull World world, @NotNull List<Location> query) {
+    public @NotNull List<LocationInfo> getLocationInfoByLocations(@NotNull World world, @NotNull List<Location> query) {
         JsonArray queryArray = new JsonArray();
         for (Location entry : query) {
             JsonArray innerArray = new JsonArray();
@@ -701,20 +701,20 @@ public class EMCAPIClient {
         return locations;
     }
 
-    public @NotNull List<LocationInfo> getLocationDataByLocations(@NotNull Location... query) {
-        return getLocationDataByLocations(world, query);
+    public @NotNull List<LocationInfo> getLocationInfoByLocations(@NotNull Location... query) {
+        return getLocationInfoByLocations(world, query);
     }
 
-    public @NotNull List<LocationInfo> getLocationDataByLocations(@NotNull World world, @NotNull Location... query) {
-        return getLocationDataByLocations(world, Arrays.stream(query).toList());
+    public @NotNull List<LocationInfo> getLocationInfoByLocations(@NotNull World world, @NotNull Location... query) {
+        return getLocationInfoByLocations(world, Arrays.stream(query).toList());
     }
 
-    public @NotNull LocationInfo getLocationDataByLocation(@NotNull Location query) {
-        return getLocationDataByLocation(world, query);
+    public @NotNull LocationInfo getLocationInfoByLocation(@NotNull Location query) {
+        return getLocationInfoByLocation(world, query);
     }
 
-    public @NotNull LocationInfo getLocationDataByLocation(@NotNull World world, @NotNull Location query) {
-        List<LocationInfo> data = getLocationDataByLocations(query);
+    public @NotNull LocationInfo getLocationInfoByLocation(@NotNull World world, @NotNull Location query) {
+        List<LocationInfo> data = getLocationInfoByLocations(query);
         return data.get(0);
     }
 }

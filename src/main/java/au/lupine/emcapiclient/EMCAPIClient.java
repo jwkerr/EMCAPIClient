@@ -1,11 +1,11 @@
 package au.lupine.emcapiclient;
 
 import au.lupine.emcapiclient.manager.RequestManager;
-import au.lupine.emcapiclient.object.state.DiscordType;
 import au.lupine.emcapiclient.object.Location;
-import au.lupine.emcapiclient.object.state.World;
 import au.lupine.emcapiclient.object.apiobject.*;
 import au.lupine.emcapiclient.object.identifier.*;
+import au.lupine.emcapiclient.object.state.DiscordType;
+import au.lupine.emcapiclient.object.state.World;
 import au.lupine.emcapiclient.util.JSONUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -51,11 +51,11 @@ public class EMCAPIClient {
         return requestManager;
     }
 
-    public @NotNull List<PlayerIdentifier> getAllPlayers() {
-        return getAllPlayers(world);
+    public @NotNull List<PlayerIdentifier> getAllPlayerIdentifiers() {
+        return getAllPlayerIdentifiers(world);
     }
 
-    public @NotNull List<PlayerIdentifier> getAllPlayers(@NotNull World world) {
+    public @NotNull List<PlayerIdentifier> getAllPlayerIdentifiers(@NotNull World world) {
         return Identifier.createIdentifierList(
                 requestManager.getURIAsJsonArray(
                         createWorldURI(world).resolve("players")
@@ -64,11 +64,11 @@ public class EMCAPIClient {
         );
     }
 
-    public @NotNull List<TownIdentifier> getAllTowns() {
-        return getAllTowns(world);
+    public @NotNull List<TownIdentifier> getAllTownIdentifiers() {
+        return getAllTownIdentifiers(world);
     }
 
-    public @NotNull List<TownIdentifier> getAllTowns(@NotNull World world) {
+    public @NotNull List<TownIdentifier> getAllTownIdentifiers(@NotNull World world) {
         return Identifier.createIdentifierList(
                 requestManager.getURIAsJsonArray(
                         createWorldURI(world).resolve("towns")
@@ -77,11 +77,11 @@ public class EMCAPIClient {
         );
     }
 
-    public @NotNull List<NationIdentifier> getAllNations() {
-        return getAllNations(world);
+    public @NotNull List<NationIdentifier> getAllNationIdentifiers() {
+        return getAllNationIdentifiers(world);
     }
 
-    public @NotNull List<NationIdentifier> getAllNations(@NotNull World world) {
+    public @NotNull List<NationIdentifier> getAllNationIdentifiers(@NotNull World world) {
         return Identifier.createIdentifierList(
                 requestManager.getURIAsJsonArray(
                         createWorldURI(world).resolve("nations")
@@ -90,17 +90,77 @@ public class EMCAPIClient {
         );
     }
 
-    public @NotNull List<QuarterIdentifier> getAllQuarters() {
-        return getAllQuarters(world);
+    public @NotNull List<QuarterIdentifier> getAllQuarterIdentifiers() {
+        return getAllQuarterIdentifiers(world);
     }
 
-    public @NotNull List<QuarterIdentifier> getAllQuarters(@NotNull World world) {
+    public @NotNull List<QuarterIdentifier> getAllQuarterIdentifiers(@NotNull World world) {
         return Identifier.createIdentifierList(
                 requestManager.getURIAsJsonArray(
                         createWorldURI(world).resolve("quarters")
                 ),
                 QuarterIdentifier.class
         );
+    }
+
+    public @NotNull List<Player> getAllPlayers() {
+        return getAllPlayers(world);
+    }
+
+    public @NotNull List<Player> getAllPlayers(@NotNull World world) {
+        List<PlayerIdentifier> identifiers = Identifier.createIdentifierList(
+                requestManager.getURIAsJsonArray(
+                        createWorldURI(world).resolve("players")
+                ),
+                PlayerIdentifier.class
+        );
+
+        return getPlayersByIdentifiers(identifiers);
+    }
+
+    public @NotNull List<Town> getAllTowns() {
+        return getAllTowns(world);
+    }
+
+    public @NotNull List<Town> getAllTowns(@NotNull World world) {
+        List<TownIdentifier> identifiers = Identifier.createIdentifierList(
+                requestManager.getURIAsJsonArray(
+                        createWorldURI(world).resolve("towns")
+                ),
+                TownIdentifier.class
+        );
+
+        return getTownsByIdentifiers(identifiers);
+    }
+
+    public @NotNull List<Nation> getAllNations() {
+        return getAllNations(world);
+    }
+
+    public @NotNull List<Nation> getAllNations(@NotNull World world) {
+        List<NationIdentifier> identifiers = Identifier.createIdentifierList(
+                requestManager.getURIAsJsonArray(
+                        createWorldURI(world).resolve("nations")
+                ),
+                NationIdentifier.class
+        );
+
+        return getNationsByIdentifiers(identifiers);
+    }
+
+    public @NotNull List<Quarter> getAllQuarters() {
+        return getAllQuarters(world);
+    }
+
+    public @NotNull List<Quarter> getAllQuarters(@NotNull World world) {
+        List<QuarterIdentifier> identifiers = Identifier.createIdentifierList(
+                requestManager.getURIAsJsonArray(
+                        createWorldURI(world).resolve("quarters")
+                ),
+                QuarterIdentifier.class
+        );
+
+        return getQuartersByIdentifiers(identifiers);
     }
 
     public @NotNull List<Player> getPlayersByStrings(@NotNull List<String> query) {

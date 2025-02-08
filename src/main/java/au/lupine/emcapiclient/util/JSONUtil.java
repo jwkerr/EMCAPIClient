@@ -26,7 +26,7 @@ public class JSONUtil {
         return element.getAsInt();
     }
 
-    public static @Nullable Long getElementsAsLongOrNull(JsonElement element) {
+    public static @Nullable Long getElementAsLongOrNull(JsonElement element) {
         if (element.isJsonNull()) return null;
 
         return element.getAsLong();

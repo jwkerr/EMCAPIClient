@@ -30,7 +30,6 @@ public class Player extends APIObject {
     private final List<String> townRanks, nationRanks;
     private final List<PlayerIdentifier> friends;
 
-
     public Player(JsonObject jsonObject) {
         super(jsonObject);
 
@@ -59,8 +58,8 @@ public class Player extends APIObject {
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
-        this.joinedTownAt = JSONUtil.getElementsAsLongOrNull(timestamps.get("joinedTownAt"));
-        this.lastOnline = JSONUtil.getElementsAsLongOrNull(timestamps.get("lastOnline"));
+        this.joinedTownAt = JSONUtil.getElementAsLongOrNull(timestamps.get("joinedTownAt"));
+        this.lastOnline = JSONUtil.getElementAsLongOrNull(timestamps.get("lastOnline"));
 
         JsonObject status = jsonObject.getAsJsonObject("status");
         this.isOnline = status.get("isOnline").getAsBoolean();

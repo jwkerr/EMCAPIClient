@@ -55,7 +55,7 @@ public class Quarter extends APIObject {
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
-        this.claimedAt = JSONUtil.getElementsAsLongOrNull(timestamps.get("claimedAt"));
+        this.claimedAt = JSONUtil.getElementAsLongOrNull(timestamps.get("claimedAt"));
 
         JsonObject status = jsonObject.getAsJsonObject("status");
         this.isEmbassy = status.get("isEmbassy").getAsBoolean();

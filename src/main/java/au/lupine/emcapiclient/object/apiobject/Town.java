@@ -63,8 +63,8 @@ public class Town extends APIObject {
 
         JsonObject timestamps = jsonObject.getAsJsonObject("timestamps");
         this.registered = timestamps.get("registered").getAsLong();
-        this.joinedNationAt = JSONUtil.getElementsAsLongOrNull(timestamps.get("joinedNationAt"));
-        this.ruinedAt = JSONUtil.getElementsAsLongOrNull(timestamps.get("ruinedAt"));
+        this.joinedNationAt = JSONUtil.getElementAsLongOrNull(timestamps.get("joinedNationAt"));
+        this.ruinedAt = JSONUtil.getElementAsLongOrNull(timestamps.get("ruinedAt"));
 
         JsonObject status = jsonObject.getAsJsonObject("status");
         this.isPublic = status.get("isPublic").getAsBoolean();

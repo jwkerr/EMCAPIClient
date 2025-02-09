@@ -33,6 +33,19 @@ public class EMCAPIClient {
     private World world = World.AURORA;
 
     /**
+     * Create a new instance of EMCAPIClient with the default world unchanged
+     */
+    public EMCAPIClient() {}
+
+    /**
+     * Create a new instance of EMCAPIClient with a specific world as the default
+     * @param world The default world for this EMCAPIClient instance
+     */
+    public EMCAPIClient(World world) {
+        this.world = world;
+    }
+
+    /**
      * Set the default world to be used in API requests when none is specified
      */
     public void setDefaultWorld(World world) {

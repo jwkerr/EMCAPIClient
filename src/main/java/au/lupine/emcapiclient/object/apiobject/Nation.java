@@ -27,7 +27,7 @@ public class Nation extends APIObject {
     private final List<PlayerIdentifier> residents;
     private final List<TownIdentifier> towns, sanctioned;
     private final List<NationIdentifier> allies, enemies;
-    private final HashMap<String, List<String>> ranks;
+    private final HashMap<String, List<PlayerIdentifier>> ranks;
 
     public Nation(JsonObject jsonObject) {
         super(jsonObject);
@@ -188,7 +188,7 @@ public class Nation extends APIObject {
         return sanctioned;
     }
 
-    public HashMap<String, List<String>> getRanks() {
+    public HashMap<String, List<PlayerIdentifier>> getRanks() {
         return ranks;
     }
 }

@@ -1,10 +1,9 @@
 package au.lupine.emcapiclient.object.apiobject;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import au.lupine.emcapiclient.object.identifier.Identifier;
+import au.lupine.emcapiclient.object.identifier.PlayerIdentifier;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,18 +15,12 @@ public abstract class APIObject {
         this.jsonObject = jsonObject;
     }
 
-    protected HashMap<String, List<String>> createRanksMap() {
+    protected HashMap<String, List<PlayerIdentifier>> createRanksMap() {
         JsonObject ranksObject = jsonObject.getAsJsonObject("ranks");
-        HashMap<String, List<String>> ranksMap = new HashMap<>();
+        HashMap<String, List<PlayerIdentifier>> ranksMap = new HashMap<>();
 
         for (String rank : ranksObject.keySet()) {
-            List<String> residentsWithRank = new ArrayList<>();
-
-            JsonArray jsonArray = ranksObject.getAsJsonArray(rank);
-            for (JsonElement element : jsonArray) {
-                residentsWithRank.add(element.getAsString());
-            }
-
+            List<PlayerIdentifier> residentsWithRank = Identifier.createIdentifierList(ranksObject.getAsJsonArray(rank), PlayerIdentifier.class);
             ranksMap.put(rank, residentsWithRank);
         }
 

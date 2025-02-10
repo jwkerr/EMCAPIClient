@@ -36,7 +36,7 @@ public class Town extends APIObject {
     private final List<Pair<Integer, Integer>> townBlocks;
     private final List<PlayerIdentifier> residents, trusted, outlaws;
     private final List<QuarterIdentifier> quarters;
-    private final HashMap<String, List<String>> ranks;
+    private final HashMap<String, List<PlayerIdentifier>> ranks;
 
     public Town(JsonObject jsonObject) {
         super(jsonObject);
@@ -277,7 +277,7 @@ public class Town extends APIObject {
         return quarters;
     }
 
-    public HashMap<String, List<String>> getRanks() {
+    public HashMap<String, List<PlayerIdentifier>> getRanks() {
         return ranks;
     }
 }

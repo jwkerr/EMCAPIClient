@@ -512,213 +512,422 @@ public class EMCAPIClient {
         return getDiscordByUUID(world, identifier.getUUID());
     }
 
-    public @Nullable TownIdentifier getTownByIdentifier(@NotNull PlayerIdentifier identifier) {
-        return getTownByIdentifier(world, identifier);
+    public @Nullable TownIdentifier getTownIdentifierByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getTownIdentifierByIdentifier(world, identifier);
     }
 
-    public @Nullable TownIdentifier getTownByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+    public @Nullable TownIdentifier getTownIdentifierByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
         Player player = getPlayerByIdentifier(world, identifier);
         if (player == null) return null;
 
         return player.getTown();
     }
 
-    public @Nullable NationIdentifier getNationByIdentifier(@NotNull PlayerIdentifier identifier) {
-        return getNationByIdentifier(world, identifier);
+    public @Nullable Town getTownByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getTownByIdentifier(world, identifier);
     }
 
-    public @Nullable NationIdentifier getNationByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+    public @Nullable Town getTownByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+        TownIdentifier town = getTownIdentifierByIdentifier(world, identifier);
+        if (town == null) return null;
+
+        return getTownByIdentifier(world, town);
+    }
+
+    public @Nullable NationIdentifier getNationIdentifierByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getNationIdentifierByIdentifier(world, identifier);
+    }
+
+    public @Nullable NationIdentifier getNationIdentifierByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
         Player player = getPlayerByIdentifier(world, identifier);
         if (player == null) return null;
 
         return player.getNation();
     }
 
-    public @Nullable List<PlayerIdentifier> getFriendsByIdentifier(@NotNull PlayerIdentifier identifier) {
-        return getFriendsByIdentifier(world, identifier);
+    public @Nullable Nation getNationByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getNationByIdentifier(world, identifier);
     }
 
-    public @Nullable List<PlayerIdentifier> getFriendsByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+    public @Nullable Nation getNationByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+        NationIdentifier nation = getNationIdentifierByIdentifier(world, identifier);
+        if (nation == null) return null;
+
+        return getNationByIdentifier(world, nation);
+    }
+
+    public @Nullable List<PlayerIdentifier> getFriendIdentifiersByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getFriendIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getFriendIdentifiersByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
         Player player = getPlayerByIdentifier(world, identifier);
         if (player == null) return null;
 
         return player.getFriends();
     }
 
-    public @Nullable PlayerIdentifier getMayorByIdentifier(@NotNull TownIdentifier identifier) {
-         return getMayorByIdentifier(world, identifier);
+    public @Nullable List<Player> getFriendsByIdentifier(@NotNull PlayerIdentifier identifier) {
+        return getFriendsByIdentifier(world, identifier);
     }
 
-    public @Nullable PlayerIdentifier getMayorByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+    public @Nullable List<Player> getFriendsByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
+        List<PlayerIdentifier> friends = getFriendIdentifiersByIdentifier(world, identifier);
+        if (friends == null) return null;
+
+        return getPlayersByIdentifiers(world, friends);
+    }
+
+    public @Nullable PlayerIdentifier getMayorIdentifierByIdentifier(@NotNull TownIdentifier identifier) {
+         return getMayorIdentifierByIdentifier(world, identifier);
+    }
+
+    public @Nullable PlayerIdentifier getMayorIdentifierByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
         Town town = getTownByIdentifier(world, identifier);
         if (town == null) return null;
 
         return town.getMayor();
     }
 
-    public @Nullable NationIdentifier getNationByIdentifier(@NotNull TownIdentifier identifier) {
-        return getNationByIdentifier(world, identifier);
+    public @Nullable Player getMayorByIdentifier(@NotNull TownIdentifier identifier) {
+        return getMayorByIdentifier(world, identifier);
     }
 
-    public @Nullable NationIdentifier getNationByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+    public @Nullable Player getMayorByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        PlayerIdentifier mayor = getMayorIdentifierByIdentifier(world, identifier);
+        if (mayor == null) return null;
+
+        return getPlayerByIdentifier(world, mayor);
+    }
+
+    public @Nullable NationIdentifier getNationIdentifierByIdentifier(@NotNull TownIdentifier identifier) {
+        return getNationIdentifierByIdentifier(world, identifier);
+    }
+
+    public @Nullable NationIdentifier getNationIdentifierByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
         Town town = getTownByIdentifier(world, identifier);
         if (town == null) return null;
 
         return town.getNation();
     }
 
-    public @Nullable List<PlayerIdentifier> getResidentsByIdentifier(@NotNull TownIdentifier identifier) {
-        return getResidentsByIdentifier(world, identifier);
+    public @Nullable Nation getNationByIdentifier(@NotNull TownIdentifier identifier) {
+        return getNationByIdentifier(world, identifier);
     }
 
-    public @Nullable List<PlayerIdentifier> getResidentsByIdentifier(@NotNull World world, TownIdentifier identifier) {
+    public @Nullable Nation getNationByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        NationIdentifier nation = getNationIdentifierByIdentifier(world, identifier);
+        if (nation == null) return null;
+
+        return getNationByIdentifier(world, nation);
+    }
+
+    public @Nullable List<PlayerIdentifier> getResidentIdentifiersByIdentifier(@NotNull TownIdentifier identifier) {
+        return getResidentIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getResidentIdentifiersByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
         Town town = getTownByIdentifier(world, identifier);
         if (town == null) return null;
 
         return town.getResidents();
     }
 
-    public @Nullable List<PlayerIdentifier> getTrustedByIdentifier(@NotNull TownIdentifier identifier) {
-        return getTrustedByIdentifier(world, identifier);
+    public @Nullable List<Player> getResidentsByIdentifier(@NotNull TownIdentifier identifier) {
+        return getResidentsByIdentifier(world, identifier);
     }
 
-    public @Nullable List<PlayerIdentifier> getTrustedByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+    public @Nullable List<Player> getResidentsByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        List<PlayerIdentifier> residents = getResidentIdentifiersByIdentifier(world, identifier);
+        if (residents == null) return null;
+
+        return getPlayersByIdentifiers(world, residents);
+    }
+
+    public @Nullable List<PlayerIdentifier> getTrustedIdentifiersByIdentifier(@NotNull TownIdentifier identifier) {
+        return getTrustedIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getTrustedIdentifiersByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
         Town town = getTownByIdentifier(world, identifier);
         if (town == null) return null;
 
         return town.getTrusted();
     }
 
-    public @Nullable List<PlayerIdentifier> getOutlawsByIdentifier(@NotNull TownIdentifier identifier) {
-        return getOutlawsByIdentifier(world, identifier);
+    public @Nullable List<Player> getTrustedByIdentifier(@NotNull TownIdentifier identifier) {
+        return getResidentsByIdentifier(world, identifier);
     }
 
-    public @Nullable List<PlayerIdentifier> getOutlawsByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+    public @Nullable List<Player> getTrustedByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        List<PlayerIdentifier> trusted = getTrustedIdentifiersByIdentifier(world, identifier);
+        if (trusted == null) return null;
+
+        return getPlayersByIdentifiers(world, trusted);
+    }
+
+    public @Nullable List<PlayerIdentifier> getOutlawIdentifiersByIdentifier(@NotNull TownIdentifier identifier) {
+        return getOutlawIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getOutlawIdentifiersByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
         Town town = getTownByIdentifier(world, identifier);
         if (town == null) return null;
 
         return town.getOutlaws();
     }
 
-    public @Nullable List<QuarterIdentifier> getQuartersByIdentifier(@NotNull TownIdentifier identifier) {
-        return getQuartersByIdentifier(world, identifier);
+    public @Nullable List<Player> getOutlawsByIdentifier(@NotNull TownIdentifier identifier) {
+        return getOutlawsByIdentifier(world, identifier);
     }
 
-    public @Nullable List<QuarterIdentifier> getQuartersByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+    public @Nullable List<Player> getOutlawsByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        List<PlayerIdentifier> outlaws = getOutlawIdentifiersByIdentifier(world, identifier);
+        if (outlaws == null) return null;
+
+        return getPlayersByIdentifiers(world, outlaws);
+    }
+
+    public @Nullable List<QuarterIdentifier> getQuarterIdentifiersByIdentifier(@NotNull TownIdentifier identifier) {
+        return getQuarterIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<QuarterIdentifier> getQuarterIdentifiersByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
         Town town = getTownByIdentifier(world, identifier);
         if (town == null) return null;
 
         return town.getQuarters();
     }
 
-    public @Nullable PlayerIdentifier getKingByIdentifier(@NotNull NationIdentifier identifier) {
-        return getKingByIdentifier(world, identifier);
+    public @Nullable List<Quarter> getQuartersByIdentifier(@NotNull TownIdentifier identifier) {
+        return getQuartersByIdentifier(world, identifier);
     }
 
-    public @Nullable PlayerIdentifier getKingByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+    public @Nullable List<Quarter> getQuartersByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
+        List<QuarterIdentifier> quarters = getQuarterIdentifiersByIdentifier(world, identifier);
+        if (quarters == null) return null;
+
+        return getQuartersByIdentifiers(world, quarters);
+    }
+
+    public @Nullable PlayerIdentifier getKingIdentifierByIdentifier(@NotNull NationIdentifier identifier) {
+        return getKingIdentifierByIdentifier(world, identifier);
+    }
+
+    public @Nullable PlayerIdentifier getKingIdentifierByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
         Nation nation = getNationByIdentifier(world, identifier);
         if (nation == null) return null;
 
         return nation.getKing();
     }
 
-    public @Nullable TownIdentifier getCapitalByIdentifier(@NotNull NationIdentifier identifier) {
-        return getCapitalByIdentifier(world, identifier);
+    public @Nullable Player getKingByIdentifier(@NotNull NationIdentifier identifier) {
+        return getKingByIdentifier(world, identifier);
     }
 
-    public @Nullable TownIdentifier getCapitalByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+    public @Nullable Player getKingByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+        PlayerIdentifier king = getKingIdentifierByIdentifier(world, identifier);
+        if (king == null) return null;
+
+        return getPlayerByIdentifier(world, king);
+    }
+
+    public @Nullable TownIdentifier getCapitalIdentifierByIdentifier(@NotNull NationIdentifier identifier) {
+        return getCapitalIdentifierByIdentifier(world, identifier);
+    }
+
+    public @Nullable TownIdentifier getCapitalIdentifierByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
         Nation nation = getNationByIdentifier(world, identifier);
         if (nation == null) return null;
 
         return nation.getCapital();
     }
 
-    public @Nullable List<PlayerIdentifier> getResidentsByIdentifier(@NotNull NationIdentifier identifier) {
-        return getResidentsByIdentifier(world, identifier);
+    public @Nullable Town getCapitalByIdentifier(@NotNull NationIdentifier identifier) {
+        return getCapitalByIdentifier(world, identifier);
     }
 
-    public @Nullable List<PlayerIdentifier> getResidentsByIdentifier(@NotNull World world, NationIdentifier identifier) {
+    public @Nullable Town getCapitalByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+        TownIdentifier capital = getCapitalIdentifierByIdentifier(world, identifier);
+        if (capital == null) return null;
+
+        return getTownByIdentifier(world, capital);
+    }
+
+    public @Nullable List<PlayerIdentifier> getResidentIdentifiersByIdentifier(@NotNull NationIdentifier identifier) {
+        return getResidentIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getResidentIdentifiersByIdentifier(@NotNull World world, NationIdentifier identifier) {
         Nation nation = getNationByIdentifier(world, identifier);
         if (nation == null) return null;
 
         return nation.getResidents();
     }
 
-    public @Nullable List<TownIdentifier> getTownsByIdentifier(@NotNull NationIdentifier identifier) {
-        return getTownsByIdentifier(world, identifier);
+    public @Nullable List<Player> getResidentsByIdentifier(@NotNull NationIdentifier identifier) {
+        return getResidentsByIdentifier(world, identifier);
     }
 
-    public @Nullable List<TownIdentifier> getTownsByIdentifier(@NotNull World world, NationIdentifier identifier) {
+    public @Nullable List<Player> getResidentsByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+        List<PlayerIdentifier> residents = getResidentIdentifiersByIdentifier(world, identifier);
+        if (residents == null) return null;
+
+        return getPlayersByIdentifiers(world, residents);
+    }
+
+    public @Nullable List<TownIdentifier> getTownIdentifiersByIdentifier(@NotNull NationIdentifier identifier) {
+        return getTownIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<TownIdentifier> getTownIdentifiersByIdentifier(@NotNull World world, NationIdentifier identifier) {
         Nation nation = getNationByIdentifier(world, identifier);
         if (nation == null) return null;
 
         return nation.getTowns();
     }
 
-    public @Nullable List<TownIdentifier> getSanctionedByIdentifier(@NotNull NationIdentifier identifier) {
-        return getSanctionedByIdentifier(world, identifier);
+    public @Nullable List<Town> getTownsByIdentifier(@NotNull NationIdentifier identifier) {
+        return getTownsByIdentifier(world, identifier);
     }
 
-    public @Nullable List<TownIdentifier> getSanctionedByIdentifier(@NotNull World world, NationIdentifier identifier) {
+    public @Nullable List<Town> getTownsByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+        List<TownIdentifier> towns = getTownIdentifiersByIdentifier(world, identifier);
+        if (towns == null) return null;
+
+        return getTownsByIdentifiers(world, towns);
+    }
+
+    public @Nullable List<TownIdentifier> getSanctionedIdentifiersByIdentifier(@NotNull NationIdentifier identifier) {
+        return getSanctionedIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<TownIdentifier> getSanctionedIdentifiersByIdentifier(@NotNull World world, NationIdentifier identifier) {
         Nation nation = getNationByIdentifier(world, identifier);
         if (nation == null) return null;
 
         return nation.getSanctioned();
     }
 
-    public @Nullable List<NationIdentifier> getAlliesByIdentifier(@NotNull NationIdentifier identifier) {
-        return getAlliesByIdentifier(world, identifier);
+    public @Nullable List<Town> getSanctionedByIdentifier(@NotNull NationIdentifier identifier) {
+        return getSanctionedByIdentifier(world, identifier);
     }
 
-    public @Nullable List<NationIdentifier> getAlliesByIdentifier(@NotNull World world, NationIdentifier identifier) {
+    public @Nullable List<Town> getSanctionedByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+        List<TownIdentifier> sanctioned = getSanctionedIdentifiersByIdentifier(world, identifier);
+        if (sanctioned == null) return null;
+
+        return getTownsByIdentifiers(world, sanctioned);
+    }
+
+    public @Nullable List<NationIdentifier> getAllyIdentifiersByIdentifier(@NotNull NationIdentifier identifier) {
+        return getAllyIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<NationIdentifier> getAllyIdentifiersByIdentifier(@NotNull World world, NationIdentifier identifier) {
         Nation nation = getNationByIdentifier(world, identifier);
         if (nation == null) return null;
 
         return nation.getAllies();
     }
 
-    public @Nullable List<NationIdentifier> getEnemiesByIdentifier(@NotNull NationIdentifier identifier) {
-        return getEnemiesByIdentifier(world, identifier);
+    public @Nullable List<Nation> getAlliesByIdentifier(@NotNull NationIdentifier identifier) {
+        return getAlliesByIdentifier(world, identifier);
     }
 
-    public @Nullable List<NationIdentifier> getEnemiesByIdentifier(@NotNull World world, NationIdentifier identifier) {
+    public @Nullable List<Nation> getAlliesByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+        List<NationIdentifier> allies = getAllyIdentifiersByIdentifier(world, identifier);
+        if (allies == null) return null;
+
+        return getNationsByIdentifiers(world, allies);
+    }
+
+    public @Nullable List<NationIdentifier> getEnemyIdentifiersByIdentifier(@NotNull NationIdentifier identifier) {
+        return getEnemyIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<NationIdentifier> getEnemyIdentifiersByIdentifier(@NotNull World world, NationIdentifier identifier) {
         Nation nation = getNationByIdentifier(world, identifier);
         if (nation == null) return null;
 
         return nation.getEnemies();
     }
 
-    public @Nullable PlayerIdentifier getOwnerByIdentifier(@NotNull QuarterIdentifier identifier) {
-        return getOwnerByIdentifier(world, identifier);
+    public @Nullable List<Nation> getEnemiesByIdentifier(@NotNull NationIdentifier identifier) {
+        return getEnemiesByIdentifier(world, identifier);
     }
 
-    public @Nullable PlayerIdentifier getOwnerByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
+    public @Nullable List<Nation> getEnemiesByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
+        List<NationIdentifier> enemies = getEnemyIdentifiersByIdentifier(world, identifier);
+        if (enemies == null) return null;
+
+        return getNationsByIdentifiers(world, enemies);
+    }
+
+    public @Nullable PlayerIdentifier getOwnerIdentifierByIdentifier(@NotNull QuarterIdentifier identifier) {
+        return getOwnerIdentifierByIdentifier(world, identifier);
+    }
+
+    public @Nullable PlayerIdentifier getOwnerIdentifierByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
         Quarter quarter = getQuarterByIdentifier(identifier);
         if (quarter == null) return null;
 
         return quarter.getOwner();
     }
 
-    public @Nullable TownIdentifier getTownByIdentifier(@NotNull QuarterIdentifier identifier) {
-        return getTownByIdentifier(world, identifier);
+    public @Nullable Player getOwnerByIdentifier(@NotNull QuarterIdentifier identifier) {
+        return getOwnerByIdentifier(world, identifier);
     }
 
-    public @Nullable TownIdentifier getTownByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
+    public @Nullable Player getOwnerByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
+        PlayerIdentifier owner = getOwnerIdentifierByIdentifier(world, identifier);
+        if (owner == null) return null;
+
+        return getPlayerByIdentifier(world, owner);
+    }
+
+    public @Nullable TownIdentifier getTownIdentifierByIdentifier(@NotNull QuarterIdentifier identifier) {
+        return getTownIdentifierByIdentifier(world, identifier);
+    }
+
+    public @Nullable TownIdentifier getTownIdentifierByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
         Quarter quarter = getQuarterByIdentifier(identifier);
         if (quarter == null) return null;
 
         return quarter.getTown();
     }
 
-    public @Nullable List<PlayerIdentifier> getTrustedByIdentifier(@NotNull QuarterIdentifier identifier) {
-        return getTrustedByIdentifier(world, identifier);
+    public @Nullable Town getTownByIdentifier(@NotNull QuarterIdentifier identifier) {
+        return getTownByIdentifier(world, identifier);
     }
 
-    public @Nullable List<PlayerIdentifier> getTrustedByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
+    public @Nullable Town getTownByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
+        TownIdentifier town = getTownIdentifierByIdentifier(world, identifier);
+        if (town == null) return null;
+
+        return getTownByIdentifier(world, town);
+    }
+
+    public @Nullable List<PlayerIdentifier> getTrustedIdentifiersByIdentifier(@NotNull QuarterIdentifier identifier) {
+        return getTrustedIdentifiersByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<PlayerIdentifier> getTrustedIdentifiersByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
         Quarter quarter = getQuarterByIdentifier(identifier);
         if (quarter == null) return null;
 
         return quarter.getTrusted();
+    }
+
+    public @Nullable List<Player> getTrustedByIdentifier(@NotNull QuarterIdentifier identifier) {
+        return getTrustedByIdentifier(world, identifier);
+    }
+
+    public @Nullable List<Player> getTrustedByIdentifier(@NotNull World world, @NotNull QuarterIdentifier identifier) {
+        List<PlayerIdentifier> trusted = getTrustedIdentifiersByIdentifier(world, identifier);
+        if (trusted == null) return null;
+
+        return getPlayersByIdentifiers(world, trusted);
     }
 
     public @NotNull List<LocationInfo> getLocationInfoByLocations(@NotNull List<Location> query) {

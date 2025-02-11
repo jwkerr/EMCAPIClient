@@ -343,7 +343,7 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Player> getPlayersByIdentifiers(@NotNull World world, @NotNull List<PlayerIdentifier> query) {
-        return getPlayersByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
+        return getPlayersByStrings(world, query.stream().map(Identifier::getUUIDOrNameAsString).toList());
     }
 
     public @NotNull List<Town> getTownsByIdentifiers(@NotNull List<TownIdentifier> query) {
@@ -351,7 +351,7 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Town> getTownsByIdentifiers(@NotNull World world, @NotNull List<TownIdentifier> query) {
-        return getTownsByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
+        return getTownsByStrings(world, query.stream().map(Identifier::getUUIDOrNameAsString).toList());
     }
 
     public @NotNull List<Nation> getNationsByIdentifiers(@NotNull List<NationIdentifier> query) {
@@ -359,7 +359,7 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Nation> getNationsByIdentifiers(@NotNull World world, @NotNull List<NationIdentifier> query) {
-        return getNationsByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
+        return getNationsByStrings(world, query.stream().map(Identifier::getUUIDOrNameAsString).toList());
     }
 
     public @NotNull List<Quarter> getQuartersByIdentifiers(@NotNull List<QuarterIdentifier> query) {
@@ -367,7 +367,7 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Quarter> getQuartersByIdentifiers(@NotNull World world, @NotNull List<QuarterIdentifier> query) {
-        return getQuartersByUUIDs(world, query.stream().map(Identifier::getUUID).toList());
+        return getQuartersByStrings(world, query.stream().map(Identifier::getUUIDOrNameAsString).toList());
     }
 
     public @NotNull List<Discord> getDiscordsByIdentifiers(@NotNull List<PlayerIdentifier> query) {
@@ -477,7 +477,7 @@ public class EMCAPIClient {
     }
 
     public @Nullable Player getPlayerByIdentifier(@NotNull World world, @NotNull PlayerIdentifier identifier) {
-        return getPlayerByUUID(world, identifier.getUUID());
+        return getPlayerByString(world, identifier.getUUIDOrNameAsString());
     }
 
     public @Nullable Town getTownByIdentifier(@NotNull TownIdentifier identifier) {
@@ -485,7 +485,7 @@ public class EMCAPIClient {
     }
 
     public @Nullable Town getTownByIdentifier(@NotNull World world, @NotNull TownIdentifier identifier) {
-        return getTownByUUID(world, identifier.getUUID());
+        return getTownByString(world, identifier.getUUIDOrNameAsString());
     }
 
     public @Nullable Nation getNationByIdentifier(@NotNull NationIdentifier identifier) {
@@ -493,7 +493,7 @@ public class EMCAPIClient {
     }
 
     public @Nullable Nation getNationByIdentifier(@NotNull World world, @NotNull NationIdentifier identifier) {
-        return getNationByUUID(world, identifier.getUUID());
+        return getNationByString(world, identifier.getUUIDOrNameAsString());
     }
 
     public @Nullable Quarter getQuarterByIdentifier(@NotNull QuarterIdentifier identifier) {

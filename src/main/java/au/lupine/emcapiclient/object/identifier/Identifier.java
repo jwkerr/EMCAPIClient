@@ -37,6 +37,13 @@ public abstract class Identifier {
         return uuid;
     }
 
+    /**
+     * @return As a String: the UUID, or name if the UUID is null
+     */
+    public String getUUIDOrNameAsString() {
+        return uuid != null ? uuid.toString() : name;
+    }
+
     public static <T extends Identifier> @NotNull List<T> createIdentifierList(JsonArray array, Class<T> type) {
         List<T> identifiers = new ArrayList<>();
 

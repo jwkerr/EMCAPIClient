@@ -29,13 +29,21 @@ public abstract class Identifier {
         this.uuid = uuid == null ? null : UUID.fromString(uuid);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public UUID getUUID() {
+        return uuid;
+    }
+
     public static <T extends Identifier> @NotNull List<T> createIdentifierList(JsonArray array, Class<T> type) {
         List<T> identifiers = new ArrayList<>();
 
         Constructor<T> constructor;
         try {
             constructor = type.getConstructor(String.class, UUID.class);
-        } catch (NoSuchMethodException ignored) {
+        } catch (NoSuchMethodException e) {
             return identifiers;
         }
 
@@ -53,13 +61,5 @@ public abstract class Identifier {
         }
 
         return identifiers;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public UUID getUUID() {
-        return uuid;
     }
 }

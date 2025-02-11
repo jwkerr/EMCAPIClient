@@ -121,14 +121,7 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Player> getAllPlayers(@NotNull World world) {
-        List<PlayerIdentifier> identifiers = Identifier.createIdentifierList(
-                requestManager.getURIAsJsonArray(
-                        createWorldURI(world).resolve("players")
-                ),
-                PlayerIdentifier.class
-        );
-
-        return getPlayersByIdentifiers(identifiers);
+        return getPlayersByIdentifiers(getAllPlayerIdentifiers());
     }
 
     public @NotNull List<Town> getAllTowns() {
@@ -136,14 +129,7 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Town> getAllTowns(@NotNull World world) {
-        List<TownIdentifier> identifiers = Identifier.createIdentifierList(
-                requestManager.getURIAsJsonArray(
-                        createWorldURI(world).resolve("towns")
-                ),
-                TownIdentifier.class
-        );
-
-        return getTownsByIdentifiers(identifiers);
+        return getTownsByIdentifiers(getAllTownIdentifiers());
     }
 
     public @NotNull List<Nation> getAllNations() {
@@ -151,14 +137,7 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Nation> getAllNations(@NotNull World world) {
-        List<NationIdentifier> identifiers = Identifier.createIdentifierList(
-                requestManager.getURIAsJsonArray(
-                        createWorldURI(world).resolve("nations")
-                ),
-                NationIdentifier.class
-        );
-
-        return getNationsByIdentifiers(identifiers);
+        return getNationsByIdentifiers(getAllNationIdentifiers());
     }
 
     public @NotNull List<Quarter> getAllQuarters() {
@@ -166,14 +145,7 @@ public class EMCAPIClient {
     }
 
     public @NotNull List<Quarter> getAllQuarters(@NotNull World world) {
-        List<QuarterIdentifier> identifiers = Identifier.createIdentifierList(
-                requestManager.getURIAsJsonArray(
-                        createWorldURI(world).resolve("quarters")
-                ),
-                QuarterIdentifier.class
-        );
-
-        return getQuartersByIdentifiers(identifiers);
+        return getQuartersByIdentifiers(getAllQuarterIdentifiers());
     }
 
     public @NotNull List<Player> getPlayersByStrings(@NotNull List<String> query) {

@@ -76,7 +76,7 @@ public class RequestManager {
             String body = response.body();
             if (statusCode != 200) throw new FailedRequestException(statusCode, body);
 
-            return gson.fromJson(response.body(), elementClass);
+            return gson.fromJson(body, elementClass);
         } catch (IOException | InterruptedException e) {
             return null;
         }

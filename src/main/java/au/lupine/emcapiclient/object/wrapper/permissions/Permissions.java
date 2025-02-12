@@ -1,4 +1,4 @@
-package au.lupine.emcapiclient.object.permissions;
+package au.lupine.emcapiclient.object.wrapper.permissions;
 
 import com.google.gson.JsonObject;
 

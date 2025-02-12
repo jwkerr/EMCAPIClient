@@ -3,14 +3,14 @@ package au.lupine.emcapiclient.object.apiobject;
 import com.google.gson.JsonObject;
 
 @SuppressWarnings("unused")
-public class Server extends APIObject {
+public class ServerInfo extends APIObject {
 
     private final String version, moonPhase;
     private final long newDayTime, serverTimeOfDay, time, fullTime;
     private final boolean hasStorm, isThundering;
     private final int maxPlayers, numOnlinePlayers, numOnlineNomads, numResidents, numNomads, numTowns, numTownBlocks, numNations, numQuarters, numCuboids, votePartyTarget, numVotesRemaining;
 
-    public Server(JsonObject jsonObject) {
+    public ServerInfo(JsonObject jsonObject) {
         super(jsonObject);
 
         this.version = jsonObject.get("version").getAsString();

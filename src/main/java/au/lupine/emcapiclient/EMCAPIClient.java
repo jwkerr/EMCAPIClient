@@ -22,7 +22,7 @@ import java.util.UUID;
 /**
  * The primary class in EMCAPIClient, simply create a new instance like any other object to use it
  * <p>
- * Methods with and without a {@link Server} parameter will default to the world specified by {@link #setDefaultWorld(Server)} when no world is provided
+ * Methods with and without a {@link Server} parameter will default to the server specified by {@link #setDefaultServer(Server)} when no server is provided
  */
 @SuppressWarnings("unused")
 public class EMCAPIClient {
@@ -33,27 +33,23 @@ public class EMCAPIClient {
     private Server server = Server.AURORA;
 
     /**
-     * Create a new instance of EMCAPIClient with the default world unchanged
+     * Create a new instance of EMCAPIClient with the default server unchanged
      */
     public EMCAPIClient() {}
 
     /**
-     * Create a new instance of EMCAPIClient with a specific world as the default
-     * @param server The default world for this EMCAPIClient instance
+     * Create a new instance of EMCAPIClient with a specific server as the default
+     * @param server The default ser for this EMCAPIClient instance
      */
     public EMCAPIClient(Server server) {
         this.server = server;
     }
 
     /**
-     * Set the default world to be used in API requests when none is specified
+     * Set the default server to be used in API requests when none is specified
      */
-    public void setDefaultWorld(Server server) {
+    public void setDefaultServer(Server server) {
         this.server = server;
-    }
-
-    private URI getDefaultWorldURI() {
-        return EARTHMC_API_URI.resolve(server.getName() + "/");
     }
 
     private URI createWorldURI(Server server) {

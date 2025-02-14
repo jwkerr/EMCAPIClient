@@ -39,7 +39,7 @@ public class EMCAPIClient {
 
     /**
      * Create a new instance of EMCAPIClient with a specific server as the default
-     * @param server The default ser for this EMCAPIClient instance
+     * @param server The default server for this EMCAPIClient instance
      */
     public EMCAPIClient(Server server) {
         this.server = server;
@@ -374,11 +374,11 @@ public class EMCAPIClient {
         return getDiscordsByUUIDs(server, query.stream().map(Identifier::getUUID).toList());
     }
 
-    public @NotNull ServerInfo getServer() {
-        return getServer(server);
+    public @NotNull ServerInfo getServerInfo() {
+        return getServerInfo(server);
     }
 
-    public @NotNull ServerInfo getServer(@NotNull Server server) {
+    public @NotNull ServerInfo getServerInfo(@NotNull Server server) {
         JsonObject response = requestManager.getURIAsJsonObject(createWorldURI(server));
         return new ServerInfo(response);
     }

@@ -1,6 +1,7 @@
 package au.lupine.emcapiclient.object.state;
 
 public enum DiscordType {
+
     DISCORD("discord"),
     MINECRAFT("minecraft");
 

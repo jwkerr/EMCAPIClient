@@ -7,7 +7,6 @@ import au.lupine.emcapiclient.util.JSONUtil;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Nullable;
 
-
 public class LocationInfo extends APIObject {
 
     private final Location location;

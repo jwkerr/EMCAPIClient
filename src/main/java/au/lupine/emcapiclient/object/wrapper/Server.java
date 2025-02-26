@@ -17,6 +17,10 @@ public class Server {
         this.name = name;
     }
 
+    public Server of(String name) {
+        return new Server(name);
+    }
+
     public String getName() {
         return name;
     }

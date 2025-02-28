@@ -23,11 +23,17 @@ public class Discord extends APIObject {
         this.uuid = uuidString == null ? null : UUID.fromString(uuidString);
     }
 
-    public @Nullable String getID() {
+    /**
+     * @return Discord account's ID
+     */
+    public @Nullable String getDiscord() {
         return id;
     }
 
-    public @Nullable UUID getUUID() {
+    /**
+     * @return Minecraft account's UUID
+     */
+    public @Nullable UUID getMinecraft() {
         return uuid;
     }
 }

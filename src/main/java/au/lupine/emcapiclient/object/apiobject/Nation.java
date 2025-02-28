@@ -41,8 +41,8 @@ public class Nation extends APIObject {
 
         JsonObject king = jsonObject.getAsJsonObject("king");
         this.king = new PlayerIdentifier(
-                JSONUtil.getElementAsStringOrNull(jsonObject.get("name")),
-                JSONUtil.getElementAsStringOrNull(jsonObject.get("uuid"))
+                JSONUtil.getElementAsStringOrNull(king.get("name")),
+                JSONUtil.getElementAsStringOrNull(king.get("uuid"))
         );
 
         JsonObject capital = jsonObject.getAsJsonObject("capital");

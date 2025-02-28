@@ -91,13 +91,11 @@ public class Player extends APIObject {
         return uuid;
     }
 
-    @Nullable
-    public String getTitle() {
+    public @Nullable String getTitle() {
         return title;
     }
 
-    @Nullable
-    public String getSurname() {
+    public @Nullable String getSurname() {
         return surname;
     }
 
@@ -108,24 +106,21 @@ public class Player extends APIObject {
     /**
      * @return A string representing the player's about as seen on /res, null if the player has no about
      */
-    @Nullable
-    public String getAbout() {
+    public @Nullable String getAbout() {
         return about;
     }
 
     /**
      * @return A {@link TownIdentifier} representing the player's town or null if they have no town
      */
-    @Nullable
-    public TownIdentifier getTown() {
+    public @Nullable TownIdentifier getTown() {
         return town;
     }
 
     /**
      * @return A {@link NationIdentifier} representing the player's nation or null if they have no nation
      */
-    @Nullable
-    public NationIdentifier getNation() {
+    public @Nullable NationIdentifier getNation() {
         return nation;
     }
 
@@ -133,13 +128,11 @@ public class Player extends APIObject {
         return registered;
     }
 
-    @Nullable
-    public Long getJoinedTownAt() {
+    public @Nullable Long getJoinedTownAt() {
         return joinedTownAt;
     }
 
-    @Nullable
-    public Long getLastOnline() {
+    public @Nullable Long getLastOnline() {
         return lastOnline;
     }
 

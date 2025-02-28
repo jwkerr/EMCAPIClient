@@ -93,8 +93,7 @@ public class Quarter extends APIObject {
         return type;
     }
 
-    @Nullable
-    public PlayerIdentifier getOwner() {
+    public @Nullable PlayerIdentifier getOwner() {
         return owner;
     }
 
@@ -106,8 +105,7 @@ public class Quarter extends APIObject {
         return registered;
     }
 
-    @Nullable
-    public Long getClaimedAt() {
+    public @Nullable Long getClaimedAt() {
         return claimedAt;
     }
 
@@ -115,8 +113,7 @@ public class Quarter extends APIObject {
         return isEmbassy;
     }
 
-    @Nullable
-    public Integer getPrice() {
+    public @Nullable Integer getPrice() {
         return price;
     }
 

@@ -125,8 +125,7 @@ public class Town extends APIObject {
     /**
      * @return A string representing the town's board as seen on /t, null if the town has no board
      */
-    @Nullable
-    public String getBoard() {
+    public @Nullable String getBoard() {
         return board;
     }
 
@@ -137,8 +136,7 @@ public class Town extends APIObject {
     /**
      * @return A string representing the town's linked wiki URL, null if the town has not set a wiki URL
      */
-    @Nullable
-    public String getWiki() {
+    public @Nullable String getWiki() {
         return wiki;
     }
 
@@ -146,8 +144,7 @@ public class Town extends APIObject {
         return mayor;
     }
 
-    @Nullable
-    public NationIdentifier getNation() {
+    public @Nullable NationIdentifier getNation() {
         return nation;
     }
 
@@ -155,13 +152,11 @@ public class Town extends APIObject {
         return registered;
     }
 
-    @Nullable
-    public Long getJoinedNationAt() {
+    public @Nullable Long getJoinedNationAt() {
         return joinedNationAt;
     }
 
-    @Nullable
-    public Long getRuinedAt() {
+    public @Nullable Long getRuinedAt() {
         return ruinedAt;
     }
 
@@ -238,8 +233,7 @@ public class Town extends APIObject {
      * <p>
      * See {@link #isForSale()}
      */
-    @Nullable
-    public Double getForSalePrice() {
+    public @Nullable Double getForSalePrice() {
         return forSalePrice;
     }
 
@@ -247,13 +241,11 @@ public class Town extends APIObject {
         return permissions;
     }
 
-    @Nullable
-    public Location getSpawn() {
+    public @Nullable Location getSpawn() {
         return spawn;
     }
 
-    @Nullable
-    public Pair<Integer, Integer> getHomeBlock() {
+    public @Nullable Pair<Integer, Integer> getHomeBlock() {
         return homeBlock;
     }
 

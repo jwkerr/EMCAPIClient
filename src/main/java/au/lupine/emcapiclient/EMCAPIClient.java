@@ -52,7 +52,7 @@ public class EMCAPIClient {
         this.server = server;
     }
 
-    private URI createWorldURI(Server server) {
+    private URI createServerURI(Server server) {
         return EARTHMC_API_URI.resolve(server.getName() + "/");
     }
 
@@ -67,7 +67,7 @@ public class EMCAPIClient {
     public @NotNull List<PlayerIdentifier> getAllPlayerIdentifiers(@NotNull Server server) {
         return Identifier.createIdentifierList(
                 requestManager.getURIAsJsonArray(
-                        createWorldURI(server).resolve("players")
+                        createServerURI(server).resolve("players")
                 ),
                 PlayerIdentifier.class
         );
@@ -80,7 +80,7 @@ public class EMCAPIClient {
     public @NotNull List<TownIdentifier> getAllTownIdentifiers(@NotNull Server server) {
         return Identifier.createIdentifierList(
                 requestManager.getURIAsJsonArray(
-                        createWorldURI(server).resolve("towns")
+                        createServerURI(server).resolve("towns")
                 ),
                 TownIdentifier.class
         );
@@ -93,7 +93,7 @@ public class EMCAPIClient {
     public @NotNull List<NationIdentifier> getAllNationIdentifiers(@NotNull Server server) {
         return Identifier.createIdentifierList(
                 requestManager.getURIAsJsonArray(
-                        createWorldURI(server).resolve("nations")
+                        createServerURI(server).resolve("nations")
                 ),
                 NationIdentifier.class
         );
@@ -106,7 +106,7 @@ public class EMCAPIClient {
     public @NotNull List<QuarterIdentifier> getAllQuarterIdentifiers(@NotNull Server server) {
         return Identifier.createIdentifierList(
                 requestManager.getURIAsJsonArray(
-                        createWorldURI(server).resolve("quarters")
+                        createServerURI(server).resolve("quarters")
                 ),
                 QuarterIdentifier.class
         );
@@ -154,7 +154,7 @@ public class EMCAPIClient {
             queryArray.add(entry);
         }
 
-        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(server).resolve("players"), JSONUtil.createRequestBody(queryArray));
+        JsonArray response = requestManager.batchPostAsJsonArray(createServerURI(server).resolve("players"), JSONUtil.createRequestBody(queryArray));
 
         List<Player> players = new ArrayList<>();
         for (JsonElement element : response) {
@@ -175,7 +175,7 @@ public class EMCAPIClient {
             queryArray.add(entry);
         }
 
-        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(server).resolve("towns"), JSONUtil.createRequestBody(queryArray));
+        JsonArray response = requestManager.batchPostAsJsonArray(createServerURI(server).resolve("towns"), JSONUtil.createRequestBody(queryArray));
 
         List<Town> towns = new ArrayList<>();
         for (JsonElement element : response) {
@@ -196,7 +196,7 @@ public class EMCAPIClient {
             queryArray.add(entry);
         }
 
-        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(server).resolve("nations"), JSONUtil.createRequestBody(queryArray));
+        JsonArray response = requestManager.batchPostAsJsonArray(createServerURI(server).resolve("nations"), JSONUtil.createRequestBody(queryArray));
 
         List<Nation> nations = new ArrayList<>();
         for (JsonElement element : response) {
@@ -217,7 +217,7 @@ public class EMCAPIClient {
             queryArray.add(entry);
         }
 
-        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(server).resolve("quarters"), JSONUtil.createRequestBody(queryArray));
+        JsonArray response = requestManager.batchPostAsJsonArray(createServerURI(server).resolve("quarters"), JSONUtil.createRequestBody(queryArray));
 
         List<Quarter> quarters = new ArrayList<>();
         for (JsonElement element : response) {
@@ -241,7 +241,7 @@ public class EMCAPIClient {
             queryArray.add(innerObject);
         }
 
-        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(server).resolve("discord"), JSONUtil.createRequestBody(queryArray));
+        JsonArray response = requestManager.batchPostAsJsonArray(createServerURI(server).resolve("discord"), JSONUtil.createRequestBody(queryArray));
 
         List<Discord> pairs = new ArrayList<>();
         for (JsonElement element : response) {
@@ -379,7 +379,7 @@ public class EMCAPIClient {
     }
 
     public @NotNull ServerInfo getServerInfo(@NotNull Server server) {
-        JsonObject response = requestManager.getURIAsJsonObject(createWorldURI(server));
+        JsonObject response = requestManager.getURIAsJsonObject(createServerURI(server));
         return new ServerInfo(response);
     }
 
@@ -939,7 +939,7 @@ public class EMCAPIClient {
             queryArray.add(innerArray);
         }
 
-        JsonArray response = requestManager.batchPostAsJsonArray(createWorldURI(server).resolve("location"), JSONUtil.createRequestBody(queryArray));
+        JsonArray response = requestManager.batchPostAsJsonArray(createServerURI(server).resolve("location"), JSONUtil.createRequestBody(queryArray));
 
         List<LocationInfo> locations = new ArrayList<>();
         for (JsonElement element : response) {

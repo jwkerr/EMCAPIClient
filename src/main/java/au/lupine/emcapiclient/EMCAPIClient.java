@@ -6,6 +6,7 @@ import au.lupine.emcapiclient.object.apiobject.*;
 import au.lupine.emcapiclient.object.identifier.*;
 import au.lupine.emcapiclient.object.state.DiscordType;
 import au.lupine.emcapiclient.object.wrapper.Server;
+import au.lupine.emcapiclient.object.wrapper.Permissions;
 import au.lupine.emcapiclient.util.JSONUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -43,6 +44,16 @@ public class EMCAPIClient {
      */
     public EMCAPIClient(Server server) {
         this.server = server;
+    }
+
+    public static void main(String[] args) {
+        EMCAPIClient api = new EMCAPIClient();
+
+        for (Town town : api.getAllTowns()) {
+            Permissions.Flags flags = town.getPermissions().getFlags();
+
+            if (flags.hasExplosion()) System.out.println(town.getName());
+        }
     }
 
     /**

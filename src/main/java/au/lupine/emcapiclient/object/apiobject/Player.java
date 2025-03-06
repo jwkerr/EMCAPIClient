@@ -4,7 +4,7 @@ import au.lupine.emcapiclient.object.identifier.Identifier;
 import au.lupine.emcapiclient.object.identifier.NationIdentifier;
 import au.lupine.emcapiclient.object.identifier.PlayerIdentifier;
 import au.lupine.emcapiclient.object.identifier.TownIdentifier;
-import au.lupine.emcapiclient.object.wrapper.permissions.Permissions;
+import au.lupine.emcapiclient.object.wrapper.Permissions;
 import au.lupine.emcapiclient.util.JSONUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

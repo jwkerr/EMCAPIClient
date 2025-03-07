@@ -37,7 +37,7 @@ public abstract class APIObject {
 
     /**
      * @param obj Any object
-     * @return True if the object is an instance of Data and if the object's internal {@link JsonObject} variable is equal
+     * @return True if the object is an {@link APIObject} and if the object's internal {@link JsonObject} variable is equal
      */
     @Override
     public boolean equals(Object obj) {
